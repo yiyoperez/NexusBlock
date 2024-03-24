@@ -1,38 +1,38 @@
 package xhyrom.nexusblock.structures.holograms;
 
-import com.gmail.filoghost.holographicdisplays.api.Hologram;
-import com.gmail.filoghost.holographicdisplays.api.HologramsAPI;
+import me.filoghost.holographicdisplays.api.HolographicDisplaysAPI;
+import me.filoghost.holographicdisplays.api.hologram.Hologram;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import xhyrom.nexusblock.NexusBlock;
 
 public class HolographicDisplays implements HologramInterface {
+
     public Object createHologram(Location location, int id, double hologramLocation) {
         Location hdLocation = location.clone().add(0.5, 0, 0.5);
         hdLocation.setY(hologramLocation);
 
-        Hologram hd = HologramsAPI.createHologram(NexusBlock.getInstance(), hdLocation);
-        return hd;
+        return HolographicDisplaysAPI.get(NexusBlock.getInstance()).createHologram(hdLocation);
     }
 
     public void insertTextLine(Object hd, Integer line, String desc) {
-        ((Hologram) hd).insertTextLine(line, desc);
+        ((Hologram) hd).getLines().insertText(line, desc);
         return;
     }
 
     public void insertItemLine(Object hd, Integer line, ItemStack item) {
-        ((Hologram) hd).insertItemLine(line, item);
+        ((Hologram) hd).getLines().insertItem(line, item);
         return;
     }
 
     public void editTextLine(Object hd, Integer line, String desc, Boolean save) {
-        ((Hologram) hd).removeLine(line);
+        ((Hologram) hd).getLines().remove(line);
         insertTextLine(hd, line, desc);
         return;
     }
 
     public void editItemLine(Object hd, Integer line, ItemStack item, Boolean save) {
-        ((Hologram) hd).removeLine(line);
+        ((Hologram) hd).getLines().remove(line);
         insertItemLine(hd, line, item);
         return;
     }

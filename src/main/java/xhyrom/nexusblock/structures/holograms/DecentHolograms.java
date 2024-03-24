@@ -12,38 +12,26 @@ public class DecentHolograms implements HologramInterface {
         Location hdLocation = location.clone().add(0.5, 0, 0.5);
         hdLocation.setY(hologramLocation);
 
-        Hologram hd = DHAPI.createHologram(String.valueOf(id), hdLocation, new ArrayList<>());
-
-        return hd;
+        return DHAPI.createHologram(String.valueOf(id), hdLocation, new ArrayList<>());
     }
 
     public void insertTextLine(Object hd, Integer line, String desc) {
         DHAPI.addHologramLine((Hologram) hd, desc);
-
-        return;
     }
 
     public void insertItemLine(Object hd, Integer line, ItemStack item) {
-        DHAPI.addHologramLine((Hologram) hd, "#ICON: "+item.getType().name());
-
-        return;
+        DHAPI.addHologramLine((Hologram) hd, "#ICON: " + item.getType().name());
     }
 
     public void editTextLine(Object hd, Integer line, String desc, Boolean save) {
         DHAPI.setHologramLine((Hologram) hd, line, desc);
-
-        return;
     }
 
     public void editItemLine(Object hd, Integer line, ItemStack item, Boolean save) {
-        DHAPI.setHologramLine((Hologram) hd, line, "#ICON: "+item.getType().name());
-
-        return;
+        DHAPI.setHologramLine((Hologram) hd, line, "#ICON: " + item.getType().name());
     }
 
     public void deleteHologram(Object hd) {
         ((Hologram) hd).delete();
-
-        return;
     }
 }

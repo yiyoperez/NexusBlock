@@ -1,14 +1,12 @@
 name: NexusBlock
-version: '${project.version}'
+version: @version@
 main: xhyrom.nexusblock.NexusBlock
 api-version: 1.13
-authors: [ xHyroM ]
+authors: [ xHyroM, Sliide_]
 softdepend:
   - HolographicDisplays
   - DecentHolograms
   - Holograms
-  - CMI
-  - CMILib
   - Multiverse-Core
   - MultiWorld
 
@@ -16,4 +14,5 @@ commands:
   nexusblock:
     description: Setup blocks or check informations
     aliases:
+      - nb
       - blocknexus
