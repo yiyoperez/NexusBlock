@@ -5,11 +5,10 @@ import org.bukkit.Material;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.structures.database.Data;
-import xhyrom.nexusblock.structures.holograms.CMIHolograms;
-import xhyrom.nexusblock.structures.holograms.HolographicDisplays;
-import xhyrom.nexusblock.structures.nexusConfig.NexusConfig;
 import xhyrom.nexusblock.structures.holograms.DecentHolograms;
 import xhyrom.nexusblock.structures.holograms.HologramInterface;
+import xhyrom.nexusblock.structures.holograms.HolographicDisplays;
+import xhyrom.nexusblock.structures.nexusConfig.NexusConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +30,8 @@ public class Loader {
             }
 
             Data dataFromDatabase = NexusBlock.getInstance().jsonDatabase.data.get(nexusConfig.id);
-            if (dataFromDatabase == null) dataFromDatabase = new Data(new CopyOnWriteArrayList<>(), new HashMap<String, Integer>(), 0);
+            if (dataFromDatabase == null)
+                dataFromDatabase = new Data(new CopyOnWriteArrayList<>(), new HashMap<String, Integer>(), 0);
 
             nexuses.add(
                     new Nexus(
@@ -54,10 +54,11 @@ public class Loader {
     }
 
     public static HologramInterface loadHologram() {
-        if (checkDependency("DecentHolograms")) return new DecentHolograms();
-        else if (checkDependency("HolographicDisplays")) return new HolographicDisplays();
-        else if (checkDependency("CMI")) return new CMIHolograms();
-        else return null;
+        if (checkDependency("DecentHolograms")) {
+            return new DecentHolograms();
+        } else if (checkDependency("HolographicDisplays")) {
+            return new HolographicDisplays();
+        } else return null;
     }
 
     private static boolean checkDependency(String name) {
