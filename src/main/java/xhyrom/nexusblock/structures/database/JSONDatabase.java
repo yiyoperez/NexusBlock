@@ -15,14 +15,5 @@ public class JSONDatabase {
         ));
     }
 
-    public void toString(String filePath) {
-        try {
-            FileWriter myWriter = new FileWriter(filePath);
-            myWriter.write(NexusBlock.getInstance().gson.toJson(this));
-            myWriter.close();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
 

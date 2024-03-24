@@ -1,6 +1,5 @@
 package xhyrom.nexusblock;
 
-import com.google.gson.Gson;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import xhyrom.nexusblock.commands.nexusblock;
@@ -9,7 +8,6 @@ import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.structures.database.JSONDatabase;
 import xhyrom.nexusblock.structures.holograms.HologramInterface;
 import xhyrom.nexusblock.utils.Loader;
-import xhyrom.nexusblock.utils.Metrics;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,7 +15,6 @@ import java.util.List;
 
 public final class NexusBlock extends JavaPlugin {
     private static NexusBlock Instance;
-    public final Gson gson = new Gson();
     public List<Nexus> nexuses = new ArrayList<>();
     public HologramInterface hologram;
     public FileConfiguration config = getConfig();
@@ -30,8 +27,6 @@ public final class NexusBlock extends JavaPlugin {
         this.saveDefaultConfig();
         config.options().copyDefaults(true);
 
-        if (config.getBoolean("send-metrics"))
-            new Metrics(this, 13145);
 
         hologram = Loader.loadHologram();
         nexuses = Loader.loadBlocks();
@@ -58,11 +53,12 @@ public final class NexusBlock extends JavaPlugin {
             super.saveResource("database.json", false);
         }
 
-        try {
-            this.jsonDatabase = gson.fromJson(new FileReader(databaseFile), JSONDatabase.class);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        //TODO: Change temporary database.
+//        try {
+//            this.jsonDatabase = gson.fromJson(new FileReader(databaseFile), JSONDatabase.class);
+//        } catch (FileNotFoundException e) {
+//            throw new RuntimeException(e);
+//        }
     }
 
     public void onReload() {
@@ -74,15 +70,16 @@ public final class NexusBlock extends JavaPlugin {
         nexuses = Loader.loadBlocks();
     }
 
+    //TODO: Change temporary database.
     private void saveData() {
-        JSONDatabase tempJsonDatabase = new JSONDatabase();
-
-        for (Nexus nexus : this.nexuses) {
-            tempJsonDatabase.addNexus(nexus.id, nexus.getDestroyers(), nexus.getDestroys(), nexus.healths.damaged);
-        }
-
-        tempJsonDatabase.toString(getDataFolder() + "/database.json");
-        this.jsonDatabase = tempJsonDatabase;
+//        JSONDatabase tempJsonDatabase = new JSONDatabase();
+//
+//        for (Nexus nexus : this.nexuses) {
+//            tempJsonDatabase.addNexus(nexus.id, nexus.getDestroyers(), nexus.getDestroys(), nexus.healths.damaged);
+//        }
+//
+//        tempJsonDatabase.toString(getDataFolder() + "/database.json");
+//        this.jsonDatabase = tempJsonDatabase;
     }
 
     public static NexusBlock getInstance() {

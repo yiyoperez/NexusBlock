@@ -13,6 +13,7 @@ plugins {
 repositories {
     maven("https://jitpack.io")
     maven("https://repo.codemc.io/repository/nms/")
+    maven("https://oss.sonatype.org/content/groups/public")
     maven("https://repo.codemc.io/repository/maven-public/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
@@ -28,10 +29,12 @@ tasks {
         archiveClassifier.set("")
         archiveFileName.set("NexusBlock-${projectVersion}.jar")
 
+        // Used to locally test the plugin.
         //destinationDirectory.set(file("D:\\MarleyMC Network\\ComboFly\\plugins"))
         destinationDirectory.set(file("$rootDir/bin/"))
 
-        // TODO Relocate libs
+        // Relocate libs if any.
+        // Example below
         //relocate("org.jetbrains.annotations", "${libsPackage}.annotations")
     }
     processResources {

@@ -16,8 +16,4 @@ public class Data {
         this.damaged = damaged;
     }
 
-    @Override
-    public String toString() {
-        return NexusBlock.getInstance().gson.toJson(this);
-    }
 }
