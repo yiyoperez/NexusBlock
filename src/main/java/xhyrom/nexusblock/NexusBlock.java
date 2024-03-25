@@ -4,10 +4,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import xhyrom.nexusblock.commands.nexusblock;
 import xhyrom.nexusblock.events.BlockDestroy;
-import xhyrom.nexusblock.structures.Nexus;
-import xhyrom.nexusblock.structures.database.JSONDatabase;
+import org.bukkit.Bukkit;
+import xhyrom.nexusblock.structures.holograms.DecentHolograms;
 import xhyrom.nexusblock.structures.holograms.HologramInterface;
-import xhyrom.nexusblock.utils.Loader;
+import xhyrom.nexusblock.structures.holograms.HolographicDisplays;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,6 +19,7 @@ public final class NexusBlock extends JavaPlugin {
     public HologramInterface hologram;
     public FileConfiguration config = getConfig();
     public JSONDatabase jsonDatabase;
+    private HologramInterface hologram;
 
     @Override
     public void onEnable() {
@@ -27,6 +28,7 @@ public final class NexusBlock extends JavaPlugin {
         this.saveDefaultConfig();
         config.options().copyDefaults(true);
 
+        setupHolograms();
 
         hologram = Loader.loadHologram();
         nexuses = Loader.loadBlocks();
@@ -35,9 +37,15 @@ public final class NexusBlock extends JavaPlugin {
         getServer().getScheduler().scheduleSyncRepeatingTask(this, this::saveData, 1L, (long) 300 * 20);
     }
 
-    @Override
-    public void onDisable() {
-        this.saveData();
+    private void setupHolograms() {
+        if (Bukkit.getPluginManager().getPlugin("DecentHolograms").isEnabled()) {
+            this.hologram = new DecentHolograms();
+        } else if (Bukkit.getPluginManager().getPlugin("DecentHolograms").isEnabled()) {
+            this.hologram = new HolographicDisplays(this);
+        } else {
+            getLogger().severe("No holograms plugins has been detected!");
+            getLogger().severe("They wont work if");
+        }
     }
 
     @Override
@@ -70,16 +78,8 @@ public final class NexusBlock extends JavaPlugin {
         nexuses = Loader.loadBlocks();
     }
 
-    //TODO: Change temporary database.
-    private void saveData() {
-//        JSONDatabase tempJsonDatabase = new JSONDatabase();
-//
-//        for (Nexus nexus : this.nexuses) {
-//            tempJsonDatabase.addNexus(nexus.id, nexus.getDestroyers(), nexus.getDestroys(), nexus.healths.damaged);
-//        }
-//
-//        tempJsonDatabase.toString(getDataFolder() + "/database.json");
-//        this.jsonDatabase = tempJsonDatabase;
+    public HologramInterface getHologram() {
+        return hologram;
     }
 
     public static NexusBlock getInstance() {

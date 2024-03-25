@@ -1,6 +1,5 @@
 package xhyrom.nexusblock.utils;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
@@ -51,18 +50,6 @@ public class Loader {
         }
 
         return nexuses;
-    }
-
-    public static HologramInterface loadHologram() {
-        if (checkDependency("DecentHolograms")) {
-            return new DecentHolograms();
-        } else if (checkDependency("HolographicDisplays")) {
-            return new HolographicDisplays();
-        } else return null;
-    }
-
-    private static boolean checkDependency(String name) {
-        return Bukkit.getPluginManager().getPlugin(name) != null;
     }
 
     private static HashMap<String, Object> read(final HashMap nexusObject) {

@@ -8,11 +8,17 @@ import xhyrom.nexusblock.NexusBlock;
 
 public class HolographicDisplays implements HologramInterface {
 
+    private final HolographicDisplaysAPI API;
+
+    public HolographicDisplays(NexusBlock plugin) {
+        this.API = HolographicDisplaysAPI.get(plugin);
+    }
+
     public Object createHologram(Location location, int id, double hologramLocation) {
         Location hdLocation = location.clone().add(0.5, 0, 0.5);
         hdLocation.setY(hologramLocation);
 
-        return HolographicDisplaysAPI.get(NexusBlock.getInstance()).createHologram(hdLocation);
+        return API.createHologram(hdLocation);
     }
 
     public void insertTextLine(Object hd, Integer line, String desc) {
