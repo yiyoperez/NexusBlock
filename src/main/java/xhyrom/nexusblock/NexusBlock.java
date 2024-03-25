@@ -8,9 +8,8 @@ import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import xhyrom.nexusblock.commands.nexusblock;
+import xhyrom.nexusblock.commands.NexusBlockCommand;
 import xhyrom.nexusblock.events.BlockDestroy;
-import org.bukkit.Bukkit;
 import xhyrom.nexusblock.structures.holograms.DecentHolograms;
 import xhyrom.nexusblock.structures.holograms.HologramInterface;
 import xhyrom.nexusblock.structures.holograms.HolographicDisplays;
@@ -41,6 +40,7 @@ public final class NexusBlock extends JavaPlugin {
         getCommand("nexusblock").setExecutor(new nexusblock());
         getServer().getPluginManager().registerEvents(new BlockDestroy(), this);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, this::saveData, 1L, (long) 300 * 20);
+        getCommand("nexusblock").setExecutor(new NexusBlockCommand());
     }
 
     private void setupHolograms() {
