@@ -27,7 +27,7 @@ public class BlockDestroy implements Listener {
         Block block = event.getBlock();
         Location blockLocation = block.getLocation();
         Nexus nexusBlock = manager.getNexusBlocks().stream()
-                .filter(nexus -> nexus.location.equals(blockLocation))
+                .filter(nexus -> nexus.getLocation().equals(blockLocation))
                 .findAny()
                 .orElse(null);
 
@@ -35,7 +35,7 @@ public class BlockDestroy implements Listener {
             event.setCancelled(true);
 
             if (block.getType() != Material.BEDROCK)
-                nexusBlock.onHit(player);
+                manager.onHit(player, nexusBlock);
         }
     }
 }
