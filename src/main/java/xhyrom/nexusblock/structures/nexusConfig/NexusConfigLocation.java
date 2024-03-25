@@ -1,6 +1,7 @@
 package xhyrom.nexusblock.structures.nexusConfig;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class NexusConfigLocation {
     public Double x;
@@ -8,7 +9,7 @@ public class NexusConfigLocation {
     public Double z;
     public String world;
 
-    public NexusConfigLocation(HashMap<String, Object> other) {
+    public NexusConfigLocation(Map<String, Object> other) {
         if (!(other.get("location") instanceof HashMap)) return;
 
         this.x = Double.valueOf(

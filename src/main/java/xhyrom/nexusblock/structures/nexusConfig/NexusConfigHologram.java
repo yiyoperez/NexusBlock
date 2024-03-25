@@ -1,8 +1,8 @@
 package xhyrom.nexusblock.structures.nexusConfig;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NexusConfigHologram {
     public String[] main;
@@ -10,7 +10,7 @@ public class NexusConfigHologram {
     public HashMap<Integer, String> healthVariablesPositions;
     public HashMap<Integer, String> positionsHologramPositions;
 
-    public NexusConfigHologram(HashMap<String, Object> other) {
+    public NexusConfigHologram( Map<String, Object> other) {
         if (!(other.get("hologram") instanceof HashMap)) return;
 
         this.positionsHologramPositions = new HashMap<>();

@@ -1,6 +1,12 @@
 package xhyrom.nexusblock;
 
-import org.bukkit.configuration.file.FileConfiguration;
+import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
+import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
+import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
+import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
+import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import xhyrom.nexusblock.commands.nexusblock;
 import xhyrom.nexusblock.events.BlockDestroy;
@@ -14,16 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class NexusBlock extends JavaPlugin {
-    private static NexusBlock Instance;
-    public List<Nexus> nexuses = new ArrayList<>();
-    public HologramInterface hologram;
-    public FileConfiguration config = getConfig();
-    public JSONDatabase jsonDatabase;
+
+    private YamlDocument lang;
+    private YamlDocument config;
+    private YamlDocument tempData;
+
     private HologramInterface hologram;
 
     @Override
     public void onEnable() {
-        Instance = this;
+        createFiles();
 
         this.saveDefaultConfig();
         config.options().copyDefaults(true);
@@ -48,34 +54,44 @@ public final class NexusBlock extends JavaPlugin {
         }
     }
 
-    @Override
-    public void saveDefaultConfig() {
-        File configFile = new File(getDataFolder(), "config.yml");
-        File databaseFile = new File(getDataFolder(), "database.json");
-
-        if (!configFile.exists()) {
-            super.saveResource("config.yml", false);
+    private void createFiles() {
+        try {
+            this.lang = YamlDocument.create(new File(getDataFolder(), "lang.yml"), getResource("lang.yml"),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder().setAutoUpdate(true).build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("lang-version")).build());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
-        if (!databaseFile.exists()) {
-            super.saveResource("database.json", false);
+        try {
+            this.config = YamlDocument.create(new File(getDataFolder(), "config.yml"), getResource("config.yml"),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder().setAutoUpdate(true).build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version")).build());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
-        //TODO: Change temporary database.
-//        try {
-//            this.jsonDatabase = gson.fromJson(new FileReader(databaseFile), JSONDatabase.class);
-//        } catch (FileNotFoundException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            this.tempData = YamlDocument.create(new File(getDataFolder(), "data.yml"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public void onReload() {
-        for (Nexus nexus : this.nexuses) {
-            this.nexuses.remove(nexus);
-            this.hologram.deleteHologram(nexus.hologramInterface);
-        }
+    public YamlDocument getLang() {
+        return lang;
+    }
 
-        nexuses = Loader.loadBlocks();
+    public YamlDocument getConfiguration() {
+        return config;
+    }
+
+    public YamlDocument getTempData() {
+        return tempData;
     }
 
     public HologramInterface getHologram() {

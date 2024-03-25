@@ -7,7 +7,7 @@ import java.util.Map;
 public class NexusConfigRewards {
     public HashMap<Integer, ArrayList<String>> rewards = new HashMap<>();
 
-    public NexusConfigRewards(HashMap<String, Object> other) {
+    public NexusConfigRewards(Map<String, Object> other) {
         if (!(other.get("rewards") instanceof HashMap)) return;
 
         for (Map.Entry<?, ?> entry : ((HashMap<?, ?>) other.get("rewards")).entrySet()) {

@@ -1,7 +1,6 @@
 package xhyrom.nexusblock.structures.nexusConfig;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
 public class NexusConfig {
     public int id;
@@ -13,7 +12,7 @@ public class NexusConfig {
     public NexusConfigHealths healths;
     public NexusConfigRewards rewards;
 
-    public NexusConfig(HashMap<String, Object> other) {
+    public NexusConfig(Map<String, Object> other) {
         this.id = Integer.parseInt(other.get("id").toString());
         this.respawn = Long.parseLong(other.get("respawn").toString());
         this.material = other.get("material").toString();
