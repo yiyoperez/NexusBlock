@@ -7,6 +7,7 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import xhyrom.nexusblock.commands.NexusBlockCommand;
 import xhyrom.nexusblock.events.BlockDestroy;
@@ -32,6 +33,7 @@ public final class NexusBlock extends JavaPlugin {
     public void onEnable() {
         createFiles();
 
+        setupHolograms();
         nexusManager = new NexusManager(this);
 
         setupHolograms();
@@ -41,9 +43,9 @@ public final class NexusBlock extends JavaPlugin {
     }
 
     private void setupHolograms() {
-        if (Bukkit.getPluginManager().getPlugin("DecentHolograms").isEnabled()) {
+        if (isEnabled("DecentHolograms")) {
             this.hologram = new DecentHolograms();
-        } else if (Bukkit.getPluginManager().getPlugin("DecentHolograms").isEnabled()) {
+        } else if (isEnabled("HolographicDisplays")) {
             this.hologram = new HolographicDisplays(this);
         } else {
             getLogger().severe("No holograms plugins has been detected!");
@@ -77,6 +79,11 @@ public final class NexusBlock extends JavaPlugin {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean isEnabled(String pluginName) {
+        Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
+        return plugin != null && plugin.isEnabled();
     }
 
     public YamlDocument getLang() {
