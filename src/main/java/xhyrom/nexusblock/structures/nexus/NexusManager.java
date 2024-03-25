@@ -29,7 +29,7 @@ public class NexusManager {
     }
 
     public boolean existsNexusBlock(String name) {
-        return nexusBlocks.stream().anyMatch(nexus -> nexus.id == )
+        return false;
     }
 
     private void loadNexusBlocks() {
