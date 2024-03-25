@@ -15,6 +15,7 @@ import xhyrom.nexusblock.structures.holograms.DecentHolograms;
 import xhyrom.nexusblock.structures.holograms.HologramInterface;
 import xhyrom.nexusblock.structures.holograms.HolographicDisplays;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
+import xhyrom.nexusblock.structures.nexus.NexusService;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,7 @@ public final class NexusBlock extends JavaPlugin {
 
     private HologramInterface hologram;
     private NexusManager nexusManager;
+    private NexusService nexusService;
 
 
     @Override
@@ -35,11 +37,17 @@ public final class NexusBlock extends JavaPlugin {
 
         setupHolograms();
         nexusManager = new NexusManager(this);
+        nexusService = new NexusService(this);
 
-        setupHolograms();
+        nexusService.loadBlocks();
 
         getCommand("nexusblock").setExecutor(new NexusBlockCommand());
         getServer().getPluginManager().registerEvents(new BlockDestroy(this), this);
+    }
+
+    @Override
+    public void onDisable() {
+        nexusService.saveNexusBlocks();
     }
 
     private void setupHolograms() {

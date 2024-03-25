@@ -6,8 +6,6 @@ import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.structures.nexusConfig.NexusConfig;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,21 +13,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class NexusManager {
 
-    private final File folder;
     private final NexusBlock plugin;
     private final List<Nexus> nexusBlocks = new ArrayList<>();
 
     public NexusManager(NexusBlock plugin) {
         this.plugin = plugin;
-        this.folder = new File(plugin.getDataFolder(), "warps");
-    }
-
-    public void createNexusBlock(String name, Material material) {
-
-    }
-
-    public boolean existsNexusBlock(String name) {
-        return false;
     }
 
     private void loadNexusBlocks() {
