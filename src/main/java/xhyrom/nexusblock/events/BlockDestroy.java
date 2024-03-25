@@ -1,6 +1,5 @@
 package xhyrom.nexusblock.events;
 
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,15 +10,23 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
+import xhyrom.nexusblock.structures.nexus.NexusManager;
 
 public class BlockDestroy implements Listener {
+
+    private final NexusManager manager;
+
+    public BlockDestroy(NexusBlock nexusBlock) {
+        this.manager = nexusBlock.getNexusManager();
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onDestroy(BlockBreakEvent event) {
         Player player = event.getPlayer();
 
         Block block = event.getBlock();
         Location blockLocation = block.getLocation();
-        Nexus nexusBlock = NexusBlock.getInstance().nexuses.stream()
+        Nexus nexusBlock = manager.getNexusBlocks().stream()
                 .filter(nexus -> nexus.location.equals(blockLocation))
                 .findAny()
                 .orElse(null);

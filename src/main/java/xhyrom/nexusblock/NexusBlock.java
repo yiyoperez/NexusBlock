@@ -13,10 +13,10 @@ import xhyrom.nexusblock.events.BlockDestroy;
 import xhyrom.nexusblock.structures.holograms.DecentHolograms;
 import xhyrom.nexusblock.structures.holograms.HologramInterface;
 import xhyrom.nexusblock.structures.holograms.HolographicDisplays;
+import xhyrom.nexusblock.structures.nexus.NexusManager;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
 
 public final class NexusBlock extends JavaPlugin {
 
@@ -25,22 +25,19 @@ public final class NexusBlock extends JavaPlugin {
     private YamlDocument tempData;
 
     private HologramInterface hologram;
+    private NexusManager nexusManager;
+
 
     @Override
     public void onEnable() {
         createFiles();
 
-        this.saveDefaultConfig();
-        config.options().copyDefaults(true);
+        nexusManager = new NexusManager(this);
 
         setupHolograms();
 
-        hologram = Loader.loadHologram();
-        nexuses = Loader.loadBlocks();
-        getCommand("nexusblock").setExecutor(new nexusblock());
-        getServer().getPluginManager().registerEvents(new BlockDestroy(), this);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, this::saveData, 1L, (long) 300 * 20);
         getCommand("nexusblock").setExecutor(new NexusBlockCommand());
+        getServer().getPluginManager().registerEvents(new BlockDestroy(this), this);
     }
 
     private void setupHolograms() {
@@ -98,7 +95,7 @@ public final class NexusBlock extends JavaPlugin {
         return hologram;
     }
 
-    public static NexusBlock getInstance() {
-        return Instance;
+    public NexusManager getNexusManager() {
+        return nexusManager;
     }
 }
