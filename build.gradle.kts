@@ -28,6 +28,14 @@ dependencies {
 }
 
 tasks {
+    compileJava {
+        options.encoding = "UTF-8"
+    }
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(11))
+        }
+    }
     shadowJar {
         archiveClassifier.set("")
         archiveFileName.set("NexusBlock-${projectVersion}.jar")
