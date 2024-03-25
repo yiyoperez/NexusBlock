@@ -11,6 +11,7 @@ plugins {
 }
 
 repositories {
+    mavenCentral()
     maven("https://jitpack.io")
     maven("https://repo.codemc.io/repository/nms/")
     maven("https://oss.sonatype.org/content/groups/public")
@@ -22,6 +23,8 @@ dependencies {
     compileOnly("org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT")
     compileOnly("com.github.decentsoftware-eu:decentholograms:2.8.6")
     compileOnly("me.filoghost.holographicdisplays:holographicdisplays-api:3.0.0")
+
+    implementation("dev.dejvokep:boosted-yaml:1.3.1")
 }
 
 tasks {
@@ -34,8 +37,7 @@ tasks {
         destinationDirectory.set(file("$rootDir/bin/"))
 
         // Relocate libs if any.
-        // Example below
-        //relocate("org.jetbrains.annotations", "${libsPackage}.annotations")
+        relocate("dev.dejvokep.boostedyaml", "${libsPackage}.boostedyaml")
     }
     processResources {
         filesMatching("**/*.yml") {
