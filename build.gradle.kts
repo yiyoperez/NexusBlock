@@ -14,17 +14,19 @@ repositories {
     mavenCentral()
     maven("https://jitpack.io")
     maven("https://repo.codemc.io/repository/nms/")
+    maven("https://repo.triumphteam.dev/snapshots/")
     maven("https://oss.sonatype.org/content/groups/public")
     maven("https://repo.codemc.io/repository/maven-public/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT")
+    compileOnly("org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("com.github.decentsoftware-eu:decentholograms:2.8.6")
     compileOnly("me.filoghost.holographicdisplays:holographicdisplays-api:3.0.0")
 
     implementation("dev.dejvokep:boosted-yaml:1.3.1")
+    implementation("dev.triumphteam:triumph-cmd-bukkit:2.0.0-SNAPSHOT")
 }
 
 tasks {
@@ -45,7 +47,11 @@ tasks {
         destinationDirectory.set(file("$rootDir/bin/"))
 
         // Relocate libs if any.
+
+        relocate("dev.triumphteam.cmd", "${libsPackage}.commandmanager")
         relocate("dev.dejvokep.boostedyaml", "${libsPackage}.boostedyaml")
+        relocate("org.jetbrains.annotations", "${libsPackage}.annotations")
+        relocate("org.intellij.lang.annotations", "${libsPackage}.lang-annotations")
     }
     processResources {
         filesMatching("**/*.yml") {
