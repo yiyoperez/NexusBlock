@@ -1,7 +1,5 @@
 package xhyrom.nexusblock.structures.nexusConfig;
 
-import dev.dejvokep.boostedyaml.block.implementation.Section;
-
 import java.util.Map;
 
 public class NexusConfigHealthStatus {
@@ -10,10 +8,9 @@ public class NexusConfigHealthStatus {
     private int maximumHealth;
 
     public NexusConfigHealthStatus(Map<String, Object> other) {
-        if (!(other instanceof Section)) return;
 
         this.damage = 0;
-        this.maximumHealth = ((Section) other).getInt("healths");
+        this.maximumHealth = Integer.parseInt(other.get("healths").toString());
     }
 
     public int getDamage() {

@@ -61,7 +61,7 @@ public class NexusManager {
     }
 
     public void onHit(Player player, Nexus nexus) {
-        player.sendMessage("Prev nexus damage is " + nexus.getHealthStatus().getDamage());
+        player.sendMessage("Nexus status " + nexus.getHealthStatus().getDamage() + "/" + nexus.getHealthStatus().getMaximumHealth());
         nexus.getHealthStatus().increaseDamage();
         player.sendMessage("Increasing nexus damage to " + nexus.getHealthStatus().getDamage());
 
