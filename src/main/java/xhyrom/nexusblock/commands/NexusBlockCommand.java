@@ -1,37 +1,40 @@
 package xhyrom.nexusblock.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
+import dev.triumphteam.cmd.bukkit.annotation.Permission;
+import dev.triumphteam.cmd.core.BaseCommand;
+import dev.triumphteam.cmd.core.annotation.Command;
+import dev.triumphteam.cmd.core.annotation.Default;
+import dev.triumphteam.cmd.core.annotation.Description;
+import dev.triumphteam.cmd.core.annotation.SubCommand;
 import org.bukkit.command.CommandSender;
+import xhyrom.nexusblock.NexusBlock;
+import xhyrom.nexusblock.utils.MessageHandler;
 
-import static xhyrom.nexusblock.utils.MessageUtils.translateColorCodes;
+@Command(value = "nexusblock", alias = {"nb", "blocknexus"})
+@Permission("nexusblock.admin")
+@Description("NexusBlock plugin main command.")
+public class NexusBlockCommand extends BaseCommand {
 
-public class NexusBlockCommand implements CommandExecutor {
+    private final MessageHandler messageHandler;
 
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        String infoMessage = translateColorCodes("Plugin by &cxHyroM#2851 &7available on github &c&nhttps://github.com/xHyroM/NexusBlock");
-
-        if (!sender.hasPermission("nexusblock.admin")) {
-            sender.sendMessage(infoMessage);
-            return true;
-        }
-
-        if (args.length == 0 || args[0].equalsIgnoreCase("info")) {
-            sender.sendMessage(translateColorCodes(infoMessage));
-            sender.sendMessage(translateColorCodes("&cAdmin Commands:\n\n&c/nexusblock reload &8- &7Reload plugin"));
-            sender.sendMessage(translateColorCodes("&c/nexusblock reload &8- &7Reload plugin"));
-            return true;
-        }
-
-        //TODO
-        if (args[0].equalsIgnoreCase("reload")) {
-            sender.sendMessage(translateColorCodes("Please restart server."));
-            // NexusBlock.getInstance().reloadConfig();
-            // NexusBlock.getInstance().onReload();
-            return true;
-        }
-
-        return true;
+    public NexusBlockCommand(NexusBlock plugin) {
+        this.messageHandler = plugin.getMessageHandler();
     }
+
+    @Default
+    public void command(CommandSender sender) {
+        messageHandler.sendManualMessage(sender, "Plugin by &cxHyroM#2851 &7available on github &c&nhttps://github.com/xHyroM/NexusBlock");
+        messageHandler.sendManualMessage(sender, "&cAdmin Commands:");
+        messageHandler.sendManualMessage(sender, "");
+        messageHandler.sendManualMessage(sender, "&c/nexusblock reload &8- &7Reload plugin");
+    }
+
+    //TODO
+    @SubCommand(value = "reload")
+    public void reload(CommandSender sender) {
+        messageHandler.sendManualMessage(sender, "Please restart server.");
+        // NexusBlock.getInstance().reloadConfig();
+        // NexusBlock.getInstance().onReload();
+    }
+
 }

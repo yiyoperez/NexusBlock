@@ -9,13 +9,14 @@ import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import xhyrom.nexusblock.commands.NexusBlockCommand;
 import xhyrom.nexusblock.events.BlockDestroy;
+import xhyrom.nexusblock.services.CommandService;
 import xhyrom.nexusblock.structures.holograms.DecentHolograms;
 import xhyrom.nexusblock.structures.holograms.HologramInterface;
 import xhyrom.nexusblock.structures.holograms.HolographicDisplays;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
 import xhyrom.nexusblock.structures.nexus.NexusService;
+import xhyrom.nexusblock.utils.MessageHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,28 +27,38 @@ public final class NexusBlock extends JavaPlugin {
     private YamlDocument config;
     private YamlDocument tempData;
 
+    private MessageHandler messageHandler;
+
     private HologramInterface hologram;
     private NexusManager nexusManager;
     private NexusService nexusService;
+    private CommandService commandService;
 
 
     @Override
     public void onEnable() {
         createFiles();
+        messageHandler = new MessageHandler(this, lang);
 
         setupHolograms();
         nexusManager = new NexusManager(this);
         nexusService = new NexusService(this);
-
         nexusService.loadBlocks();
 
-        getCommand("nexusblock").setExecutor(new NexusBlockCommand());
+        commandService = new CommandService(this);
+        commandService.start();
+
         getServer().getPluginManager().registerEvents(new BlockDestroy(this), this);
     }
 
     @Override
     public void onDisable() {
-        nexusService.saveNexusBlocks();
+        if (nexusService != null) {
+            nexusService.saveNexusBlocks();
+        }
+        if (commandService != null) {
+            commandService.finish();
+        }
     }
 
     private void setupHolograms() {
@@ -112,5 +123,9 @@ public final class NexusBlock extends JavaPlugin {
 
     public NexusManager getNexusManager() {
         return nexusManager;
+    }
+
+    public MessageHandler getMessageHandler() {
+        return messageHandler;
     }
 }
