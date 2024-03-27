@@ -56,11 +56,14 @@ public class NexusManager {
                 0
         );
         nexusBlocks.add(nexus);
-        updateHologram(nexus, true);
+        //TODO: Again.. error with holo instance.
+        //updateHologram(nexus, true);
     }
 
     public void onHit(Player player, Nexus nexus) {
+        player.sendMessage("Prev nexus damage is " + nexus.getHealthStatus().getDamage());
         nexus.getHealthStatus().increaseDamage();
+        player.sendMessage("Increasing nexus damage to " + nexus.getHealthStatus().getDamage());
 
         nexus.getDestroys().merge(player.getName(), 1, Integer::sum);
 
@@ -69,11 +72,12 @@ public class NexusManager {
         }
 
         nexus.getDestroyers().sort(new ModuleComparator(nexus.getDestroys()));
-        if (nexus.getDestroyers().size() > nexus.getHologramConfig().positionsHologramPositions.size()) {
-            nexus.getDestroyers().remove(nexus.getHologramConfig().positionsHologramPositions.size());
+        if (nexus.getDestroyers().size() > nexus.getHologramConfig().getPositionsHologramPositions().size()) {
+            nexus.getDestroyers().remove(nexus.getHologramConfig().getPositionsHologramPositions().size());
         }
 
-        updateHologram(nexus, false);
+        // TODO
+        //updateHologram(nexus, false);
         if (nexus.getHealthStatus().getDamage() >= nexus.getHealthStatus().getMaximumHealth()) {
             destroy(player, nexus);
         }
@@ -114,7 +118,7 @@ public class NexusManager {
         block.setType(Material.BEDROCK);
 
         // Give rewards to top players
-        for (int i = 0; i <= nexus.getHologramConfig().positionsHologramPositions.size(); i++) {
+        for (int i = 0; i <= nexus.getHologramConfig().getPositionsHologramPositions().size(); i++) {
             if (nexus.getDestroyers().size() <= i) break;
 
             String playerName = nexus.getDestroyers().get(i);
@@ -132,11 +136,11 @@ public class NexusManager {
             block1.setType(nexus.getMaterial());
 
             nexus.getHealthStatus().setDamage(0);
-            updateHologramHealthPositions(nexus);
+            //updateHologramHealthPositions(nexus);
 
             nexus.getDestroyers().clear();
             nexus.getDestroys().clear();
-            updateHologramPositions(nexus, true);
+            //updateHologramPositions(nexus, true);
         }, nexus.getRespawnDelay() * 20L);
     }
 
@@ -159,9 +163,9 @@ public class NexusManager {
 
         if (setup) {
             int i = 0;
-            for (String line : nexus.getHologramConfig().main) {
+            for (String line : nexus.getHologramConfig().getMain()) {
                 if (line.contains("{health}") || line.contains("{maximumHealth}")) {
-                    nexus.getHologramConfig().healthVariablesPositions.put(i, line);
+                    nexus.getHologramConfig().getHealthVariablesPositions().put(i, line);
                 }
 
                 line = line
@@ -177,7 +181,7 @@ public class NexusManager {
                                         .replaceAll("\\{playerName}", "-")
                                         .replaceAll("\\{count}", "0")
                         );
-                        nexus.getHologramConfig().positionsHologramPositions.put(i, l);
+                        nexus.getHologramConfig().getPositionsHologramPositions().put(i, l);
                         i++;
                     }
 
@@ -201,7 +205,7 @@ public class NexusManager {
     private void updateHologramHealthPositions(Nexus nexus) {
         HologramInterface hologramInterface = plugin.getHologram();
 
-        nexus.getHologramConfig().healthVariablesPositions.forEach((i, line) -> {
+        nexus.getHologramConfig().getHealthVariablesPositions().forEach((i, line) -> {
             hologramInterface.editTextLine(
                     hologramInterface,
                     i,
@@ -217,7 +221,7 @@ public class NexusManager {
         HologramInterface hologramInterface = plugin.getHologram();
 
         int i = 0;
-        for (Map.Entry<Integer, String> line : nexus.getHologramConfig().positionsHologramPositions.entrySet()) {
+        for (Map.Entry<Integer, String> line : nexus.getHologramConfig().getPositionsHologramPositions().entrySet()) {
             if (reset) {
                 hologramInterface.editTextLine(
                         hologramInterface,

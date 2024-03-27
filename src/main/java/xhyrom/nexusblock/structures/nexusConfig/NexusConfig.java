@@ -1,16 +1,18 @@
 package xhyrom.nexusblock.structures.nexusConfig;
 
+import org.bukkit.Bukkit;
+
 import java.util.Map;
 
 public class NexusConfig {
-    private String id;
-    private long respawn;
-    private String material;
-    private Double hologramLocation;
-    private NexusConfigHologram hologram;
-    private NexusConfigLocation location;
-    private NexusConfigHealthStatus healths;
-    private NexusConfigRewards rewards;
+    private final String id;
+    private final long respawn;
+    private final String material;
+    private final Double hologramLocation;
+    private final NexusConfigHologram hologram;
+    private final NexusConfigLocation location;
+    private final NexusConfigHealthStatus healths;
+    private final NexusConfigRewards rewards;
 
     public NexusConfig(Map<String, Object> other) {
         this.id = String.valueOf(other.get("id").toString());

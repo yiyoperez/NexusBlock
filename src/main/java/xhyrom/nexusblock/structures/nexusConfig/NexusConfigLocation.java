@@ -1,26 +1,38 @@
 package xhyrom.nexusblock.structures.nexusConfig;
 
-import java.util.HashMap;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
+
 import java.util.Map;
 
 public class NexusConfigLocation {
-    public Double x;
-    public Double y;
-    public Double z;
-    public String world;
+    private Double x;
+    private Double y;
+    private Double z;
+    private String world;
 
     public NexusConfigLocation(Map<String, Object> other) {
-        if (!(other.get("location") instanceof HashMap)) return;
+        if (!(other.get("location") instanceof Section)) return;
+        Section section = (Section) other.get("location");
 
-        this.x = Double.valueOf(
-                ((HashMap<?, ?>) other.get("location")).get("x").toString()
-        );
-        this.y = Double.valueOf(
-                ((HashMap<?, ?>) other.get("location")).get("y").toString()
-        );
-        this.z = Double.valueOf(
-                ((HashMap<?, ?>) other.get("location")).get("z").toString()
-        );
-        this.world = ((HashMap<?, ?>) other.get("location")).get("world").toString();
+        this.x = section.getDouble("x");
+        this.y = section.getDouble("y");
+        this.z = section.getDouble("z");
+        this.world = section.getString("world");
+    }
+
+    public Double getX() {
+        return x;
+    }
+
+    public Double getY() {
+        return y;
+    }
+
+    public Double getZ() {
+        return z;
+    }
+
+    public String getWorld() {
+        return world;
     }
 }

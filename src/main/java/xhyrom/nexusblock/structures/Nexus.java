@@ -29,7 +29,7 @@ public class Nexus {
             String id,
             Material material,
             NexusConfigHologram hologramConfig,
-            NexusConfigLocation location,
+            NexusConfigLocation locationConfig,
             long respawnDelay,
             NexusConfigHealthStatus healthStatus,
             double hologramLocation,
@@ -40,9 +40,8 @@ public class Nexus {
     ) {
         this.id = id;
         this.material = material;
-        //TODO: Throws NPE
-        this.world = Bukkit.getWorld(location.world);
-        this.location = new Location(world, location.x, location.y, location.z, 0, 0);
+        this.world = Bukkit.getWorld(locationConfig.getWorld());
+        this.location = new Location(world, locationConfig.getX(), locationConfig.getY(), locationConfig.getZ(), 0, 0);
         this.hologramConfig = hologramConfig;
         this.respawnDelay = respawnDelay;
 
@@ -63,7 +62,7 @@ public class Nexus {
     public HashMap<String, Integer> getDestroys() {
         HashMap<String, Integer> tempDestroys = new HashMap<>();
 
-        for (int i = 0; i < this.hologramConfig.positionsHologramPositions.size(); i++) {
+        for (int i = 0; i < this.hologramConfig.getPositionsHologramPositions().size(); i++) {
             if (this.destroyers.size() <= i) break;
 
             String playerName = this.destroyers.get(i);

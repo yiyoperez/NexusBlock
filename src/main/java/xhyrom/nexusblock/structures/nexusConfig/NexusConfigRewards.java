@@ -1,5 +1,7 @@
 package xhyrom.nexusblock.structures.nexusConfig;
 
+import dev.dejvokep.boostedyaml.block.implementation.Section;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,11 +13,12 @@ public class NexusConfigRewards {
     private final HashMap<Integer, ArrayList<String>> rewards = new HashMap<>();
 
     public NexusConfigRewards(Map<String, Object> other) {
-        if (!(other.get("rewards") instanceof HashMap)) return;
+        if (!(other.get("rewards") instanceof Section)) return;
 
-        for (Map.Entry<?, ?> entry : ((HashMap<?, ?>) other.get("rewards")).entrySet()) {
-            this.rewards.put(Integer.parseInt(entry.getKey().toString()) - 1, (ArrayList<String>) entry.getValue());
-        }
+        Section section = (Section) other.get("rewards");
+        section.getStringRouteMappedValues(false).forEach((entry, value) ->
+                this.rewards.put(Integer.parseInt(entry) - 1, (ArrayList<String>) value));
+
     }
 
     public List<String> getReward(int s) {
