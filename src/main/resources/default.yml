@@ -10,9 +10,9 @@ hologram:
         - ""
         - "&c{health}&8/&c{maximumHealth}"
     positions:
-        - "&a➀ &7{playerName} &8| &7{count}"
-        - "&2➁ &7{playerName} &8| &7{count}"
-        - "&c➂ &7{playerName} &8| &7{count}"
+        - "&a1 &7{playerName} &8| &7{count}"
+        - "&22 &7{playerName} &8| &7{count}"
+        - "&c3 &7{playerName} &8| &7{count}"
 
 # Position of nexus
 location:
@@ -40,6 +40,32 @@ rewards:
         - "give {playerName} book"
         - "say {playerName} {destroys} 2."
     # Player that destroy block
-    -1:
+    0:
         - "give {playerName} golden_apple"
         - "say {playerName} {destroys} destroyed block!!"
+
+
+#new format
+
+ID: "Default"
+MATERIAL: "DIAMOND_BLOCK"
+HEALTH: 100
+RESPAWN_INTERVAL: 10
+HOLOGRAMS:
+    # Hologram offset, how much the hologram offsets from the nexus block.
+    OFFSET: 2.0
+    MAIN:
+        - ""
+        - ""
+        - ""
+    POSITION:
+        - ""
+        - ""
+        - ""
+LOCATIONS:
+    - ""
+REWARDS:
+    JUST_WINNER: true
+    WINNER:
+        - ""
+        - ""
