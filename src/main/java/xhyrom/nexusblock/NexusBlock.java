@@ -98,6 +98,21 @@ public final class NexusBlock extends JavaPlugin {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        boolean isPluginLoadingForFirstTime = !new File(getDataFolder() + File.separator + "blocks").exists();
+        if (isPluginLoadingForFirstTime) {
+            getLogger().info("Creating default nexus block.");
+
+            try {
+                YamlDocument defaultConfig = YamlDocument.create(new File(getDataFolder(), "blocks/default.yml"),
+                        getResource("default.yml"));
+
+                defaultConfig.update();
+                defaultConfig.save();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     public boolean isEnabled(String pluginName) {
