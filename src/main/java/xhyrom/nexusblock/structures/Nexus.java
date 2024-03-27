@@ -40,6 +40,7 @@ public class Nexus {
     ) {
         this.id = id;
         this.material = material;
+        //TODO: Throws NPE
         this.world = Bukkit.getWorld(location.world);
         this.location = new Location(world, location.x, location.y, location.z, 0, 0);
         this.hologramConfig = hologramConfig;
