@@ -2,13 +2,15 @@ name: NexusBlock
 version: @version@
 main: xhyrom.nexusblock.NexusBlock
 api-version: 1.13
-authors: [ xHyroM, Sliide_]
+authors: [ xHyroM, Sliide_ ]
+description: Plugin that allows create nexus blocks.
 softdepend:
-  - HolographicDisplays
-  - DecentHolograms
-  - Holograms
-  - Multiverse-Core
-  - MultiWorld
+    - HolographicDisplays
+    - DecentHolograms
+    - Holograms
+    - Multiverse-Core
+    - MultiWorld
+    - My_Worlds
 
 commands:
   nexusblock:

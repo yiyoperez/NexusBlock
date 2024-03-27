@@ -1,3 +1,26 @@
-
 # Do NOT touch!
 lang-version: 1
+
+# Plugin prefix, you can use it anywhere with placeholder %prefix%.
+PREFIX: '&8[&cNexusBlock&8] &7'
+
+# Common plugin message.
+RELOADED: '%prefix% &rSe recargaron los archivos de configuracion.'
+NO_PERMISSION: '%prefix% &cNo tienes permisos para hacer esto.'
+ERROR_OCCURRED: '%prefix% &cHa ocurrido un error, notifica esto al staff.'
+PLAYER_NOT_FOUND: '%prefix% &cEl jugador &e"%player%" &cno fue encontrado!'
+NOT_BOOLEAN: '%prefix% &cLa variable &e"%value" &cno es un true/false.'
+NOT_INTEGER: '%prefix% &cLa variable &e"%value%" &cno es un numero entero.'
+NOT_DOUBLE: '%prefix% &cLa variable &e"%value%" &cno es un numero doble. (0.0)'
+OUT_OF_RANGE: '%prefix% &cEl valor %value% esta fuera del rango. Minimo: %min% Maximo: %max%'
+
+# Command manager messages.
+COMMAND_MANAGER:
+    USAGE_HEADER: "&8x &c&lNexusBlock &7‣ &f<required> [optional] (description)"
+    USAGE_PREFIX: "&8x &c/"
+    USAGE: { }
+    TRANSLATIONS:
+        NO_PERMISSION: "%prefix% &cNo tienes permisos para usar este comando."
+        ONLY_PLAYERS: "%prefix% &cSolo jugadores pueden usar este comando!"
+        ONLY_CONSOLE: "%prefix% &cSolo puedes usar este comando desde la consola!"
+        INVALID_SUB_COMMAND: "%prefix% &cEl sub-comando &e\"%sub-command%\" &cno existe!"
