@@ -64,8 +64,10 @@ public final class NexusBlock extends JavaPlugin {
     private void setupHolograms() {
         if (isEnabled("DecentHolograms")) {
             this.hologram = new DecentHolograms();
+            getLogger().info("NexusBlock is now using DecentHolograms");
         } else if (isEnabled("HolographicDisplays")) {
             this.hologram = new HolographicDisplays(this);
+            getLogger().info("NexusBlock is now using HolographicDisplays");
         } else {
             getLogger().severe("No holograms plugins has been detected!");
             getLogger().severe("They wont work if you are not using an hologram plugin.");
