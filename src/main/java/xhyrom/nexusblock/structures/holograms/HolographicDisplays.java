@@ -14,9 +14,8 @@ public class HolographicDisplays implements HologramInterface {
         this.API = HolographicDisplaysAPI.get(plugin);
     }
 
-    public Object createHologram(Location location, int id, double hologramLocation) {
-        Location hdLocation = location.clone().add(0.5, 0, 0.5);
-        hdLocation.setY(hologramLocation);
+    public Object createHologram(Location location, String id, double hologramOffset) {
+        Location hdLocation = location.clone().add(0.5, hologramOffset, 0.5);
 
         return API.createHologram(hdLocation);
     }
@@ -31,13 +30,13 @@ public class HolographicDisplays implements HologramInterface {
         return;
     }
 
-    public void editTextLine(Object hd, Integer line, String desc, Boolean save) {
+    public void editTextLine(Object hd, Integer line, String desc) {
         ((Hologram) hd).getLines().remove(line);
         insertTextLine(hd, line, desc);
         return;
     }
 
-    public void editItemLine(Object hd, Integer line, ItemStack item, Boolean save) {
+    public void editItemLine(Object hd, Integer line, ItemStack item) {
         ((Hologram) hd).getLines().remove(line);
         insertItemLine(hd, line, item);
         return;

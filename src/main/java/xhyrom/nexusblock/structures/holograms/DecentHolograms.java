@@ -8,11 +8,10 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 
 public class DecentHolograms implements HologramInterface {
-    public Object createHologram(Location location, int id, double hologramLocation) {
-        Location hdLocation = location.clone().add(0.5, 0, 0.5);
-        hdLocation.setY(hologramLocation);
+    public Object createHologram(Location location, String id, double hologramOffset) {
+        Location hdLocation = location.clone().add(0.5, hologramOffset, 0.5);
 
-        return DHAPI.createHologram(String.valueOf(id), hdLocation, new ArrayList<>());
+        return DHAPI.createHologram(id, hdLocation, new ArrayList<>());
     }
 
     public void insertTextLine(Object hd, Integer line, String desc) {
@@ -23,11 +22,11 @@ public class DecentHolograms implements HologramInterface {
         DHAPI.addHologramLine((Hologram) hd, "#ICON: " + item.getType().name());
     }
 
-    public void editTextLine(Object hd, Integer line, String desc, Boolean save) {
+    public void editTextLine(Object hd, Integer line, String desc) {
         DHAPI.setHologramLine((Hologram) hd, line, desc);
     }
 
-    public void editItemLine(Object hd, Integer line, ItemStack item, Boolean save) {
+    public void editItemLine(Object hd, Integer line, ItemStack item) {
         DHAPI.setHologramLine((Hologram) hd, line, "#ICON: " + item.getType().name());
     }
 
