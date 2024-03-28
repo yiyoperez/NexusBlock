@@ -1,6 +1,8 @@
 package xhyrom.nexusblock.structures.nexus;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -10,13 +12,17 @@ import xhyrom.nexusblock.api.events.PlayerDestroyNexus;
 import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.structures.holograms.HologramInterface;
 import xhyrom.nexusblock.structures.nexusConfig.NexusConfig;
+import xhyrom.nexusblock.structures.nexusConfig.NexusConfigHealthStatus;
+import xhyrom.nexusblock.structures.nexusConfig.NexusConfigHologram;
+import xhyrom.nexusblock.utils.Placeholder;
+import xhyrom.nexusblock.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 public class NexusManager {
 
@@ -44,50 +50,41 @@ public class NexusManager {
         Nexus nexus = new Nexus(
                 nexusConfig.getId(),
                 material,
+                nexusConfig.getRespawn(),
+                //TODO: Get damage from temp data.
+                0,
                 nexusConfig.getHologram(),
                 nexusConfig.getLocation(),
-                nexusConfig.getRespawn(),
                 nexusConfig.getHealths(),
-                nexusConfig.getHologramLocation(),
                 nexusConfig.getRewards(),
-                //TODO: Get destroys and destroyers from temp data.
-                new CopyOnWriteArrayList<>(),
-                new HashMap<>(),
-                0
+                //TODO: Get destroyers from temp data.
+                new HashMap<>()
         );
         nexusBlocks.add(nexus);
-        //TODO: Again.. error with holo instance.
-        //updateHologram(nexus, true);
+
+        // Create block and hologram.
+        nexus.getLocation().getBlock().setType(nexus.getMaterial());
+        updateHologram(nexus, true);
     }
 
     public void onHit(Player player, Nexus nexus) {
-        player.sendMessage("Nexus status " + nexus.getHealthStatus().getDamage() + "/" + nexus.getHealthStatus().getMaximumHealth());
-        nexus.getHealthStatus().increaseDamage();
-        player.sendMessage("Increasing nexus damage to " + nexus.getHealthStatus().getDamage());
+        NexusConfigHealthStatus healthStatus = nexus.getHealthStatus();
+        healthStatus.increaseDamage();
 
-        nexus.getDestroys().merge(player.getName(), 1, Integer::sum);
+        nexus.getDestroyers().putIfAbsent(player.getName(), 0);
+        nexus.getDestroyers().merge(player.getName(), 1, Integer::sum);
 
-        if (!nexus.getDestroyers().contains(player.getName())) {
-            nexus.getDestroyers().add(player.getName());
-        }
-
-        nexus.getDestroyers().sort(new ModuleComparator(nexus.getDestroys()));
-        if (nexus.getDestroyers().size() > nexus.getHologramConfig().getPositionsHologramPositions().size()) {
-            nexus.getDestroyers().remove(nexus.getHologramConfig().getPositionsHologramPositions().size());
-        }
-
-        // TODO
-        //updateHologram(nexus, false);
-        if (nexus.getHealthStatus().getDamage() >= nexus.getHealthStatus().getMaximumHealth()) {
+        updateHologram(nexus, false);
+        if (healthStatus.getDamage() >= healthStatus.getMaximumHealth()) {
             destroy(player, nexus);
         }
     }
 
     private static class ModuleComparator implements Comparator<String> {
 
-        private HashMap<String, Integer> destroys = new HashMap<>();
+        private Map<String, Integer> destroys = new HashMap<>();
 
-        public ModuleComparator(HashMap<String, Integer> destroys) {
+        public ModuleComparator(Map<String, Integer> destroys) {
             this.destroys = destroys;
         }
 
@@ -112,20 +109,33 @@ public class NexusManager {
 
         if (event.isCancelled()) return;
 
-        nexus.getLocation().getWorld().strikeLightningEffect(nexus.getLocation());
+        nexus.getWorld().strikeLightningEffect(nexus.getLocation());
 
         Block block = nexus.getLocation().getBlock();
         block.setType(Material.BEDROCK);
 
+        // TODO: WORK ON REWARDS.
         // Give rewards to top players
-        for (int i = 0; i <= nexus.getHologramConfig().getPositionsHologramPositions().size(); i++) {
-            if (nexus.getDestroyers().size() <= i) break;
+        List<String> destroyers = nexus.getDestroyers()
+                .keySet()
+                .stream()
+                .sorted(new ModuleComparator(nexus.getDestroyers()))
+                .collect(Collectors.toList());
 
-            String playerName = nexus.getDestroyers().get(i);
-            if (playerName == null) continue;
+        destroyers.forEach(playerName -> {
+            // Limit leaderboard players.
+            int configLimit = plugin.getConfiguration().getInt("LEADERBOARD.LIMIT");
+            // If off-limits set to 3.
+            int limit = (configLimit <= 0 || configLimit > 5) ? 3 : plugin.getConfiguration().getInt("LEADERBOARD.LIMIT");
 
-            giveRewards(i, playerName, nexus);
-        }
+            for (int i = 0; i < limit; i++) {
+                if (nexus.getDestroyers().size() > i) {
+                    continue;
+                }
+
+                giveRewards(i, playerName, nexus);
+            }
+        });
 
         // Give reward to Casper the friendly ghost?
         giveRewards(-2, player.getName(), nexus);
@@ -136,14 +146,14 @@ public class NexusManager {
             block1.setType(nexus.getMaterial());
 
             nexus.getHealthStatus().setDamage(0);
-            //updateHologramHealthPositions(nexus);
+            updateHologramHealthPositions(nexus);
 
             nexus.getDestroyers().clear();
-            nexus.getDestroys().clear();
-            //updateHologramPositions(nexus, true);
+            updateHologramPositions(nexus, true);
         }, nexus.getRespawnDelay() * 20L);
     }
 
+    // TODO: WORK ON REWARDS.
     private void giveRewards(int i, String playerName, Nexus nexus) {
         if (!nexus.getRewardsConfig().getRewards().containsKey(i)) return;
 
@@ -153,7 +163,7 @@ public class NexusManager {
                     Bukkit.getConsoleSender(),
                     reward
                             .replaceAll("\\{playerName}", playerName)
-                            .replaceAll("\\{destroys}", String.valueOf(nexus.getDestroys().get(playerName)))
+                            .replaceAll("\\{destroys}", nexus.getDestroyers().get(playerName).toString())
             );
         });
     }
@@ -161,41 +171,32 @@ public class NexusManager {
     private void updateHologram(Nexus nexus, boolean setup) {
         HologramInterface hologramInterface = plugin.getHologram();
 
+        if (hologramInterface == null) return;
         if (setup) {
-            int i = 0;
-            for (String line : nexus.getHologramConfig().getMain()) {
-                if (line.contains("{health}") || line.contains("{maximumHealth}")) {
-                    nexus.getHologramConfig().getHealthVariablesPositions().put(i, line);
+            Location location = nexus.getLocation();
+            NexusConfigHologram hologramConfig = nexus.getHologramConfig();
+            NexusConfigHealthStatus healthStatus = nexus.getHealthStatus();
+
+            double offset = hologramConfig.getHologramOffset();
+            Object hologram = hologramInterface.createHologram(location, nexus.getId(), offset);
+            hologramConfig.setHologramInterface(hologram);
+
+
+            // Set hologram content
+            hologramConfig.getHologramStrings().forEach(line -> {
+                int stringIndex = hologramConfig.getHologramStrings().indexOf(line);
+                if (line.equals("%material%")) {
+                    hologramInterface.insertItemLine(hologram, stringIndex, new ItemStack(nexus.getMaterial()));
+                    return;
                 }
-
-                line = line
-                        .replaceAll("\\{health}", String.valueOf(nexus.getHealthStatus().getDamage()))
-                        .replaceAll("\\{maximumHealth}", String.valueOf(nexus.getHealthStatus().getMaximumHealth()));
-
-                if (line.contains("\n")) {
-                    for (String l : line.split("\n")) {
-                        hologramInterface.insertTextLine(
-                                hologramInterface,
-                                i,
-                                l
-                                        .replaceAll("\\{playerName}", "-")
-                                        .replaceAll("\\{count}", "0")
-                        );
-                        nexus.getHologramConfig().getPositionsHologramPositions().put(i, l);
-                        i++;
-                    }
-
-                    continue;
-                }
-
-                if (line.equals("{BLOCK:MATERIAL}")) {
-                    hologramInterface.insertItemLine(hologramInterface, i, new ItemStack(nexus.getMaterial()));
-                } else {
-                    hologramInterface.insertTextLine(hologramInterface, i, line);
-                }
-
-                i++;
-            }
+                hologramInterface.insertTextLine(
+                        hologram,
+                        stringIndex,
+                        StringUtils.replace(line,
+                                new Placeholder("%health%", healthStatus.getDamage()),
+                                new Placeholder("%maxHealth%", healthStatus.getMaximumHealth())
+                        ));
+            });
         }
 
         updateHologramHealthPositions(nexus);
@@ -205,145 +206,69 @@ public class NexusManager {
     private void updateHologramHealthPositions(Nexus nexus) {
         HologramInterface hologramInterface = plugin.getHologram();
 
-        nexus.getHologramConfig().getHealthVariablesPositions().forEach((i, line) -> {
-            hologramInterface.editTextLine(
-                    hologramInterface,
-                    i,
-                    line
-                            .replaceAll("\\{health}", String.valueOf(nexus.getHealthStatus().getDamage()))
-                            .replaceAll("\\{maximumHealth}", String.valueOf(nexus.getHealthStatus().getMaximumHealth())),
-                    false
-            );
+        if (hologramInterface == null) return;
+        NexusConfigHologram hologramConfig = nexus.getHologramConfig();
+        NexusConfigHealthStatus healthStatus = nexus.getHealthStatus();
+        Object hologram = hologramConfig.getHologramInterface();
+
+        hologramConfig.getHologramStrings().forEach(line -> {
+            if (line.contains("%health%") || line.contains("%maxHealth%")) {
+                int stringIndex = hologramConfig.getHologramStrings().indexOf(line);
+
+                hologramInterface.editTextLine(
+                        hologram,
+                        stringIndex,
+                        StringUtils.replace(line,
+                                new Placeholder("%health%", healthStatus.getDamage()),
+                                new Placeholder("%maxHealth%", healthStatus.getMaximumHealth())
+                        )
+                );
+            }
         });
     }
 
     private void updateHologramPositions(Nexus nexus, boolean reset) {
         HologramInterface hologramInterface = plugin.getHologram();
 
-        int i = 0;
-        for (Map.Entry<Integer, String> line : nexus.getHologramConfig().getPositionsHologramPositions().entrySet()) {
-            if (reset) {
-                hologramInterface.editTextLine(
-                        hologramInterface,
-                        line.getKey(),
-                        line.getValue()
-                                .replaceAll("\\{playerName}", "-")
-                                .replaceAll("\\{count}", "0"),
-                        false
-                );
+        if (hologramInterface == null) return;
+        NexusConfigHologram hologramConfig = nexus.getHologramConfig();
+        Object hologram = hologramConfig.getHologramInterface();
+        YamlDocument config = plugin.getConfiguration();
 
-                continue;
+        // Limit leaderboard players.
+        int configLimit = config.getInt("LEADERBOARD.LIMIT");
+        // If off-limits set to 3.
+        int limit = (configLimit <= 0 || configLimit > 5) ? 3 : config.getInt("LEADERBOARD.LIMIT");
+
+        for (int i = 0; i < limit; i++) {
+            for (String line : hologramConfig.getHologramStrings()) {
+                int stringIndex = hologramConfig.getHologramStrings().indexOf(line);
+
+                // Junkie me, pls kill me
+                int ix = i + 1;
+
+                if (line.contains("%top_" + ix + "%") || line.contains("%value_" + ix + "%")) {
+
+                    boolean resetOrEmpty = reset || ix > nexus.getDestroyers().size();
+                    List<String> destroyers = nexus.getDestroyers()
+                            .keySet()
+                            .stream()
+                            .sorted(new ModuleComparator(nexus.getDestroyers()))
+                            .collect(Collectors.toList());
+
+                    hologramInterface.editTextLine(
+                            hologram,
+                            stringIndex,
+                            StringUtils.replace(line,
+                                    new Placeholder("%top_" + ix + "%", resetOrEmpty ? config.getString("LEADERBOARD.EMPTY_TOP") : destroyers.get(i)),
+                                    new Placeholder("%value_" + ix + "%", resetOrEmpty ? config.getString("LEADERBOARD.EMPTY_VALUE") : String.valueOf(nexus.getDestroyers().get(destroyers.get(i))
+                                    ))
+                            )
+                    );
+                }
             }
-
-            if (nexus.getDestroyers().size() <= i) break;
-
-            String playerName = nexus.getDestroyers().get(i);
-            if (playerName == null) continue;
-
-            hologramInterface.editTextLine(
-                    hologramInterface,
-                    line.getKey(),
-                    line.getValue()
-                            .replaceAll("\\{playerName}", playerName)
-                            .replaceAll("\\{count}", String.valueOf(nexus.getDestroys().get(playerName))),
-                    false
-            );
-
-            i++;
         }
     }
-
-    //    private void updateHologram(boolean setup) {
-//        HologramInterface hologramInterfaceNexusBlock = NexusBlock.getInstance().hologram;
-//
-//        if (setup) {
-//            int i = 0;
-//            for (String line : this.hologram.main) {
-//                if (line.contains("{health}") || line.contains("{maximumHealth}")) {
-//                    this.hologram.healthVariablesPositions.put(i, line);
-//                }
-//
-//                line = line
-//                        .replaceAll("\\{health}", String.valueOf(this.healths.damaged))
-//                        .replaceAll("\\{maximumHealth}", String.valueOf(this.healths.maximumHealth));
-//
-//                if (line.contains("\n")) {
-//                    for (String l : line.split("\n")) {
-//                        hologramInterfaceNexusBlock.insertTextLine(
-//                                this.hologramInterface,
-//                                i,
-//                                l
-//                                        .replaceAll("\\{playerName}", "-")
-//                                        .replaceAll("\\{count}", "0")
-//                        );
-//                        this.hologram.positionsHologramPositions.put(i, l);
-//                        i++;
-//                    }
-//
-//                    continue;
-//                }
-//
-//                if (line.equals("{BLOCK:MATERIAL}")) NexusBlock.getInstance().hologram.insertItemLine(this.hologramInterface, i, new ItemStack(this.material));
-//                else NexusBlock.getInstance().hologram.insertTextLine(this.hologramInterface, i, line);
-//
-//                i++;
-//            }
-//        }
-//
-//        updateHologramHealthPositions();
-//        updateHologramPositions(false);
-//    }
-//
-//    private void updateHologramHealthPositions() {
-//        HologramInterface hologramInterfaceNexusBlock = NexusBlock.getInstance().hologram;
-//
-//        this.hologram.healthVariablesPositions.forEach((i, line) -> {
-//            hologramInterfaceNexusBlock.editTextLine(
-//                    this.hologramInterface,
-//                    i,
-//                    line
-//                            .replaceAll("\\{health}", String.valueOf(this.healths.damaged))
-//                            .replaceAll("\\{maximumHealth}", String.valueOf(this.healths.maximumHealth)),
-//                    false
-//            );
-//        });
-//    }
-//
-//    private void updateHologramPositions(boolean reset) {
-//        HologramInterface hologramInterfaceNexusBlock = NexusBlock.getInstance().hologram;
-//
-//        int i = 0;
-//        for (Map.Entry<Integer, String> line : this.hologram.positionsHologramPositions.entrySet()) {
-//            if (reset) {
-//                hologramInterfaceNexusBlock.editTextLine(
-//                        this.hologramInterface,
-//                        line.getKey(),
-//                        line.getValue()
-//                                .replaceAll("\\{playerName}", "-")
-//                                .replaceAll("\\{count}", "0"),
-//                        false
-//                );
-//
-//                continue;
-//            }
-//
-//            if (this.destroyers.size() <= i) break;
-//
-//            String playerName = this.destroyers.get(i);
-//            if (playerName == null) continue;
-//
-//            hologramInterfaceNexusBlock.editTextLine(
-//                    this.hologramInterface,
-//                    line.getKey(),
-//                    line.getValue()
-//                            .replaceAll("\\{playerName}", playerName)
-//                            .replaceAll("\\{count}", String.valueOf(this.destroys.get(playerName))),
-//                    false
-//            );
-//
-//            i++;
-//        }
-//    }
 
     public Nexus getNexus(String yes) {
         return null;
