@@ -4,13 +4,11 @@ import java.util.Map;
 
 public class NexusConfigHealthStatus {
 
-    private int damage;
+    private int damage = 0;
     private int maximumHealth;
 
     public NexusConfigHealthStatus(Map<String, Object> other) {
-
-        this.damage = 0;
-        this.maximumHealth = Integer.parseInt(other.get("healths").toString());
+        this.maximumHealth = Integer.parseInt(other.get("HEALTH").toString());
     }
 
     public int getDamage() {
@@ -22,7 +20,7 @@ public class NexusConfigHealthStatus {
     }
 
     public void increaseDamage() {
-        setDamage(damage++);
+        this.damage++;
     }
 
     public int getMaximumHealth() {

@@ -1,45 +1,36 @@
 package xhyrom.nexusblock.structures.nexusConfig;
 
-import dev.dejvokep.boostedyaml.block.implementation.Section;
-
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class NexusConfigHologram {
-    private List<String> main;
-    private List<String> positions;
-    private Map<Integer, String> healthVariablesPositions;
-    private Map<Integer, String> positionsHologramPositions;
+
+    private Object hologramInterface;
+    private double hologramOffset;
+    private final List<String> hologramStrings;
 
     public NexusConfigHologram(Map<String, Object> other) {
-        if (!(other.get("hologram") instanceof Section)) return;
-
-        Section section = (Section) other.get("hologram");
-
-        this.positionsHologramPositions = new HashMap<>();
-        this.healthVariablesPositions = new HashMap<>();
-        this.main = section.getStringList("main");
-        this.positions = section.getStringList("positions");
-
-        main.addAll(positions);
-
-        //TODO: Replace placeholder into position placeholder "{hologram:positions}" or something like that.
+        this.hologramStrings = (List<String>) other.get("HOLOGRAM");
+        this.hologramOffset = Double.parseDouble(other.get("HOLOGRAM-HEIGHT").toString());
     }
 
-    public List<String> getMain() {
-        return main;
+    public Object getHologramInterface() {
+        return hologramInterface;
     }
 
-    public List<String> getPositions() {
-        return positions;
+    public void setHologramInterface(Object hologramInterface) {
+        this.hologramInterface = hologramInterface;
     }
 
-    public Map<Integer, String> getHealthVariablesPositions() {
-        return healthVariablesPositions;
+    public double getHologramOffset() {
+        return hologramOffset;
     }
 
-    public Map<Integer, String> getPositionsHologramPositions() {
-        return positionsHologramPositions;
+    public void setHologramOffset(double hologramOffset) {
+        this.hologramOffset = hologramOffset;
+    }
+
+    public List<String> getHologramStrings() {
+        return hologramStrings;
     }
 }

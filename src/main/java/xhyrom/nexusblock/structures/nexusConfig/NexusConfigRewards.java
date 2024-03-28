@@ -13,9 +13,9 @@ public class NexusConfigRewards {
     private final HashMap<Integer, ArrayList<String>> rewards = new HashMap<>();
 
     public NexusConfigRewards(Map<String, Object> other) {
-        if (!(other.get("rewards") instanceof Section)) return;
+        if (!(other.get("REWARDS") instanceof Section)) return;
 
-        Section section = (Section) other.get("rewards");
+        Section section = (Section) other.get("REWARDS");
         section.getStringRouteMappedValues(false).forEach((entry, value) ->
                 this.rewards.put(Integer.parseInt(entry) - 1, (ArrayList<String>) value));
 
