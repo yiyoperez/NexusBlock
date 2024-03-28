@@ -1,34 +1,38 @@
-id: default
-material: DIAMOND_BLOCK
-hologram:
-    main:
-        - "{BLOCK:MATERIAL}"
-        - "&b&lDIAMOND NEXUS"
-        - "Destroy to get reward"
-        - ""
-        - "{hologram:positions}"
-        - ""
-        - "&c{health}&8/&c{maximumHealth}"
-    positions:
-        - "&a1 &7{playerName} &8| &7{count}"
-        - "&22 &7{playerName} &8| &7{count}"
-        - "&c3 &7{playerName} &8| &7{count}"
+# NexusBlock id.
+ID: default
 
-# Position of nexus
-location:
-    x: 10.0
-    y: 50.0
-    z: 10.0
-    world: "world"
+# Material
+MATERIAL: DIAMOND_BLOCK
 
-#  Position of hologram (only y, height)
-hologramLocation: 54.5
+# Block max health.
+HEALTH: 100
+
+# Hologram height/y-offset.
+HOLOGRAM-HEIGHT: 5
 
 # Respawn nexus after destroy (in seconds)
-respawn: 10
+RESPAWN_INTERVAL: 10
 
-# Nexus healths
-healths: 100
+# Position of nexus
+LOCATION:
+    X: 10.0
+    Y: 50.0
+    Z: 10.0
+    WORLD: "world"
+
+# Hologram
+# Available placeholders are
+# %material%, %health%, %maxHealth% %top_1%, %top_2%, %value_1%, %value_2% etc..
+HOLOGRAM:
+    - "%material%"
+    - "&b&lDIAMOND NEXUS"
+    - "Destroy to get reward"
+    - ""
+    - "&a1 &7%top_1% &8| &7%value_1%"
+    - "&a2 &7%top_2% &8| &7%value_2%"
+    - "&a3 &7%top_3% &8| &7%value_3%"
+    - ""
+    - "&c%health%&8/&c%maxHealth%"
 
 rewards:
     # First player (top 1)
@@ -43,29 +47,3 @@ rewards:
     0:
         - "give {playerName} golden_apple"
         - "say {playerName} {destroys} destroyed block!!"
-
-
-#new format
-
-ID: "Default"
-MATERIAL: "DIAMOND_BLOCK"
-HEALTH: 100
-RESPAWN_INTERVAL: 10
-HOLOGRAMS:
-    # Hologram offset, how much the hologram offsets from the nexus block.
-    OFFSET: 2.0
-    MAIN:
-        - ""
-        - ""
-        - ""
-    POSITION:
-        - ""
-        - ""
-        - ""
-LOCATIONS:
-    - ""
-REWARDS:
-    JUST_WINNER: true
-    WINNER:
-        - ""
-        - ""

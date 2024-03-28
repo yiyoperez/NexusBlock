@@ -11,3 +11,8 @@
 
 # Do NOT touch!
 config-version: 1
+
+LEADERBOARD:
+    LIMIT: 5
+    EMPTY_TOP: "NONE"
+    EMPTY_VALUE: 0
