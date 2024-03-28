@@ -2,6 +2,7 @@ package xhyrom.nexusblock.structures.nexus;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import xhyrom.nexusblock.NexusBlock;
+import xhyrom.nexusblock.structures.holograms.HologramInterface;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,11 +12,13 @@ public class NexusService {
     private final File folder;
     private final NexusBlock plugin;
     private final NexusManager nexusManager;
+    private final HologramInterface hologramInterface;
 
     public NexusService(NexusBlock plugin) {
         this.plugin = plugin;
         this.folder = new File(plugin.getDataFolder(), "blocks");
         this.nexusManager = plugin.getNexusManager();
+        this.hologramInterface = plugin.getHologram();
     }
 
     public void loadBlocks() {
@@ -40,6 +43,13 @@ public class NexusService {
     }
 
     public void saveNexusBlocks() {
+
+        // Delete holograms.
+        if (hologramInterface != null) {
+            nexusManager.getNexusBlocks().forEach(nexus ->
+                    hologramInterface.deleteHologram(nexus.getHologramConfig().getHologramInterface()));
+        }
+
         if (!folder.exists()) return;
 
         File[] files = folder.listFiles();
