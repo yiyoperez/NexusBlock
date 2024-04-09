@@ -34,16 +34,21 @@ HOLOGRAM:
     - ""
     - "&c%health%&8/&c%maxHealth%"
 
-rewards:
-    # First player (top 1)
-    1:
-        - "give {playerName} apple"
-        - "say {playerName} {destroys} 1."
-    # Second player (top 2)
-    2:
-        - "give {playerName} book"
-        - "say {playerName} {destroys} 2."
+# Available placeholders are
+# %player%, %destroys%
+REWARDS:
     # Player that destroy block
-    0:
-        - "give {playerName} golden_apple"
-        - "say {playerName} {destroys} destroyed block!!"
+    DESTROYER:
+        - "give %player% golden_apple"
+        - "say %player% destroyed block!"
+        - "say %player% broke the nexus %destroys% times."
+    # Set this section empty ( DESTROYERS: {} ) if you don't want give rewards to other destroyers.
+    DESTROYERS:
+        # First player (top 1)
+        1:
+            - "give %player% apple"
+            - "say %player% broke the nexus %destroys% times."
+        # Second player (top 2)
+        2:
+            - "give %player% book"
+            - "say %player% broke the nexus %destroys% times."
