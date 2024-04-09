@@ -1,6 +1,7 @@
 package xhyrom.nexusblock.structures.nexus;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,7 +20,6 @@ import xhyrom.nexusblock.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,29 +42,44 @@ public class NexusManager {
             return;
         }
 
-        //TODO: Get temp data and apply it.
-//            Data dataFromDatabase = NexusBlock.getInstance().jsonDatabase.data.get(nexusConfig.id);
-//            if (dataFromDatabase == null)
-//                dataFromDatabase = new Data(new CopyOnWriteArrayList<>(), new HashMap<String, Integer>(), 0);
-
         Nexus nexus = new Nexus(
                 nexusConfig.getId(),
                 material,
                 nexusConfig.getRespawn(),
-                //TODO: Get damage from temp data.
-                0,
                 nexusConfig.getHologram(),
                 nexusConfig.getLocation(),
                 nexusConfig.getHealths(),
-                nexusConfig.getRewards(),
-                //TODO: Get destroyers from temp data.
-                new HashMap<>()
+                nexusConfig.getRewards()
         );
+
+        // Update values from temporal data if any.
+        updateFromTemporalData(nexusConfig, nexus);
+
+        // Add to list.
         nexusBlocks.add(nexus);
 
         // Create block and hologram.
         nexus.getLocation().getBlock().setType(nexus.getMaterial());
         updateHologram(nexus, true);
+    }
+
+    private void updateFromTemporalData(NexusConfig nexusConfig, Nexus nexus) {
+        YamlDocument tempData = plugin.getTempData();
+        if (tempData.contains(nexusConfig.getId())) {
+            Section section = tempData.getSection(nexusConfig.getId());
+            if (section == null) return;
+
+            // Update stored damage.
+            int damage = section.getInt("DAMAGE", 0);
+            nexus.getHealthStatus().setDamage(damage);
+            // Gets stored data and apply to nexus.
+            if (section.contains("DESTROYERS")) {
+                section.getSection("DESTROYERS")
+                        .getStringRouteMappedValues(false)
+                        .replaceAll((d, v) -> nexus.getDestroyers().put(d, (Integer) v));
+            }
+            section.clear();
+        }
     }
 
     public void onHit(Player player, Nexus nexus) {
@@ -82,7 +97,7 @@ public class NexusManager {
 
     private static class ModuleComparator implements Comparator<String> {
 
-        private Map<String, Integer> destroys = new HashMap<>();
+        private final Map<String, Integer> destroys;
 
         public ModuleComparator(Map<String, Integer> destroys) {
             this.destroys = destroys;

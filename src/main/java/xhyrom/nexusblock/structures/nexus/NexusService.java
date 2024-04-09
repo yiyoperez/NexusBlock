@@ -1,11 +1,16 @@
 package xhyrom.nexusblock.structures.nexus;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import xhyrom.nexusblock.NexusBlock;
+import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.structures.holograms.HologramInterface;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.stream.Stream;
 
 public class NexusService {
 
@@ -13,10 +18,12 @@ public class NexusService {
     private final NexusBlock plugin;
     private final NexusManager nexusManager;
     private final HologramInterface hologramInterface;
+    private final YamlDocument tempData;
 
     public NexusService(NexusBlock plugin) {
         this.plugin = plugin;
         this.folder = new File(plugin.getDataFolder(), "blocks");
+        this.tempData = plugin.getTempData();
         this.nexusManager = plugin.getNexusManager();
         this.hologramInterface = plugin.getHologram();
     }
@@ -28,8 +35,8 @@ public class NexusService {
         if (files == null) return;
 
         for (File file : files) {
-            // Not really needed, yet?
             String id = file.getName().split("\\.")[0];
+            plugin.getLogger().info("Loaded nexus " + id);
 
             YamlDocument nexusBlock;
             try {
@@ -43,46 +50,109 @@ public class NexusService {
     }
 
     public void saveNexusBlocks() {
+        if (nexusManager.getNexusBlocks().isEmpty()) return;
 
-        // Delete holograms.
-        if (hologramInterface != null) {
-            nexusManager.getNexusBlocks().forEach(nexus ->
-                    hologramInterface.deleteHologram(nexus.getHologramConfig().getHologramInterface()));
-        }
+        nexusManager.getNexusBlocks().forEach(nexus -> {
+            plugin.getLogger().info("Saving nexus " + nexus.getId());
 
-        if (!folder.exists()) return;
+            // Delete holograms.
+            if (hologramInterface != null) {
+                hologramInterface.deleteHologram(nexus.getHologramConfig().getHologramInterface());
+            }
 
-        File[] files = folder.listFiles();
-        if (files == null) return;
+            // Save current damage and destroyers values.
+            saveTemporalData(nexus);
 
-        //TODO:
-        // Delete file if no longer exists.
-        // Save if nexus was edited.
+            // Update if nexus was edited or create file if it's new.
+            try {
+                YamlDocument file = YamlDocument.create(new File(folder, nexus.getId() + ".yml"));
+
+                // Todo: update link
+                file.addComment("Information about nexus blocks at ...");
+                file.set("ID", nexus.getId());
+                file.set("MATERIAL", nexus.getMaterial().name());
+                file.set("HEALTH", nexus.getHealthStatus().getMaximumHealth());
+                file.set("HOLOGRAM-HEIGHT", nexus.getHologramConfig().getHologramOffset());
+                file.set("RESPAWN_INTERVAL", nexus.getRespawnDelay());
+                file.set("LOCATION.X", nexus.getLocation().getX());
+                file.set("LOCATION.Y", nexus.getLocation().getY());
+                file.set("LOCATION.Z", nexus.getLocation().getZ());
+                file.set("LOCATION.WORLD", nexus.getLocation().getWorld().getName());
+                file.set("HOLOGRAM", nexus.getHologramConfig().getHologramStrings());
+
+                //TODO: REWARDS...
+
+                file.save();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+        });
+
+        // Empty list.
+        nexusManager.getNexusBlocks().clear();
     }
 
-    //TODO:
-    // Moved from main.
-    // Needs to work.
-    /*public void onReload() {
-        for (Nexus nexus : this.nexuses) {
-            this.nexuses.remove(nexus);
-            this.hologram.deleteHologram(nexus.hologramInterface);
+    // Not even sure if implement it.
+    private void deleteOldFiles() {
+        // Delete file if no longer exists.
+        if (!folder.exists()) return;
+
+//        File[] files = folder.listFiles();
+//        if (files == null) return;
+//
+//
+//        // Delete file if no longer exists.
+//        for (File file : files) {
+//
+//            String id = file.getName().split("\\.")[0];
+//            if (nexusManager.existsNexusBlock(id)) return;
+//
+//            try {
+//                plugin.getLogger().warning("Deleting file " + file.getName());
+//                Files.deleteIfExists(file.toPath());
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+
+        try (Stream<Path> paths = Files.walk(folder.toPath())) {
+            paths
+                    .filter(Files::isRegularFile)
+                    .forEach(file -> {
+                        String id = file.getFileName().toString().split("\\.")[0];
+                        if (!nexusManager.existsNexusBlock(id)) {
+                            try {
+                                plugin.getLogger().warning("Deleting file " + file.getFileName());
+                                Files.deleteIfExists(file);
+                            } catch (IOException ignored) {
+                            }
+                        }
+                    });
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+    }
 
-        nexuses = Loader.loadBlocks();
-    }*/
+    public void onReload() {
+        saveNexusBlocks();
+        loadBlocks();
+    }
 
-    //TODO:
-    // Moved from main, it saves current destroyers.
-    // Executed at scheduler at 300 * 20.
-//    private void saveData() {
-////        JSONDatabase tempJsonDatabase = new JSONDatabase();
-////
-////        for (Nexus nexus : this.nexuses) {
-////            tempJsonDatabase.addNexus(nexus.id, nexus.getDestroyers(), nexus.getDestroys(), nexus.healths.damaged);
-////        }
-////
-////        tempJsonDatabase.toString(getDataFolder() + "/database.json");
-////        this.jsonDatabase = tempJsonDatabase;
-//    }
+    private void saveTemporalData(Nexus nexus) {
+        if (nexus.getHealthStatus().getDamage() == 0 || nexus.getDestroyers().isEmpty()) return;
+
+        // Save nexus current damage.
+        Section section = tempData.createSection(nexus.getId());
+        section.set("DAMAGE", nexus.getHealthStatus().getDamage());
+        // Save destroyers data.
+        nexus.getDestroyers().forEach((destroyer, value) ->
+                section.createSection("DESTROYERS").set(destroyer, value));
+
+        try {
+            tempData.save();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

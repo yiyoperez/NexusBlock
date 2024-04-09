@@ -28,12 +28,10 @@ public class Nexus {
             String id,
             Material material,
             long respawnDelay,
-            int currentHealth,
             NexusConfigHologram hologramConfig,
             NexusConfigLocation locationConfig,
             NexusConfigHealthStatus healthStatus,
-            NexusConfigRewards rewardsConfig,
-            Map<String, Integer> destroyers
+            NexusConfigRewards rewardsConfig
     ) {
         this.id = id;
         this.material = material;
@@ -43,8 +41,6 @@ public class Nexus {
         this.rewardsConfig = rewardsConfig;
         this.hologramConfig = hologramConfig;
         this.healthStatus = healthStatus;
-        healthStatus.setDamage(currentHealth);
-        this.destroyers = destroyers;
     }
 
     public String getId() {

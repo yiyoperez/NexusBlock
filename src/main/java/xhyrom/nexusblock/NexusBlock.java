@@ -52,6 +52,11 @@ public final class NexusBlock extends JavaPlugin {
     }
 
     @Override
+    public void reloadConfig() {
+        nexusService.onReload();
+    }
+
+    @Override
     public void onDisable() {
         if (nexusService != null) {
             nexusService.saveNexusBlocks();
