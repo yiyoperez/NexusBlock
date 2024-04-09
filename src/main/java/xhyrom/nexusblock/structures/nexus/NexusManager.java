@@ -173,14 +173,14 @@ public class NexusManager {
         if (!nexus.getRewardsConfig().getRewards().containsKey(i)) return;
 
         List<String> rewards = nexus.getRewardsConfig().getReward(i);
-        rewards.forEach(reward -> {
-            Bukkit.dispatchCommand(
-                    Bukkit.getConsoleSender(),
-                    reward
-                            .replaceAll("\\{playerName}", playerName)
-                            .replaceAll("\\{destroys}", nexus.getDestroyers().get(playerName).toString())
-            );
-        });
+        rewards.forEach(reward ->
+                Bukkit.dispatchCommand(
+                        Bukkit.getConsoleSender(),
+                        StringUtils.replace(reward,
+                                new Placeholder("%player%", playerName),
+                                new Placeholder("%destroys%", nexus.getDestroyers().get(playerName))
+                        )
+                ));
     }
 
     private void updateHologram(Nexus nexus, boolean setup) {
