@@ -16,8 +16,9 @@ public class NexusConfigRewards {
         if (!(other.get("REWARDS") instanceof Section)) return;
 
         Section section = (Section) other.get("REWARDS");
-        section.getStringRouteMappedValues(false).forEach((entry, value) ->
-                this.rewards.put(Integer.parseInt(entry) - 1, (ArrayList<String>) value));
+        // TODO: accept any kind of value.
+//        section.getStringRouteMappedValues(false).forEach((entry, value) ->
+//                this.rewards.put(Integer.parseInt(entry) - 1, (ArrayList<String>) value));
 
     }
 
