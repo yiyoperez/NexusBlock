@@ -8,6 +8,7 @@ import dev.triumphteam.cmd.core.annotation.Description;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 import org.bukkit.command.CommandSender;
 import xhyrom.nexusblock.NexusBlock;
+import xhyrom.nexusblock.structures.nexus.NexusManager;
 import xhyrom.nexusblock.utils.MessageHandler;
 
 @Command(value = "nexusblock", alias = {"nb", "blocknexus"})
@@ -15,9 +16,14 @@ import xhyrom.nexusblock.utils.MessageHandler;
 @Description("NexusBlock plugin main command.")
 public class NexusBlockCommand extends BaseCommand {
 
+    //TODO:
+    // Subcommands: Create, Read/Info, Update/Edit, Delete, List, Enable/Disable, Teleport, Get/Place (Give item to set block location)
+
+    private final NexusManager nexusManager;
     private final MessageHandler messageHandler;
 
     public NexusBlockCommand(NexusBlock plugin) {
+        this.nexusManager = plugin.getNexusManager();
         this.messageHandler = plugin.getMessageHandler();
     }
 
@@ -43,6 +49,10 @@ public class NexusBlockCommand extends BaseCommand {
         messageHandler.sendManualMessage(sender, "&cAdmin Commands:");
         messageHandler.sendManualMessage(sender, "");
         messageHandler.sendManualMessage(sender, "&c/nexusblock reload &8- &7Reload plugin");
+    }
+
+    public NexusManager getNexusManager() {
+        return nexusManager;
     }
 
     public MessageHandler getMessageHandler() {

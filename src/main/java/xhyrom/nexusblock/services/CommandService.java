@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xhyrom.nexusblock.NexusBlock;
+import xhyrom.nexusblock.commands.ListSubCommand;
 import xhyrom.nexusblock.commands.NexusBlockCommand;
 import xhyrom.nexusblock.utils.MessageHandler;
 import xhyrom.nexusblock.utils.Placeholder;
@@ -40,6 +41,7 @@ public class CommandService {
         registerTranslations();
 
         commandSet.add(new NexusBlockCommand(plugin));
+        commandSet.add(new ListSubCommand(plugin));
 
         commandSet.forEach(command -> {
             logger.log(Level.INFO, "Trying to register command " + command.getClass().getSimpleName());
