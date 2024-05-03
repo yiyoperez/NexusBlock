@@ -39,16 +39,16 @@ HOLOGRAM:
 REWARDS:
     # Player that destroy block
     DESTROYER:
-        - "give %player% golden_apple"
+        - "give %player% golden_apple 1"
         - "say %player% destroyed block!"
         - "say %player% broke the nexus %destroys% times."
     # Set this section empty ( DESTROYERS: {} ) if you don't want give rewards to other destroyers.
     DESTROYERS:
         # First player (top 1)
         1:
-            - "give %player% apple"
+            - "give %player% apple 1"
             - "say %player% broke the nexus %destroys% times."
         # Second player (top 2)
         2:
-            - "give %player% book"
+            - "give %player% book 1"
             - "say %player% broke the nexus %destroys% times."
