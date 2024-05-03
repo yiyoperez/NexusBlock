@@ -7,12 +7,13 @@ import dev.triumphteam.cmd.core.annotation.Default;
 import dev.triumphteam.cmd.core.annotation.Description;
 import dev.triumphteam.cmd.core.annotation.SubCommand;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
 import xhyrom.nexusblock.utils.MessageHandler;
+import xhyrom.nexusblock.utils.Placeholder;
 
 @Command(value = "nexusblock", alias = {"nb", "blocknexus"})
-@Permission("nexusblock.admin")
 @Description("NexusBlock plugin main command.")
 public class NexusBlockCommand extends BaseCommand {
 
@@ -38,17 +39,24 @@ public class NexusBlockCommand extends BaseCommand {
     }
 
     @SubCommand(value = "reload")
+    @Permission("nexusblock.command.reload")
     public void reload(CommandSender sender) {
         messageHandler.sendManualMessage(sender, "Please restart server.");
         // NexusBlock.getInstance().reloadConfig();
         // NexusBlock.getInstance().onReload();
+        messageHandler.sendMessage(sender, "RELOADED");
     }
 
     private void sendHelpMessage(CommandSender sender) {
-        messageHandler.sendManualMessage(sender, "Plugin by &cxHyroM#2851 &7available on github &c&nhttps://github.com/xHyroM/NexusBlock");
-        messageHandler.sendManualMessage(sender, "&cAdmin Commands:");
-        messageHandler.sendManualMessage(sender, "");
-        messageHandler.sendManualMessage(sender, "&c/nexusblock reload &8- &7Reload plugin");
+        messageHandler.sendManualMessage(sender, "%prefix% &7Plugin available on github &a&nhttps://github.com/yiyoperez/NexusBlock/releases");
+        if (sender instanceof Player) {
+            if (!sender.hasPermission("nexusblock.admin")) return;
+        }
+
+        messageHandler.sendMessage(sender, "COMMAND_MANAGER.USAGE_HEADER");
+        messageHandler.sendListMessage(sender, "HELP.MAIN-COMMAND",
+                new Placeholder("%command%", getCommand())
+        );
     }
 
     public NexusManager getNexusManager() {

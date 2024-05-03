@@ -14,6 +14,13 @@ NOT_INTEGER: '%prefix% &cLa variable &e"%value%" &cno es un numero entero.'
 NOT_DOUBLE: '%prefix% &cLa variable &e"%value%" &cno es un numero doble. (0.0)'
 OUT_OF_RANGE: '%prefix% &cEl valor %value% esta fuera del rango. Minimo: %min% Maximo: %max%'
 
+HELP:
+    MAIN-COMMAND:
+        - "&cAdmin Commands:"
+        - ""
+        - "&c/%command% reload &8- &7Reload plugin."
+        - "&c/%command% list &8- &7Show all nexus blocks."
+
 # Command manager messages.
 COMMAND_MANAGER:
     USAGE_HEADER: "&8x &c&lNexusBlock &7‣ &f<required> [optional] (description)"
