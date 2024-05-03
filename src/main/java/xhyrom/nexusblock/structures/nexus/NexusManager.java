@@ -15,6 +15,7 @@ import xhyrom.nexusblock.structures.holograms.HologramInterface;
 import xhyrom.nexusblock.structures.nexusConfig.NexusConfig;
 import xhyrom.nexusblock.structures.nexusConfig.NexusConfigHealthStatus;
 import xhyrom.nexusblock.structures.nexusConfig.NexusConfigHologram;
+import xhyrom.nexusblock.structures.nexusConfig.NexusConfigRewards;
 import xhyrom.nexusblock.utils.Placeholder;
 import xhyrom.nexusblock.utils.StringUtils;
 
@@ -129,7 +130,6 @@ public class NexusManager {
         Block block = nexus.getLocation().getBlock();
         block.setType(Material.BEDROCK);
 
-        // TODO: WORK ON REWARDS.
         // Give rewards to top players
         List<String> destroyers = nexus.getDestroyers()
                 .keySet()
@@ -137,23 +137,25 @@ public class NexusManager {
                 .sorted(new ModuleComparator(nexus.getDestroyers()))
                 .collect(Collectors.toList());
 
-        destroyers.forEach(playerName -> {
+        // Give reward to the one who finally broke the block.
+        giveRewards(player.getName(), nexus);
+
+        // Give rewards to other destroyers.
+        for (int i = 0; i < destroyers.size(); i++) {
             // Limit leaderboard players.
             int configLimit = plugin.getConfiguration().getInt("LEADERBOARD.LIMIT");
             // If off-limits set to 3.
             int limit = (configLimit <= 0 || configLimit > 5) ? 3 : plugin.getConfiguration().getInt("LEADERBOARD.LIMIT");
 
-            for (int i = 0; i < limit; i++) {
-                if (nexus.getDestroyers().size() > i) {
-                    continue;
-                }
+            // Player is beyond nexus limits.
+            if (i > limit) return;
 
-                giveRewards(i, playerName, nexus);
-            }
-        });
+            String playerName = destroyers.get(i);
+            // Player not online.
+            if (Bukkit.getPlayer(playerName) == null) return;
 
-        // Give reward to Casper the friendly ghost?
-        giveRewards(-2, player.getName(), nexus);
+            giveRewards(playerName, nexus, i + 1);
+        }
 
         // So... this resets the nexus block.
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
@@ -168,11 +170,28 @@ public class NexusManager {
         }, nexus.getRespawnDelay() * 20L);
     }
 
-    // TODO: WORK ON REWARDS.
-    private void giveRewards(int i, String playerName, Nexus nexus) {
-        if (!nexus.getRewardsConfig().getRewards().containsKey(i)) return;
+    private void giveRewards(String playerName, Nexus nexus) {
+        NexusConfigRewards rewardsConfig = nexus.getRewardsConfig();
+        if (rewardsConfig.getDestroyerRewards().isEmpty()) return;
 
-        List<String> rewards = nexus.getRewardsConfig().getReward(i);
+        for (String reward : rewardsConfig.getDestroyerRewards()) {
+            Bukkit.dispatchCommand(
+                    Bukkit.getConsoleSender(),
+                    StringUtils.replace(reward,
+                            new Placeholder("%player%", playerName),
+                            new Placeholder("%destroys%", nexus.getDestroyers().get(playerName))
+                    )
+            );
+        }
+    }
+
+    private void giveRewards(String playerName, Nexus nexus, int playerDestroys) {
+        NexusConfigRewards rewardsConfig = nexus.getRewardsConfig();
+
+        if (rewardsConfig.getRewards().isEmpty()) return;
+        if (!rewardsConfig.getRewards().containsKey(playerDestroys)) return;
+
+        List<String> rewards = nexus.getRewardsConfig().getReward(playerDestroys);
         rewards.forEach(reward ->
                 Bukkit.dispatchCommand(
                         Bukkit.getConsoleSender(),

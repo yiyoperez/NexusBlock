@@ -67,8 +67,6 @@ public class NexusService {
             try {
                 YamlDocument file = YamlDocument.create(new File(folder, nexus.getId() + ".yml"));
 
-                // Todo: update link
-                file.addComment("Information about nexus blocks at ...");
                 file.set("ID", nexus.getId());
                 file.set("MATERIAL", nexus.getMaterial().name());
                 file.set("HEALTH", nexus.getHealthStatus().getMaximumHealth());
@@ -79,8 +77,12 @@ public class NexusService {
                 file.set("LOCATION.Z", nexus.getLocation().getZ());
                 file.set("LOCATION.WORLD", nexus.getLocation().getWorld().getName());
                 file.set("HOLOGRAM", nexus.getHologramConfig().getHologramStrings());
-
-                //TODO: REWARDS...
+                file.getSection("REWARDS")
+                        .set("DESTROYER", nexus.getRewardsConfig().getDestroyerRewards());
+                nexus.getRewardsConfig().getRewards().forEach((entry, value) ->
+                        file.getSection("REWARDS")
+                                .getSection("DESTROYERS")
+                                .set(String.valueOf(entry), value));
 
                 file.save();
             } catch (IOException e) {
