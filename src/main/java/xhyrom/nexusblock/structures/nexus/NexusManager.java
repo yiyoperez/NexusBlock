@@ -148,11 +148,11 @@ public class NexusManager {
             int limit = (configLimit <= 0 || configLimit > 5) ? 3 : plugin.getConfiguration().getInt("LEADERBOARD.LIMIT");
 
             // Player is beyond nexus limits.
-            if (i > limit) return;
+            if (i > limit) continue;
 
             String playerName = destroyers.get(i);
             // Player not online.
-            if (Bukkit.getPlayer(playerName) == null) return;
+            if (Bukkit.getPlayer(playerName) == null) continue;
 
             giveRewards(playerName, nexus, i + 1);
         }
