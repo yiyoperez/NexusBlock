@@ -21,7 +21,7 @@ public class NexusBlockCommand extends BaseCommand {
         this.messageHandler = plugin.getMessageHandler();
     }
 
-    @Default
+    @Default(alias = "help")
     public void command(CommandSender sender) {
         messageHandler.sendManualMessage(sender, "Plugin by &cxHyroM#2851 &7available on github &c&nhttps://github.com/xHyroM/NexusBlock");
         messageHandler.sendManualMessage(sender, "&cAdmin Commands:");
