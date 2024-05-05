@@ -5,9 +5,10 @@
     <option name="description" value="" />
   </component>
   <component name="EntryPointsManager">
-    <list size="2">
+    <list size="3">
       <item index="0" class="java.lang.String" itemvalue="dev.triumphteam.cmd.core.annotation.Default" />
       <item index="1" class="java.lang.String" itemvalue="dev.triumphteam.cmd.core.annotation.SubCommand" />
+      <item index="2" class="java.lang.String" itemvalue="org.bukkit.event.EventHandler" />
     </list>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
