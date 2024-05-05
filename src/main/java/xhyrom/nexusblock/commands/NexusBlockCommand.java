@@ -12,14 +12,13 @@ import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.holograms.HologramManager;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
 import xhyrom.nexusblock.utils.MessageHandler;
-import xhyrom.nexusblock.utils.Placeholder;
 
 @Command(value = "nexusblock", alias = {"nb", "blocknexus"})
 @Description("NexusBlock plugin main command.")
 public class NexusBlockCommand extends BaseCommand {
 
     //TODO:
-    // Subcommands: Create, Read/Info, Update/Edit, Delete, List, Enable/Disable, Teleport, Get/Place (Give item to set block location)
+    // Subcommands: Read/Info, Update/Edit/Set(offset, material etc..), Enable/Disable.
 
     private final NexusManager nexusManager;
     private final MessageHandler messageHandler;
@@ -57,9 +56,7 @@ public class NexusBlockCommand extends BaseCommand {
         }
 
         messageHandler.sendMessage(sender, "COMMAND_MANAGER.USAGE_HEADER");
-        messageHandler.sendListMessage(sender, "HELP.MAIN-COMMAND",
-                new Placeholder("%command%", getCommand())
-        );
+        messageHandler.sendListMessage(sender, "MAIN-COMMAND");
     }
 
     public NexusManager getNexusManager() {

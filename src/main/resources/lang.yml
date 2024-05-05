@@ -5,29 +5,41 @@ lang-version: 1
 PREFIX: '&8[&cNexusBlock&8] &7'
 
 # Common plugin message.
-RELOADED: '%prefix% &rSe recargaron los archivos de configuracion.'
-NO_PERMISSION: '%prefix% &cNo tienes permisos para hacer esto.'
-ERROR_OCCURRED: '%prefix% &cHa ocurrido un error, notifica esto al staff.'
-PLAYER_NOT_FOUND: '%prefix% &cEl jugador &e"%player%" &cno fue encontrado!'
-NOT_BOOLEAN: '%prefix% &cLa variable &e"%value" &cno es un true/false.'
-NOT_INTEGER: '%prefix% &cLa variable &e"%value%" &cno es un numero entero.'
-NOT_DOUBLE: '%prefix% &cLa variable &e"%value%" &cno es un numero doble. (0.0)'
-OUT_OF_RANGE: '%prefix% &cEl valor %value% esta fuera del rango. Minimo: %min% Maximo: %max%'
+RELOADED: '%prefix% &rConfiguration files have been reloaded.'
+NO_PERMISSION: '%prefix% &cYou have no permissions to do that.'
+ERROR_OCCURRED: '%prefix% &cAn error has occurred please notify staff.'
+PLAYER_NOT_FOUND: '%prefix% &cPlayer &e"%player%" &chas been not found!'
+NOT_BOOLEAN: '%prefix% &cVariable &e"%value" &ccan only be true/false.'
+NOT_INTEGER: '%prefix% &cVariable &e"%value%" &ccan only be an integer.'
+NOT_DOUBLE: '%prefix% &cVariable &e"%value%" &ccan only be a double. (0.0)'
+OUT_OF_RANGE: '%prefix% &cValue %value% it out of range. Min: %min% Max: %max%'
 
-HELP:
-    MAIN-COMMAND:
-        - "&cAdmin Commands:"
-        - ""
-        - "&c/%command% reload &8- &7Reload plugin."
-        - "&c/%command% list &8- &7Show all nexus blocks."
+MAIN-COMMAND:
+    - "&cAdmin Commands:"
+    - ""
+    - "&c/nexusblock reload &8- &7Reload plugin."
+    - "&c/nexusblock list &8- &7Show all nexus blocks."
+    - "&c/nexusblock create <nexusName> &8- &7Create a new nexus block."
+    - "&c/nexusblock setlocation <nexusName> &8- &7Set nexus block location to yours."
+    -
+NEXUS:
+    DOES_NOT_EXIST: "&cNo nexus block with that name exists!"
+    ALREADY_EXISTS: "&cNexus block with that name already exists!"
+    CREATED: "&aNexus block with name %nexusName% has been created."
+    DELETED: "&aNexus block with name %nexusName% has been deleted."
+    TELEPORTED: "&7Teleported to nexus block &a%nexusName% &7location."
+    SETLOCATION: "&7Updated nexus block &e\"&a%nexusName%&e\" location."
+    LOCATION_NOT_SET: "&cNexus block &e%nexusName% &cdoesn't have a location set."
 
 # Command manager messages.
 COMMAND_MANAGER:
     USAGE_HEADER: "&8x &c&lNexusBlock &7‣ &f<required> [optional] (description)"
     USAGE_PREFIX: "&8x &c/"
-    USAGE: { }
+    USAGE:
+        SETLOCATION: "%command% <nexusName>"
+        CREATE: "%command% <nexusName> <blockMaterial>"
     TRANSLATIONS:
-        NO_PERMISSION: "%prefix% &cNo tienes permisos para usar este comando."
-        ONLY_PLAYERS: "%prefix% &cSolo jugadores pueden usar este comando!"
-        ONLY_CONSOLE: "%prefix% &cSolo puedes usar este comando desde la consola!"
-        INVALID_SUB_COMMAND: "%prefix% &cEl sub-comando &e\"%sub-command%\" &cno existe!"
+        NO_PERMISSION: "%prefix% &cYou have no permissions to use that command."
+        ONLY_PLAYERS: "%prefix% &cYou can only run this command in-game!"
+        ONLY_CONSOLE: "%prefix% &cYou can only run this command at the console!"
+        INVALID_SUB_COMMAND: "%prefix% &cSub-command &e\"%sub-command%\" &cdoesn't exists!"
