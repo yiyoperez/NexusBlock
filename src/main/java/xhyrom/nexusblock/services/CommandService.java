@@ -14,6 +14,7 @@ import xhyrom.nexusblock.commands.NexusBlockCommand;
 import xhyrom.nexusblock.utils.MessageHandler;
 import xhyrom.nexusblock.utils.Placeholder;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
@@ -71,27 +72,28 @@ public class CommandService {
     private void registerTranslations() {
         logger.info("Registering command manager translation messages.");
         // Bukkit message keys
-        commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) -> {
-            messageHandler.sendMessage(sender, "COMMAND_MANAGER.TRANSLATIONS.NO_PERMISSION", new Placeholder("%command%", context.getCommand()));
-        });
+        commandManager.registerMessage(BukkitMessageKey.NO_PERMISSION, (sender, context) ->
+                messageHandler.sendMessage(sender, "COMMAND_MANAGER.TRANSLATIONS.NO_PERMISSION", new Placeholder("%command%", context.getCommand())));
 
-        commandManager.registerMessage(BukkitMessageKey.PLAYER_ONLY, (sender, context) -> {
-            messageHandler.sendMessage(sender, "COMMAND_MANAGER.TRANSLATIONS.ONLY_PLAYERS");
-        });
+        commandManager.registerMessage(BukkitMessageKey.PLAYER_ONLY, (sender, context) ->
+                messageHandler.sendMessage(sender, "COMMAND_MANAGER.TRANSLATIONS.ONLY_PLAYERS"));
 
-        commandManager.registerMessage(BukkitMessageKey.CONSOLE_ONLY, (sender, context) -> {
-            messageHandler.sendMessage(sender, "COMMAND_MANAGER.TRANSLATIONS.ONLY_CONSOLE");
-        });
+        commandManager.registerMessage(BukkitMessageKey.CONSOLE_ONLY, (sender, context) ->
+                messageHandler.sendMessage(sender, "COMMAND_MANAGER.TRANSLATIONS.ONLY_CONSOLE"));
 
         // Default message keys
-        commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) -> {
-            messageHandler.sendMessage(sender, "COMMAND_MANAGER.TRANSLATIONS.INVALID_SUB_COMMAND", new Placeholder("%sub-command%", context.getSubCommand()));
-        });
+        commandManager.registerMessage(MessageKey.UNKNOWN_COMMAND, (sender, context) ->
+                messageHandler.sendMessage(sender, "COMMAND_MANAGER.TRANSLATIONS.INVALID_SUB_COMMAND", new Placeholder("%sub-command%", context.getSubCommand())));
 
         commandManager.registerMessage(MessageKey.NOT_ENOUGH_ARGUMENTS, (sender, context) -> {
             messageHandler.sendMessage(sender, "COMMAND_MANAGER.USAGE_HEADER");
             String usagePrefix = messageHandler.getMessage(sender, "COMMAND_MANAGER.USAGE_PREFIX");
-            String usage = messageHandler.getMessage(sender, "COMMAND_MANAGER.USAGE." + context.getCommand().toUpperCase(),
+
+            String command = context.getCommand();
+            String subCommand = context.getSubCommand();
+            String usageTarget = subCommand.equals("TH_DEFAULT") ? command.toUpperCase() : subCommand.toUpperCase();
+
+            String usage = messageHandler.getMessage(sender, "COMMAND_MANAGER.USAGE." + usageTarget,
                     new Placeholder("%command%", context.getCommand()));
 
             messageHandler.sendManualMessage(sender, usagePrefix + usage);
