@@ -4,48 +4,58 @@ import java.util.Map;
 
 public class NexusConfig {
     private final String id;
-    private final long respawn;
-    private final String material;
-    private final NexusConfigHologram hologram;
-    private final NexusConfigLocation location;
-    private final NexusConfigHealthStatus healths;
-    private final NexusConfigRewards rewards;
+    private final long respawnInterval;
+    private final String blockMaterial;
+    private final NexusHologramConfig hologram;
+    private final NexusLocationConfig location;
+    private final NexusHealthConfig healths;
+    private final NexusRewardsConfig rewards;
+
+    public NexusConfig(String id, String material) {
+        this.id = id;
+        this.respawnInterval = 10;
+        this.blockMaterial = material;
+        this.hologram = new NexusHologramConfig(id);
+        this.location = new NexusLocationConfig();
+        this.healths = new NexusHealthConfig();
+        this.rewards = new NexusRewardsConfig();
+    }
 
     public NexusConfig(Map<String, Object> other) {
         this.id = String.valueOf(other.get("ID").toString());
-        this.respawn = Long.parseLong(other.get("RESPAWN_INTERVAL").toString());
-        this.material = other.get("MATERIAL").toString();
-        this.hologram = new NexusConfigHologram(other);
-        this.location = new NexusConfigLocation(other);
-        this.healths = new NexusConfigHealthStatus(other);
-        this.rewards = new NexusConfigRewards(other);
+        this.respawnInterval = Long.parseLong(other.get("RESPAWN_INTERVAL").toString());
+        this.blockMaterial = other.get("MATERIAL").toString();
+        this.hologram = new NexusHologramConfig(other);
+        this.location = new NexusLocationConfig(other);
+        this.healths = new NexusHealthConfig(other);
+        this.rewards = new NexusRewardsConfig(other);
     }
 
     public String getId() {
         return id;
     }
 
-    public long getRespawn() {
-        return respawn;
+    public long getRespawnInterval() {
+        return respawnInterval;
     }
 
-    public String getMaterial() {
-        return material;
+    public String getBlockMaterial() {
+        return blockMaterial;
     }
 
-    public NexusConfigHologram getHologram() {
+    public NexusHologramConfig getHologram() {
         return hologram;
     }
 
-    public NexusConfigLocation getLocation() {
+    public NexusLocationConfig getLocation() {
         return location;
     }
 
-    public NexusConfigHealthStatus getHealths() {
+    public NexusHealthConfig getHealths() {
         return healths;
     }
 
-    public NexusConfigRewards getRewards() {
+    public NexusRewardsConfig getRewards() {
         return rewards;
     }
 }

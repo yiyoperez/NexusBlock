@@ -2,12 +2,16 @@ package xhyrom.nexusblock.structures.nexusConfig;
 
 import java.util.Map;
 
-public class NexusConfigHealthStatus {
+public class NexusHealthConfig {
 
     private int damage = 0;
     private int maximumHealth;
 
-    public NexusConfigHealthStatus(Map<String, Object> other) {
+    public NexusHealthConfig() {
+        this.maximumHealth = 50;
+    }
+
+    public NexusHealthConfig(Map<String, Object> other) {
         this.maximumHealth = Integer.parseInt(other.get("HEALTH").toString());
     }
 
