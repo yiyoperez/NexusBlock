@@ -9,6 +9,7 @@ import dev.triumphteam.cmd.core.annotation.SubCommand;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xhyrom.nexusblock.NexusBlock;
+import xhyrom.nexusblock.structures.holograms.HologramManager;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
 import xhyrom.nexusblock.utils.MessageHandler;
 import xhyrom.nexusblock.utils.Placeholder;
@@ -22,10 +23,12 @@ public class NexusBlockCommand extends BaseCommand {
 
     private final NexusManager nexusManager;
     private final MessageHandler messageHandler;
+    private final HologramManager hologramManager;
 
     public NexusBlockCommand(NexusBlock plugin) {
         this.nexusManager = plugin.getNexusManager();
         this.messageHandler = plugin.getMessageHandler();
+        this.hologramManager = plugin.getHologramManager();
     }
 
     @Default
@@ -65,5 +68,9 @@ public class NexusBlockCommand extends BaseCommand {
 
     public MessageHandler getMessageHandler() {
         return messageHandler;
+    }
+
+    public HologramManager getHologramManager() {
+        return hologramManager;
     }
 }

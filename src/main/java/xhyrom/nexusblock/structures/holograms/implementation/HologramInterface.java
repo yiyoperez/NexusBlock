@@ -1,4 +1,4 @@
-package xhyrom.nexusblock.structures.holograms;
+package xhyrom.nexusblock.structures.holograms.implementation;
 
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +14,8 @@ public interface HologramInterface {
     void editTextLine(Object hologram, Integer line, String desc);
 
     void editItemLine(Object hologram, Integer line, ItemStack item);
+
+    void updateLocation(Object hologram, Location location);
 
     void deleteHologram(Object hologram);
 }

@@ -11,9 +11,10 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import xhyrom.nexusblock.events.BlockDestroy;
 import xhyrom.nexusblock.services.CommandService;
-import xhyrom.nexusblock.structures.holograms.DecentHolograms;
-import xhyrom.nexusblock.structures.holograms.HologramInterface;
-import xhyrom.nexusblock.structures.holograms.HolographicDisplays;
+import xhyrom.nexusblock.structures.holograms.implementation.DecentHolograms;
+import xhyrom.nexusblock.structures.holograms.implementation.HologramInterface;
+import xhyrom.nexusblock.structures.holograms.HologramManager;
+import xhyrom.nexusblock.structures.holograms.implementation.HolographicDisplays;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
 import xhyrom.nexusblock.structures.nexus.NexusService;
 import xhyrom.nexusblock.utils.MessageHandler;
@@ -30,6 +31,7 @@ public final class NexusBlock extends JavaPlugin {
     private MessageHandler messageHandler;
 
     private HologramInterface hologram;
+    private HologramManager hologramManager;
     private NexusManager nexusManager;
     private NexusService nexusService;
     private CommandService commandService;
@@ -41,6 +43,7 @@ public final class NexusBlock extends JavaPlugin {
         messageHandler = new MessageHandler(this, lang);
 
         setupHolograms();
+        hologramManager = new HologramManager(this);
         nexusManager = new NexusManager(this);
         nexusService = new NexusService(this);
         nexusService.loadBlocks();
@@ -141,6 +144,10 @@ public final class NexusBlock extends JavaPlugin {
 
     public HologramInterface getHologram() {
         return hologram;
+    }
+
+    public HologramManager getHologramManager() {
+        return hologramManager;
     }
 
     public NexusManager getNexusManager() {

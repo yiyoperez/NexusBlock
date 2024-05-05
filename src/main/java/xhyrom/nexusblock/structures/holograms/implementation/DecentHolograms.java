@@ -1,4 +1,4 @@
-package xhyrom.nexusblock.structures.holograms;
+package xhyrom.nexusblock.structures.holograms.implementation;
 
 import eu.decentsoftware.holograms.api.DHAPI;
 import eu.decentsoftware.holograms.api.holograms.Hologram;
@@ -30,7 +30,13 @@ public class DecentHolograms implements HologramInterface {
         DHAPI.setHologramLine((Hologram) hd, line, "#ICON: " + item.getType().name());
     }
 
-    public void deleteHologram(Object hd) {
-        ((Hologram) hd).delete();
+    @Override
+    public void updateLocation(Object hologram, Location location) {
+        ((Hologram) hologram).setLocation(location);
+        ((Hologram) hologram).updateAll();
+    }
+
+    public void deleteHologram(Object hologram) {
+        ((Hologram) hologram).delete();
     }
 }

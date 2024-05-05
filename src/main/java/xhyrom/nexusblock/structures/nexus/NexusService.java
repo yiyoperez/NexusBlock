@@ -4,7 +4,9 @@ import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
-import xhyrom.nexusblock.structures.holograms.HologramInterface;
+import xhyrom.nexusblock.structures.holograms.implementation.HologramInterface;
+import xhyrom.nexusblock.structures.holograms.HologramManager;
+import xhyrom.nexusblock.structures.nexusConfig.NexusLocationConfig;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,6 +19,7 @@ public class NexusService {
     private final File folder;
     private final NexusBlock plugin;
     private final NexusManager nexusManager;
+    private final HologramManager hologramManager;
     private final HologramInterface hologramInterface;
     private final YamlDocument tempData;
 
@@ -26,6 +29,7 @@ public class NexusService {
         this.tempData = plugin.getTempData();
         this.nexusManager = plugin.getNexusManager();
         this.hologramInterface = plugin.getHologram();
+        this.hologramManager = plugin.getHologramManager();
     }
 
     public void loadBlocks() {
@@ -46,6 +50,10 @@ public class NexusService {
             }
 
             nexusManager.createNexusBlock(nexusBlock.getStringRouteMappedValues(false));
+
+            // Spawn block and hologram.
+            nexusManager.setWorldBlock(nexusManager.getNexus(id));
+            hologramManager.setupHologram(nexusManager.getNexus(id));
         }
     }
 
@@ -57,7 +65,7 @@ public class NexusService {
 
             // Delete holograms.
             if (hologramInterface != null) {
-                hologramInterface.deleteHologram(nexus.getHologramConfig().getHologramInterface());
+                hologramManager.deleteHologram(nexus);
             }
 
             // Save current damage and destroyers values.
@@ -72,17 +80,19 @@ public class NexusService {
                 file.set("HEALTH", nexus.getHealthStatus().getMaximumHealth());
                 file.set("HOLOGRAM-HEIGHT", nexus.getHologramConfig().getHologramOffset());
                 file.set("RESPAWN_INTERVAL", nexus.getRespawnDelay());
-                file.set("LOCATION.X", nexus.getLocation().getX());
-                file.set("LOCATION.Y", nexus.getLocation().getY());
-                file.set("LOCATION.Z", nexus.getLocation().getZ());
-                file.set("LOCATION.WORLD", nexus.getLocation().getWorld().getName());
+
+                NexusLocationConfig locationConfig = nexus.getLocationConfig();
+                if (locationConfig.getLocation() != null) {
+                    file.set("LOCATION.X", nexus.getLocationConfig().getLocation().getX());
+                    file.set("LOCATION.Y", nexus.getLocationConfig().getLocation().getY());
+                    file.set("LOCATION.Z", nexus.getLocationConfig().getLocation().getZ());
+                    file.set("LOCATION.WORLD", nexus.getLocationConfig().getWorld().getName());
+                }
+
                 file.set("HOLOGRAM", nexus.getHologramConfig().getHologramStrings());
-                file.getSection("REWARDS")
-                        .set("DESTROYER", nexus.getRewardsConfig().getDestroyerRewards());
+                file.set("REWARDS.DESTROYER", nexus.getRewardsConfig().getDestroyerRewards());
                 nexus.getRewardsConfig().getRewards().forEach((entry, value) ->
-                        file.getSection("REWARDS")
-                                .getSection("DESTROYERS")
-                                .set(String.valueOf(entry), value));
+                        file.set("REWARDS.DESTROYERS." + entry, value));
 
                 file.save();
             } catch (IOException e) {
