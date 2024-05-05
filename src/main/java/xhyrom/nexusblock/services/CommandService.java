@@ -6,11 +6,13 @@ import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.message.MessageKey;
 import dev.triumphteam.cmd.core.suggestion.SuggestionKey;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.commands.ListSubCommand;
 import xhyrom.nexusblock.commands.NexusBlockCommand;
+import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.utils.MessageHandler;
 import xhyrom.nexusblock.utils.Placeholder;
 
@@ -66,6 +68,17 @@ public class CommandService {
                 Bukkit.getOnlinePlayers()
                         .stream()
                         .map(Player::getName)
+                        .collect(Collectors.toList()));
+        commandManager.registerSuggestion(SuggestionKey.of("available-blocks"), (sender, context) ->
+                plugin.getNexusManager()
+                        .getNexusBlocks()
+                        .stream()
+                        .map(Nexus::getId)
+                        .collect(Collectors.toList()));
+        commandManager.registerSuggestion(SuggestionKey.of("block-materials"), (sender, context) ->
+                Arrays.stream(Material.values())
+                        .filter(material -> material.isBlock() && material.isSolid())
+                        .map(Enum::name)
                         .collect(Collectors.toList()));
     }
 
