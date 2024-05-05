@@ -10,8 +10,12 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xhyrom.nexusblock.NexusBlock;
+import xhyrom.nexusblock.commands.CreateNexusCommand;
+import xhyrom.nexusblock.commands.DeleteNexusCommand;
 import xhyrom.nexusblock.commands.ListSubCommand;
 import xhyrom.nexusblock.commands.NexusBlockCommand;
+import xhyrom.nexusblock.commands.SetLocationCommand;
+import xhyrom.nexusblock.commands.TeleportCommand;
 import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.utils.MessageHandler;
 import xhyrom.nexusblock.utils.Placeholder;
@@ -26,7 +30,6 @@ import java.util.stream.Collectors;
 public class CommandService {
 
     private final Logger logger;
-
     private final NexusBlock plugin;
     private final MessageHandler messageHandler;
     private final Set<BaseCommand> commandSet = new HashSet<>();
@@ -43,8 +46,14 @@ public class CommandService {
         registerSuggestions();
         registerTranslations();
 
+        // Main Command
         commandSet.add(new NexusBlockCommand(plugin));
+        // Sub Commands
         commandSet.add(new ListSubCommand(plugin));
+        commandSet.add(new TeleportCommand(plugin));
+        commandSet.add(new SetLocationCommand(plugin));
+        commandSet.add(new CreateNexusCommand(plugin));
+        commandSet.add(new DeleteNexusCommand(plugin));
 
         commandSet.forEach(command -> {
             logger.log(Level.INFO, "Trying to register command " + command.getClass().getSimpleName());
