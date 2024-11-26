@@ -13,6 +13,7 @@ import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.structures.holograms.HologramManager;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
+import xhyrom.nexusblock.structures.nexusConfig.NexusHologramConfig;
 import xhyrom.nexusblock.structures.nexusConfig.NexusLocationConfig;
 import xhyrom.nexusblock.utils.Placeholder;
 
@@ -33,11 +34,11 @@ public class SetLocationCommand extends NexusBlockCommand {
             return;
         }
 
+        // Iteration to find block/location player is looking at.
         BlockIterator blockIterator = new BlockIterator(player, 10);
         Block lastBlock = blockIterator.next();
 
         while (blockIterator.hasNext()) {
-
             lastBlock = blockIterator.next();
 
             if (lastBlock.getType() == Material.AIR) {
@@ -45,6 +46,8 @@ public class SetLocationCommand extends NexusBlockCommand {
             }
             break;
         }
+
+        // Self-explanatory.
         Location lookingLocation = lastBlock.getLocation();
 
         //Remove old block
@@ -55,15 +58,22 @@ public class SetLocationCommand extends NexusBlockCommand {
                 block.setType(Material.AIR);
             }
         }
-        // Update current hologram location if any.
-        //TODO. DOESN'T GET UPDATED.
-        hologramManager.updateHologramLocation(nexus, lookingLocation);
 
+        // Update nexus block location at config.
         nexus.getLocationConfig().setLocation(lookingLocation);
-        getMessageHandler().sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexusName));
 
         // Setup create block at new location.
         nexusManager.setWorldBlock(nexus);
+
+        // Get hologram offset.
+        NexusHologramConfig hologramConfig = nexus.getHologramConfig();
+        double offset = hologramConfig.getHologramOffset();
+
+        // Update current hologram location if any.
+        hologramManager.updateHologramLocation(nexus, lookingLocation.clone().add(0.5D, offset, 0.5D));
+
+        // Send message to player notifying location update.
+        getMessageHandler().sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexusName));
 
         // Create hologram if didn't have one.
         if (nexus.getHologramConfig().getHologram() == null) {
