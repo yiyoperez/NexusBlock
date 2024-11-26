@@ -4,6 +4,9 @@ ID: default
 # Material
 MATERIAL: DIAMOND_BLOCK
 
+# Status
+ENABLED: false
+
 # Block max health.
 HEALTH: 100
 
@@ -37,6 +40,12 @@ HOLOGRAM:
 # Available placeholders are
 # %player%, %destroys%
 REWARDS:
+    # Block location drops
+    # Delete section to disable drop rewards.
+    DROP:
+        RADIUS: 5 # Value is in blocks.
+        ACTIONS:
+            - "[COMMAND] give %player% golden_apple 1"
     # Player that destroy block
     DESTROYER:
         - "give %player% golden_apple 1"

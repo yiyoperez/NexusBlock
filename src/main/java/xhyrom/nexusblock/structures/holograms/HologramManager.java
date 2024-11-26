@@ -65,7 +65,6 @@ public class HologramManager {
         if (hologram == null) return;
 
         hologramInterface.updateLocation(hologram, location);
-        plugin.getLogger().info("Updating hologram location.");
     }
 
     public void deleteHologram(Nexus nexus) {
@@ -75,7 +74,6 @@ public class HologramManager {
         Object hologram = nexus.getHologramConfig().getHologram();
         if (hologram == null) return;
 
-        plugin.getLogger().info("Deleting nexus " + nexus.getId() + " hologram.");
         hologramInterface.deleteHologram(hologram);
     }
 
