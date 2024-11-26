@@ -21,7 +21,8 @@ MAIN-COMMAND:
     - "&c/nexusblock list &8- &7Show all nexus blocks."
     - "&c/nexusblock create <nexusName> &8- &7Create a new nexus block."
     - "&c/nexusblock setlocation <nexusName> &8- &7Set nexus block location to yours."
-    -
+
+# Nexus command related messages.
 NEXUS:
     DOES_NOT_EXIST: "&cNo nexus block with that name exists!"
     ALREADY_EXISTS: "&cNexus block with that name already exists!"
@@ -30,6 +31,42 @@ NEXUS:
     TELEPORTED: "&7Teleported to nexus block &a%nexusName% &7location."
     SETLOCATION: "&7Updated nexus block &e\"&a%nexusName%&e\" location."
     LOCATION_NOT_SET: "&cNexus block &e%nexusName% &cdoesn't have a location set."
+    # How nexus are displayed when using /nexusblock list
+    LIST-FORMAT:
+        ENABLED: "&a"
+        DISABLED: "&c"
+        PREFIX: "&7Available nexus blocks: "
+        DELIMITER: ","
+        SUFFIX: "&7."
+    INFO:
+        HEADER: "&7Nexus information."
+        DISPLAY:
+            - "%header%"
+            - "Nexus ID: %id%"
+            - "Status: %status%"
+            - "Material: %material%"
+            - "Health: %damage%/%max_health%"
+            - "Respawn Interval: %respawn_interval%"
+            - "%destroyer_header%"
+            - "%destroyer_rewards%"
+            - "%destroyers_header%"
+            - "%destroyers_rewards%"
+            - "%hologram%"
+        ID: "&7ID: &f%id%"
+        MATERIAL: "&7Material: &f%material%"
+        DAMAGE: "&7Damage: &f%damage%"
+        MAX_HEALTH: "&7Max Health: &f%max_health%"
+        RESPAWN_INTERVAL: "&7Respawn Interval: &f%respawn_interval%"
+        REWARDS:
+            DESTROYER:
+                HEADER: "&7Destroyer Rewards:"
+                VALUE: "%destroyer_rewards%"
+            LEADERBOARD:
+                HEADER: "&7Destroyers Rewards:"
+                VALUE: "%top% - %reward%"
+        HOLOGRAM:
+            HEADER: "&7Hologram:"
+            VALUE: "%hologram_lines%"
 
 # Command manager messages.
 COMMAND_MANAGER:
