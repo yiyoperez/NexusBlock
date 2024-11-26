@@ -1,5 +1,6 @@
 package xhyrom.nexusblock.commands;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.triumphteam.cmd.bukkit.annotation.Permission;
 import dev.triumphteam.cmd.core.BaseCommand;
 import dev.triumphteam.cmd.core.annotation.Command;
@@ -18,13 +19,15 @@ import xhyrom.nexusblock.utils.MessageHandler;
 public class NexusBlockCommand extends BaseCommand {
 
     //TODO:
-    // Subcommands: Read/Info, Update/Edit/Set(offset, material etc..), Enable/Disable.
+    // Subcommands: Hologram, Rewards, Update/Edit/Set(offset, material etc..), Enable/Disable.
 
     private final NexusManager nexusManager;
+    private final YamlDocument configuration;
     private final MessageHandler messageHandler;
     private final HologramManager hologramManager;
 
     public NexusBlockCommand(NexusBlock plugin) {
+        this.configuration = plugin.getConfiguration();
         this.nexusManager = plugin.getNexusManager();
         this.messageHandler = plugin.getMessageHandler();
         this.hologramManager = plugin.getHologramManager();
@@ -61,6 +64,10 @@ public class NexusBlockCommand extends BaseCommand {
 
     public NexusManager getNexusManager() {
         return nexusManager;
+    }
+
+    public YamlDocument getConfiguration() {
+        return configuration;
     }
 
     public MessageHandler getMessageHandler() {

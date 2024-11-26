@@ -59,6 +59,7 @@ public class NexusManager {
         Nexus nexus = new Nexus(
                 nexusConfig.getId(),
                 Material.matchMaterial(nexusConfig.getBlockMaterial()),
+                nexusConfig.isEnabled(),
                 nexusConfig.getRespawnInterval(),
                 nexusConfig.getHologram(),
                 nexusConfig.getLocation(),

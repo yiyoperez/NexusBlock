@@ -4,6 +4,7 @@ import java.util.Map;
 
 public class NexusConfig {
     private final String id;
+    private boolean enabled;
     private final long respawnInterval;
     private final String blockMaterial;
     private final NexusHologramConfig hologram;
@@ -13,6 +14,7 @@ public class NexusConfig {
 
     public NexusConfig(String id, String material) {
         this.id = id;
+        this.enabled = false;
         this.respawnInterval = 10;
         this.blockMaterial = material;
         this.hologram = new NexusHologramConfig(id);
@@ -23,8 +25,9 @@ public class NexusConfig {
 
     public NexusConfig(Map<String, Object> other) {
         this.id = String.valueOf(other.get("ID").toString());
+        this.enabled = Boolean.parseBoolean(other.getOrDefault("ENABLED", false).toString());
         this.respawnInterval = Long.parseLong(other.get("RESPAWN_INTERVAL").toString());
-        this.blockMaterial = other.get("MATERIAL").toString();
+        this.blockMaterial = other.getOrDefault("MATERIAL", "COAL_ORE").toString();
         this.hologram = new NexusHologramConfig(other);
         this.location = new NexusLocationConfig(other);
         this.healths = new NexusHealthConfig(other);
@@ -33,6 +36,14 @@ public class NexusConfig {
 
     public String getId() {
         return id;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public long getRespawnInterval() {

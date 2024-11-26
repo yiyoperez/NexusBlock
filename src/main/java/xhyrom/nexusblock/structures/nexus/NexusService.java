@@ -4,8 +4,8 @@ import dev.dejvokep.boostedyaml.YamlDocument;
 import dev.dejvokep.boostedyaml.block.implementation.Section;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
-import xhyrom.nexusblock.structures.holograms.implementation.HologramInterface;
 import xhyrom.nexusblock.structures.holograms.HologramManager;
+import xhyrom.nexusblock.structures.holograms.implementation.HologramInterface;
 import xhyrom.nexusblock.structures.nexusConfig.NexusLocationConfig;
 
 import java.io.File;
@@ -76,6 +76,7 @@ public class NexusService {
                 YamlDocument file = YamlDocument.create(new File(folder, nexus.getId() + ".yml"));
 
                 file.set("ID", nexus.getId());
+                file.set("ENABLED", nexus.isEnabled());
                 file.set("MATERIAL", nexus.getMaterial().name());
                 file.set("HEALTH", nexus.getHealthStatus().getMaximumHealth());
                 file.set("HOLOGRAM-HEIGHT", nexus.getHologramConfig().getHologramOffset());

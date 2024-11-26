@@ -12,7 +12,7 @@ public class NexusHealthConfig {
     }
 
     public NexusHealthConfig(Map<String, Object> other) {
-        this.maximumHealth = Integer.parseInt(other.get("HEALTH").toString());
+        this.maximumHealth = Integer.parseInt(other.getOrDefault("HEALTH", maximumHealth).toString());
     }
 
     public int getDamage() {

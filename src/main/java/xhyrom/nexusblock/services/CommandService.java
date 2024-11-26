@@ -12,7 +12,8 @@ import org.bukkit.entity.Player;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.commands.CreateNexusCommand;
 import xhyrom.nexusblock.commands.DeleteNexusCommand;
-import xhyrom.nexusblock.commands.ListSubCommand;
+import xhyrom.nexusblock.commands.InfoNexusCommand;
+import xhyrom.nexusblock.commands.ListNexusCommand;
 import xhyrom.nexusblock.commands.NexusBlockCommand;
 import xhyrom.nexusblock.commands.SetLocationCommand;
 import xhyrom.nexusblock.commands.TeleportCommand;
@@ -49,8 +50,9 @@ public class CommandService {
         // Main Command
         commandSet.add(new NexusBlockCommand(plugin));
         // Sub Commands
-        commandSet.add(new ListSubCommand(plugin));
         commandSet.add(new TeleportCommand(plugin));
+        commandSet.add(new ListNexusCommand(plugin));
+        commandSet.add(new InfoNexusCommand(plugin));
         commandSet.add(new SetLocationCommand(plugin));
         commandSet.add(new CreateNexusCommand(plugin));
         commandSet.add(new DeleteNexusCommand(plugin));

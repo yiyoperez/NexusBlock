@@ -14,6 +14,7 @@ public class Nexus {
 
     private final String id;
     private Material material;
+    private boolean enabled;
     private Long respawnDelay;
     private final NexusRewardsConfig rewardsConfig;
     private final NexusHologramConfig hologramConfig;
@@ -26,6 +27,7 @@ public class Nexus {
         this.material = material;
 
         NexusConfig nexusConfig = new NexusConfig(id, material.name());
+        this.enabled = nexusConfig.isEnabled();
         this.respawnDelay = nexusConfig.getRespawnInterval();
         this.rewardsConfig = new NexusRewardsConfig();
         this.hologramConfig = new NexusHologramConfig(id);
@@ -36,6 +38,7 @@ public class Nexus {
     public Nexus(
             String id,
             Material material,
+            boolean isEnabled,
             long respawnDelay,
             NexusHologramConfig hologramConfig,
             NexusLocationConfig locationConfig,
@@ -43,6 +46,7 @@ public class Nexus {
             NexusRewardsConfig rewardsConfig
     ) {
         this.id = id;
+        this.enabled = isEnabled;
         this.material = material;
         this.respawnDelay = respawnDelay;
         this.rewardsConfig = rewardsConfig;
@@ -57,6 +61,14 @@ public class Nexus {
 
     public Material getMaterial() {
         return material;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public void setMaterial(Material material) {
