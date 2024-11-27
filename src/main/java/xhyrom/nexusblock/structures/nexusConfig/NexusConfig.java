@@ -5,8 +5,8 @@ import java.util.Map;
 public class NexusConfig {
     private final String id;
     private boolean enabled;
-    private final long respawnInterval;
-    private final String blockMaterial;
+    private long respawnInterval;
+    private String blockMaterial;
     private final NexusHologramConfig hologram;
     private final NexusLocationConfig location;
     private final NexusHealthConfig healths;
@@ -50,8 +50,16 @@ public class NexusConfig {
         return respawnInterval;
     }
 
+    public void setRespawnInterval(long respawnInterval) {
+        this.respawnInterval = respawnInterval;
+    }
+
     public String getBlockMaterial() {
         return blockMaterial;
+    }
+
+    public void setBlockMaterial(String blockMaterial) {
+        this.blockMaterial = blockMaterial;
     }
 
     public NexusHologramConfig getHologram() {

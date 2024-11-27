@@ -23,8 +23,8 @@ public class PlayerDestroyNexus extends PlayerEvent implements Cancellable {
     @Override
     public String toString() {
         return "PlayerDestroyNexus{"
-                + "player=" + player
-                + ", nexus='" + nexus.toString() + '\''
+                + "player=" + player.getName()
+                + ", nexus='" + nexus.getId() + '\''
                 + '}';
     }
 

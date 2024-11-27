@@ -9,7 +9,7 @@ public class NexusHologramConfig {
 
     private Object hologram;
     private double hologramOffset;
-    private final List<String> hologramStrings;
+    private List<String> hologramStrings;
 
     // Hologram default values.
     public NexusHologramConfig(String nexusName) {
@@ -51,5 +51,9 @@ public class NexusHologramConfig {
 
     public List<String> getHologramStrings() {
         return hologramStrings;
+    }
+
+    public void setHologramStrings(List<String> hologramStrings) {
+        this.hologramStrings = hologramStrings;
     }
 }
