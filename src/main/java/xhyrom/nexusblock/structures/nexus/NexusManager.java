@@ -51,9 +51,10 @@ public class NexusManager {
         NexusConfig nexusConfig = new NexusConfig(map);
 
         if (!MaterialUtils.isValidMaterial(nexusConfig.getBlockMaterial())) {
-            plugin.getLogger().warning("Invalid material in nexus " + nexusConfig.getId());
+            nexusConfig.setBlockMaterial("COAL_BLOCK");
+            plugin.getLogger().severe("Invalid material in nexus " + nexusConfig.getId());
+            plugin.getLogger().warning("Changed to COAL_BLOCK to keep the block working.");
             plugin.getLogger().warning("Please use a valid material and avoid modifying the config manually.");
-            return;
         }
 
         Nexus nexus = new Nexus(
