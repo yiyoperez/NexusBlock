@@ -24,7 +24,6 @@ import xhyrom.nexusblock.utils.Placeholder;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -57,19 +56,13 @@ public class CommandService {
         commandSet.add(new CreateNexusCommand(plugin));
         commandSet.add(new DeleteNexusCommand(plugin));
 
-        commandSet.forEach(command -> {
-            logger.log(Level.INFO, "Trying to register command " + command.getClass().getSimpleName());
-            commandManager.registerCommand(command);
-        });
+        commandSet.forEach(commandManager::registerCommand);
     }
 
     public void finish() {
         if (commandManager == null) return;
         if (!commandSet.isEmpty()) {
-            commandSet.forEach(command -> {
-                logger.info("Trying to un-register command " + command.getClass().getSimpleName());
-                commandManager.unregisterCommand(command);
-            });
+            commandSet.forEach(commandManager::unregisterCommand);
         }
     }
 
