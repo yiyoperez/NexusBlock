@@ -19,7 +19,7 @@ import xhyrom.nexusblock.utils.MessageHandler;
 public class NexusBlockCommand extends BaseCommand {
 
     //TODO:
-    // Subcommands: Hologram, Rewards, Update/Edit/Set(offset, material etc..), Enable/Disable.
+    // Subcommands: Hologram, Rewards, Edit, Set(offset, material etc..), Enable/Disable.
 
     private final NexusManager nexusManager;
     private final YamlDocument configuration;
@@ -47,6 +47,7 @@ public class NexusBlockCommand extends BaseCommand {
     @Permission("nexusblock.command.reload")
     public void reload(CommandSender sender) {
         messageHandler.sendManualMessage(sender, "Please restart server.");
+        //TODO: proper reload.
         // NexusBlock.getInstance().reloadConfig();
         // NexusBlock.getInstance().onReload();
         messageHandler.sendMessage(sender, "RELOADED");
