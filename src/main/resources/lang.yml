@@ -32,11 +32,12 @@ NEXUS:
     SETLOCATION: "&7Updated nexus block &e\"&a%nexusName%&e\" location."
     LOCATION_NOT_SET: "&cNexus block &e%nexusName% &cdoesn't have a location set."
     # How nexus are displayed when using /nexusblock list
+    EMPTY_LIST: "&7There are no nexus blocks to display."
     LIST-FORMAT:
         ENABLED: "&a"
         DISABLED: "&c"
         PREFIX: "&7Available nexus blocks: "
-        DELIMITER: ","
+        DELIMITER: ", "
         SUFFIX: "&7."
     INFO:
         HEADER: "&7Nexus information."
