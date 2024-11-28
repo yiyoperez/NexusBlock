@@ -6,14 +6,17 @@ import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
+import io.github.mqzen.menus.Lotus;
+import me.clip.placeholderapi.libs.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import xhyrom.nexusblock.events.BlockDestroy;
 import xhyrom.nexusblock.services.CommandService;
+import xhyrom.nexusblock.structures.holograms.HologramManager;
 import xhyrom.nexusblock.structures.holograms.implementation.DecentHolograms;
 import xhyrom.nexusblock.structures.holograms.implementation.HologramInterface;
-import xhyrom.nexusblock.structures.holograms.HologramManager;
 import xhyrom.nexusblock.structures.holograms.implementation.HolographicDisplays;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
 import xhyrom.nexusblock.structures.nexus.NexusService;
@@ -36,9 +39,21 @@ public final class NexusBlock extends JavaPlugin {
     private NexusService nexusService;
     private CommandService commandService;
 
+    private Lotus lotus;
+    private BukkitAudiences adventure;
+
+    public @NotNull BukkitAudiences adventure() {
+        if (this.adventure == null) {
+            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+        }
+        return this.adventure;
+    }
 
     @Override
     public void onEnable() {
+        this.adventure = BukkitAudiences.create(this);
+        lotus = Lotus.load(this);
+
         createFiles();
         messageHandler = new MessageHandler(this, lang);
 
@@ -66,6 +81,10 @@ public final class NexusBlock extends JavaPlugin {
         }
         if (commandService != null) {
             commandService.finish();
+        }
+        if (this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
         }
     }
 
@@ -156,5 +175,9 @@ public final class NexusBlock extends JavaPlugin {
 
     public MessageHandler getMessageHandler() {
         return messageHandler;
+    }
+
+    public Lotus getLotus() {
+        return lotus;
     }
 }
