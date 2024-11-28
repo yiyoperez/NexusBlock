@@ -20,6 +20,8 @@ public class ListNexusCommand extends NexusBlockCommand {
     public void listCommand(CommandSender sender) {
         Section listFormatSection = getConfiguration().getSection("LIST-FORMAT");
         
+        Section listFormatSection = getLang().getSection("NEXUS.LIST-FORMAT");
+
         String enabled = listFormatSection.getString("ENABLED");
         String disabled = listFormatSection.getString("DISABLED");
         String prefix = listFormatSection.getString("PREFIX");
