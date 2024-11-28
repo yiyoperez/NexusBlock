@@ -3,8 +3,6 @@ import org.apache.tools.ant.filters.ReplaceTokens
 val libsPackage = property("libsPackage") as String
 val projectVersion = property("version") as String
 
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-
 plugins {
     `java-library`
     id("com.github.johnrengelman.shadow") version "7.0.0"
@@ -39,7 +37,7 @@ tasks {
     }
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(11))
+            languageVersion.set(JavaLanguageVersion.of(17))
         }
     }
     shadowJar {
