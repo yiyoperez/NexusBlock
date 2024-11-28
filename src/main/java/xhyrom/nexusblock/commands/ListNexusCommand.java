@@ -10,6 +10,7 @@ import java.util.StringJoiner;
 
 
 public class ListNexusCommand extends NexusBlockCommand {
+
     public ListNexusCommand(NexusBlock plugin) {
         super(plugin);
     }

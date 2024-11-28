@@ -18,6 +18,7 @@ import xhyrom.nexusblock.structures.nexusConfig.NexusLocationConfig;
 import xhyrom.nexusblock.utils.Placeholder;
 
 public class SetLocationCommand extends NexusBlockCommand {
+
     public SetLocationCommand(NexusBlock plugin) {
         super(plugin);
     }

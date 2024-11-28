@@ -12,6 +12,7 @@ import xhyrom.nexusblock.structures.nexusConfig.NexusLocationConfig;
 import xhyrom.nexusblock.utils.Placeholder;
 
 public class TeleportCommand extends NexusBlockCommand {
+
     public TeleportCommand(NexusBlock plugin) {
         super(plugin);
     }

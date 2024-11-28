@@ -11,6 +11,7 @@ import xhyrom.nexusblock.utils.MaterialUtils;
 import xhyrom.nexusblock.utils.Placeholder;
 
 public class CreateNexusCommand extends NexusBlockCommand {
+
     public CreateNexusCommand(NexusBlock plugin) {
         super(plugin);
     }

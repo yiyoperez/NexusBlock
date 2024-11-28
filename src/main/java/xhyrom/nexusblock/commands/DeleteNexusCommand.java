@@ -15,6 +15,7 @@ import xhyrom.nexusblock.structures.nexusConfig.NexusLocationConfig;
 import xhyrom.nexusblock.utils.Placeholder;
 
 public class DeleteNexusCommand extends NexusBlockCommand {
+
     public DeleteNexusCommand(NexusBlock plugin) {
         super(plugin);
     }

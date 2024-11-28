@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InfoNexusCommand extends NexusBlockCommand {
+
     public InfoNexusCommand(NexusBlock plugin) {
         super(plugin);
     }
