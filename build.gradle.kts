@@ -27,7 +27,9 @@ dependencies {
     compileOnly("com.github.decentsoftware-eu:decentholograms:2.8.6")
     compileOnly("me.filoghost.holographicdisplays:holographicdisplays-api:3.0.0")
 
-    implementation("dev.dejvokep:boosted-yaml:1.3.1")
+    implementation("com.github.mqzn:Lotus:1.3")
+    implementation("dev.dejvokep:boosted-yaml:1.3.7")
+    implementation("net.kyori:adventure-platform-bukkit:4.3.4")
     implementation("dev.triumphteam:triumph-cmd-bukkit:2.0.0-SNAPSHOT")
 }
 
@@ -49,7 +51,6 @@ tasks {
         destinationDirectory.set(file("$rootDir/bin/"))
 
         // Relocate libs if any.
-
         relocate("dev.triumphteam.cmd", "${libsPackage}.commandmanager")
         relocate("dev.dejvokep.boostedyaml", "${libsPackage}.boostedyaml")
         relocate("org.jetbrains.annotations", "${libsPackage}.annotations")
