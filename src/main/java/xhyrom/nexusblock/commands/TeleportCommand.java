@@ -36,7 +36,7 @@ public class TeleportCommand extends NexusBlockCommand {
             return;
         }
 
-        player.teleport(locationConfig.getLocation());
+        player.teleport(locationConfig.getLocation().add(0D, 0.5D, 0D));
         getMessageHandler().sendMessage(player, "NEXUS.TELEPORTED", placeholder);
     }
 }
