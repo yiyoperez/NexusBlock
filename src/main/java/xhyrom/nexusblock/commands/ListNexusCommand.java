@@ -18,8 +18,12 @@ public class ListNexusCommand extends NexusBlockCommand {
     @SubCommand(value = "list")
     @Permission("nexusblock.command.list")
     public void listCommand(CommandSender sender) {
-        Section listFormatSection = getConfiguration().getSection("LIST-FORMAT");
-        
+
+        if (getNexusManager().getNexusBlocks().isEmpty()) {
+            getMessageHandler().sendMessage(sender, "NEXUS.EMPTY_LIST");
+            return;
+        }
+
         Section listFormatSection = getLang().getSection("NEXUS.LIST-FORMAT");
 
         String enabled = listFormatSection.getString("ENABLED");
