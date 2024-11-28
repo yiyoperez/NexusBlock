@@ -21,12 +21,16 @@ public class NexusBlockCommand extends BaseCommand {
     //TODO:
     // Subcommands: Hologram, Rewards, Edit, Set(offset, material etc..), Enable/Disable.
 
+    private final NexusBlock plugin;
     private final NexusManager nexusManager;
+    private final YamlDocument lang;
     private final YamlDocument configuration;
     private final MessageHandler messageHandler;
     private final HologramManager hologramManager;
 
     public NexusBlockCommand(NexusBlock plugin) {
+        this.plugin = plugin;
+        this.lang = plugin.getLang();
         this.configuration = plugin.getConfiguration();
         this.nexusManager = plugin.getNexusManager();
         this.messageHandler = plugin.getMessageHandler();
@@ -63,8 +67,16 @@ public class NexusBlockCommand extends BaseCommand {
         messageHandler.sendListMessage(sender, "MAIN-COMMAND");
     }
 
+    public NexusBlock getPlugin() {
+        return plugin;
+    }
+
     public NexusManager getNexusManager() {
         return nexusManager;
+    }
+
+    public YamlDocument getLang() {
+        return lang;
     }
 
     public YamlDocument getConfiguration() {
