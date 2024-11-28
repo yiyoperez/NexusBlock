@@ -7,7 +7,6 @@ description: Plugin that allows create nexus blocks.
 softdepend:
     - HolographicDisplays
     - DecentHolograms
-    - Holograms
     - Multiverse-Core
     - MultiWorld
     - My_Worlds
