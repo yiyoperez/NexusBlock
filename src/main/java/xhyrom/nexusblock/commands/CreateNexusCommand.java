@@ -7,7 +7,6 @@ import dev.triumphteam.cmd.core.annotation.Suggestion;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import xhyrom.nexusblock.NexusBlock;
-import xhyrom.nexusblock.utils.MaterialUtils;
 import xhyrom.nexusblock.utils.Placeholder;
 
 public class CreateNexusCommand extends NexusBlockCommand {
@@ -25,7 +24,8 @@ public class CreateNexusCommand extends NexusBlockCommand {
             return;
         }
 
-        if (!MaterialUtils.isValidMaterial(materialName)) {
+        if (Material.matchMaterial(materialName) == null) {
+            //TODO: Create message.
             getMessageHandler().sendManualMessage(sender, "Invalid material in nexus " + nexusName);
             return;
         }

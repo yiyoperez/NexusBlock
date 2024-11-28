@@ -16,7 +16,6 @@ import xhyrom.nexusblock.structures.nexusConfig.NexusConfig;
 import xhyrom.nexusblock.structures.nexusConfig.NexusHealthConfig;
 import xhyrom.nexusblock.structures.nexusConfig.NexusLocationConfig;
 import xhyrom.nexusblock.structures.nexusConfig.NexusRewardsConfig;
-import xhyrom.nexusblock.utils.MaterialUtils;
 import xhyrom.nexusblock.utils.Placeholder;
 import xhyrom.nexusblock.utils.StringUtils;
 
@@ -50,7 +49,7 @@ public class NexusManager {
     public void createNexusBlock(Map<String, Object> map) {
         NexusConfig nexusConfig = new NexusConfig(map);
 
-        if (!MaterialUtils.isValidMaterial(nexusConfig.getBlockMaterial())) {
+        if (Material.matchMaterial(nexusConfig.getBlockMaterial()) == null) {
             nexusConfig.setBlockMaterial("COAL_BLOCK");
             plugin.getLogger().severe("Invalid material in nexus " + nexusConfig.getId());
             plugin.getLogger().warning("Changed to COAL_BLOCK to keep the block working.");

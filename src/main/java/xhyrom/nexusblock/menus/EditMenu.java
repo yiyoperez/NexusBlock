@@ -61,7 +61,7 @@ public final class EditMenu implements Menu {
                         button.setNamedData("status", !currentStatus);
                         nexus.setEnabled(!currentStatus);
 
-                        //TODO: Create actual message.
+                        //TODO: Create message.
                         messageHandler.sendManualMessage(player, "Nexus " + nexus.getId() + " status has been set to " + !currentStatus);
                         button.setItem(ItemBuilder.modern(!currentStatus ? enabledMaterial : disabledMaterial)
                                 .setDisplay(Component.text("Nexus Status " + (!currentStatus ? "enabled" : "disabled")))
