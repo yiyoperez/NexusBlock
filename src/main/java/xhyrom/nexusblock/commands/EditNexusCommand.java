@@ -33,6 +33,6 @@ public class EditNexusCommand extends NexusBlockCommand {
 
         //TODO: create message.
         messageHandler.sendManualMessage(sender, "Opening nexus " + nexus.getId() + " edit menu.");
-        getPlugin().getLotus().openMenu((Player) sender, new EditMenu(nexus, this));
+        getPlugin().getLotus().openMenu((Player) sender, new EditMenu(nexus, getPlugin()));
     }
 }

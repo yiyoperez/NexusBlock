@@ -15,45 +15,44 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
+import xhyrom.nexusblock.structures.nexusConfig.NexusHologramConfig;
 import xhyrom.nexusblock.utils.MessageHandler;
-import xhyrom.nexusblock.utils.Placeholder;
 
-public final class EditMenu implements Menu {
+public final class HologramMenu implements Menu {
 
-    private final NexusBlock plugin;
     private final Nexus nexus;
     private final MessageHandler messageHandler;
 
     private final Material enabledMaterial = Material.LIME_STAINED_GLASS_PANE;
     private final Material disabledMaterial = Material.RED_STAINED_GLASS_PANE;
 
-    public EditMenu(Nexus nexus, NexusBlock plugin) {
-        this.plugin = plugin;
+    public HologramMenu(Nexus nexus, NexusBlock plugin) {
         this.nexus = nexus;
         this.messageHandler = plugin.getMessageHandler();
     }
 
     @Override
     public String getName() {
-        return "Editor Menu";
+        return "Editor > Hologram";
     }
 
     @Override
     public @NotNull Content getContent(DataRegistry dataRegistry, Player player, Capacity capacity) {
-        //TODO: Create nexus block update items. (Material, Health, MaxHealth, RespawnInterval ...)
-
         return Content.builder(capacity)
-                .setButton(10, getStatusButton(player))
-                .setButton(18, deleteButton(player))
+                .setButton(13, getStatusButton(player))
+                .setButton(15, getOffsetButton(player))
                 .build();
     }
 
     private Button getStatusButton(Player player) {
-        return Button.clickable(
-                ItemBuilder.modern(nexus.isEnabled() ? enabledMaterial : disabledMaterial, 1)
-                        .setDisplay(Component.text("Nexus Status " + (nexus.isEnabled() ? "enabled" : "disabled")))
-                        .build(),
 
+        NexusHologramConfig hologramConfig = nexus.getHologramConfig();
+        boolean hologramStatus = hologramConfig.getHologram() != null;
+
+        return Button.clickable(
+                ItemBuilder.modern(hologramStatus ? enabledMaterial : disabledMaterial, 1)
+                        .setDisplay(Component.text("Hologram Status " + (hologramStatus ? "enabled" : "No hologram plugin found.")))
+                        .build(),
                 ButtonClickAction.plain((menuView, event) -> {
                     event.setCancelled(true);
                     menuView.updateButton(event.getSlot(), (button) -> {
@@ -65,7 +64,7 @@ public final class EditMenu implements Menu {
                         //TODO: Create message.
                         messageHandler.sendManualMessage(player, "Nexus " + nexus.getId() + " status has been set to " + !currentStatus);
                         button.setItem(ItemBuilder.modern(!currentStatus ? enabledMaterial : disabledMaterial)
-                                .setDisplay(Component.text("Nexus Status " + (!currentStatus ? "enabled" : "disabled")))
+                                .setDisplay(Component.text("Hologram Status " + (!currentStatus ? "enabled" : "No hologram plugin found.")))
                                 .build());
                     });
 
@@ -73,34 +72,45 @@ public final class EditMenu implements Menu {
         ).setNamedData("status", nexus.isEnabled());
     }
 
-    private Button deleteButton(Player player) {
+    private Button getOffsetButton(Player player) {
+
+        NexusHologramConfig hologramConfig = nexus.getHologramConfig();
+        boolean hologramStatus = hologramConfig.getHologram() != null;
+
+        if (!hologramStatus) {
+            return Button.empty(ItemBuilder.modern(Material.BARRIER).setDisplay(Component.text("Holograms is disabled.")).build());
+        }
+
         return Button.clickable(
-                ItemBuilder.modern(Material.LAVA_BUCKET)
-                        .setDisplay(Component.text("Delete nexus " + nexus.getId()))
+                ItemBuilder.modern(hologramStatus ? enabledMaterial : disabledMaterial, 1)
+                        .setDisplay(Component.text("Hologram Status " + (hologramStatus ? "enabled" : "No hologram plugin found.")))
                         .build(),
                 ButtonClickAction.plain((menuView, event) -> {
                     event.setCancelled(true);
+                    menuView.updateButton(event.getSlot(), (button) -> {
+                        boolean currentStatus = button.getNamedData("status");
 
-                    plugin.getLotus().openMenu(player,
-                            new ConfirmMenu(plugin, this,
-                                    ButtonClickAction.plain(((mv, e) -> {
-                                        player.closeInventory();
-                                        plugin.getNexusManager().deleteNexus(nexus);
-                                        messageHandler.sendMessage(player, "NEXUS.DELETED", new Placeholder("%nexusName%", nexus.getId()));
-                                    }))));
+                        button.setNamedData("status", !currentStatus);
+                        nexus.setEnabled(!currentStatus);
+
+                        //TODO: Create message.
+                        messageHandler.sendManualMessage(player, "Nexus " + nexus.getId() + " status has been set to " + !currentStatus);
+                        button.setItem(ItemBuilder.modern(!currentStatus ? enabledMaterial : disabledMaterial)
+                                .setDisplay(Component.text("Hologram Status " + (!currentStatus ? "enabled" : "No hologram plugin found.")))
+                                .build());
+                    });
 
                 })
-        );
+        ).setNamedData("status", nexus.isEnabled());
     }
 
     @Override
     public @NotNull MenuTitle getTitle(DataRegistry dataRegistry, Player player) {
-        return MenuTitles.createModern(nexus.getId() + " edit menu.");
+        return MenuTitles.createModern("Editor > Hologram");
     }
 
     @Override
     public @NotNull Capacity getCapacity(DataRegistry dataRegistry, Player player) {
-        return Capacity.ofRows(3);
+        return Capacity.ofRows(5);
     }
-
 }
