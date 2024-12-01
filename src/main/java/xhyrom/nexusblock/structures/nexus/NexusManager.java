@@ -23,17 +23,18 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class NexusManager {
 
     private final NexusBlock plugin;
-    private final List<Nexus> nexusBlocks = new ArrayList<>();
+    private final Set<Nexus> nexusBlocks = new HashSet<>();
 
     public NexusManager(NexusBlock plugin) {
         this.plugin = plugin;
@@ -257,7 +258,7 @@ public class NexusManager {
         return nexusBlocks.stream().anyMatch(block -> block.getId().equalsIgnoreCase(nexusName));
     }
 
-    public List<Nexus> getNexusBlocks() {
+    public Set<Nexus> getNexusBlocks() {
         return nexusBlocks;
     }
 
