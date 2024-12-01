@@ -200,7 +200,9 @@ public class NexusManager {
         // So... this resets the nexus block.
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             Block block = location.getBlock();
-            block.setType(nexus.getMaterial());
+            if (nexus.getLocationConfig().getLocation() == location) {
+                block.setType(nexus.getMaterial());
+            }
 
             nexus.getDestroyers().clear();
             nexus.getHealthStatus().setDamage(0);
