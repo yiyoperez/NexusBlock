@@ -74,8 +74,12 @@ COMMAND_MANAGER:
     USAGE_HEADER: "&8x &c&lNexusBlock &7‣ &f<required> [optional] (description)"
     USAGE_PREFIX: "&8x &c/"
     USAGE:
-        SETLOCATION: "%command% <nexusName>"
-        CREATE: "%command% <nexusName> <blockMaterial>"
+        SETLOCATION: "%command% setlocation <nexusName>"
+        CREATE: "%command% create <nexusName> <blockMaterial>"
+        DELETE: "%command% delete <nexusName>"
+        INFO: "%command% info <nexusName>"
+        EDIT: "%command% edit <nexusName>"
+        TELEPORT: "%command% teleport <nexusName>"
     TRANSLATIONS:
         NO_PERMISSION: "%prefix% &cYou have no permissions to use that command."
         ONLY_PLAYERS: "%prefix% &cYou can only run this command in-game!"
