@@ -15,6 +15,7 @@ repositories {
     maven("https://repo.triumphteam.dev/snapshots/")
     maven("https://oss.sonatype.org/content/groups/public")
     maven("https://repo.codemc.io/repository/maven-public/")
+    maven("https://repo.codemc.io/repository/maven-snapshots/")
     maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
 }
@@ -27,6 +28,7 @@ dependencies {
 
     implementation("com.github.mqzn:Lotus:1.3")
     implementation("dev.dejvokep:boosted-yaml:1.3.7")
+    implementation("net.wesjd:anvilgui:1.10.3-SNAPSHOT")
     implementation("net.kyori:adventure-platform-bukkit:4.3.4")
     implementation("dev.triumphteam:triumph-cmd-bukkit:2.0.0-SNAPSHOT")
 }
