@@ -40,11 +40,43 @@ public final class EditMenu implements Menu {
 
     @Override
     public @NotNull Content getContent(DataRegistry dataRegistry, Player player, Capacity capacity) {
-        //TODO: Create nexus block update items. (Material, Health, MaxHealth, RespawnInterval ...)
+        //TODO: Create nexus block update items. (Material, Health, MaxHealth, ...)
+        // Improve item update.
+
+        Button respawnButton = Button.clickable(
+                ItemBuilder.modern(Material.BLAZE_POWDER)
+                        .setDisplay(Component.text("Respawn Delay " + nexus.getRespawnDelay()))
+                        .build(),
+                ButtonClickAction.plain(((view, event) -> {
+                    event.setCancelled(true);
+
+                    view.updateButton(event.getSlot(), (button) -> {
+                        long currentDelay = button.getNamedData("delay");
+
+                        if (event.isLeftClick()) {
+                            button.setNamedData("delay", currentDelay + 1);
+                        }
+                        if (event.isRightClick()) {
+                            if (currentDelay > 0) {
+                                button.setNamedData("delay", currentDelay - 1);
+                            }
+                        }
+
+                        button.setItem(ItemBuilder.modern(Material.BLAZE_POWDER)
+                                .setDisplay(Component.text("Respawn Delay " + currentDelay))
+                                .build());
+
+                        //TODO: Create message.
+                        messageHandler.sendManualMessage(player, "Nexus " + nexus.getId() + " respawn delay has been set to " + currentDelay);
+                        nexus.setRespawnDelay(currentDelay);
+                    });
+                }))
+        ).setNamedData("delay", nexus.getRespawnDelay());
 
         return Content.builder(capacity)
                 .setButton(10, getStatusButton(player))
-                .setButton(18, deleteButton(player))
+                .setButton(11, respawnButton)
+                .setButton(25, deleteButton(player))
                 .build();
     }
 
@@ -54,9 +86,9 @@ public final class EditMenu implements Menu {
                         .setDisplay(Component.text("Nexus Status " + (nexus.isEnabled() ? "enabled" : "disabled")))
                         .build(),
 
-                ButtonClickAction.plain((menuView, event) -> {
+                ButtonClickAction.plain((view, event) -> {
                     event.setCancelled(true);
-                    menuView.updateButton(event.getSlot(), (button) -> {
+                    view.updateButton(event.getSlot(), (button) -> {
                         boolean currentStatus = button.getNamedData("status");
 
                         button.setNamedData("status", !currentStatus);
