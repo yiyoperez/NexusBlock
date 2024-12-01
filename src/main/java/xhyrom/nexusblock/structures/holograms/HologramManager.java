@@ -17,6 +17,8 @@ public class HologramManager {
 
     private final NexusBlock plugin;
 
+    //TODO: Class will need changes to accept per-state hologram.
+
     public HologramManager(NexusBlock plugin) {
         this.plugin = plugin;
     }
