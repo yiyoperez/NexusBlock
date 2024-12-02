@@ -23,7 +23,7 @@ repositories {
 dependencies {
     compileOnly("me.clip:placeholderapi:2.11.5")
     compileOnly("org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT")
-    compileOnly("com.github.decentsoftware-eu:decentholograms:2.8.6")
+    compileOnly("com.github.decentsoftware-eu:decentholograms:2.8.12")
     compileOnly("me.filoghost.holographicdisplays:holographicdisplays-api:3.0.0")
 
     implementation("com.github.mqzn:Lotus:1.3")
