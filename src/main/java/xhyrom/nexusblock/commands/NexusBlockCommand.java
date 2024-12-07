@@ -58,9 +58,11 @@ public class NexusBlockCommand extends BaseCommand {
     }
 
     private void sendHelpMessage(CommandSender sender) {
-        messageHandler.sendManualMessage(sender, "%prefix% &7Plugin available on github &a&nhttps://github.com/yiyoperez/NexusBlock/releases");
+        messageHandler.sendManualMessage(sender, "%prefix% <gray>Plugin available on github <green><u>https://github.com/yiyoperez/NexusBlock/releases");
+
         if (sender instanceof Player) {
             if (!sender.hasPermission("nexusblock.admin")) return;
+            messageHandler.sendMessage(sender, "NO_PERMISSION");
         }
 
         messageHandler.sendMessage(sender, "COMMAND_MANAGER.USAGE_HEADER");

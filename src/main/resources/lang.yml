@@ -2,45 +2,45 @@
 lang-version: 1
 
 # Plugin prefix, you can use it anywhere with placeholder %prefix%.
-PREFIX: '&8[&cNexusBlock&8] &7'
+PREFIX: '<dark_gray>[<red>NexusBlock<dark_gray>] <gray>'
 
 # Common plugin message.
-RELOADED: '%prefix% &rConfiguration files have been reloaded.'
-NO_PERMISSION: '%prefix% &cYou have no permissions to do that.'
-ERROR_OCCURRED: '%prefix% &cAn error has occurred please notify staff.'
-PLAYER_NOT_FOUND: '%prefix% &cPlayer &e"%player%" &chas been not found!'
-NOT_BOOLEAN: '%prefix% &cVariable &e"%value" &ccan only be true/false.'
-NOT_INTEGER: '%prefix% &cVariable &e"%value%" &ccan only be an integer.'
-NOT_DOUBLE: '%prefix% &cVariable &e"%value%" &ccan only be a double. (0.0)'
-OUT_OF_RANGE: '%prefix% &cValue %value% it out of range. Min: %min% Max: %max%'
+RELOADED: '%prefix% <reset>Configuration files have been reloaded.'
+NO_PERMISSION: '%prefix% <red>You have no permissions to do that.'
+ERROR_OCCURRED: '%prefix% <red>An error has occurred please notify staff.'
+PLAYER_NOT_FOUND: '%prefix% <red>Player <yellow>"%player%" <red>has been not found!'
+NOT_BOOLEAN: '%prefix% <red>Variable <yellow>"%value" <red>can only be true/false.'
+NOT_INTEGER: '%prefix% <red>Variable <yellow>"%value%" <red>can only be an integer.'
+NOT_DOUBLE: '%prefix% <red>Variable <yellow>"%value%" <red>can only be a double. (0.0)'
+OUT_OF_RANGE: '%prefix% <red>Value %value% it out of range. Min: %min% Max: %max%'
 
 MAIN-COMMAND:
-    - "&cAdmin Commands:"
+    - "<red>Admin Commands:"
     - ""
-    - "&c/nexusblock reload &8- &7Reload plugin."
-    - "&c/nexusblock list &8- &7Show all nexus blocks."
-    - "&c/nexusblock create <nexusName> &8- &7Create a new nexus block."
-    - "&c/nexusblock setlocation <nexusName> &8- &7Set nexus block location to yours."
+    - "<red>/nexusblock reload <dark_gray>- <gray>Reload plugin."
+    - "<red>/nexusblock list <dark_gray>- <gray>Show all nexus blocks."
+    - "<red>/nexusblock create <nexusName> <dark_gray>- <gray>Create a new nexus block."
+    - "<red>/nexusblock setlocation <nexusName> <dark_gray>- <gray>Set nexus block location to yours."
 
 # Nexus command related messages.
 NEXUS:
-    DOES_NOT_EXIST: "&cNo nexus block with that name exists!"
-    ALREADY_EXISTS: "&cNexus block with that name already exists!"
-    CREATED: "&aNexus block with name %nexusName% has been created."
-    DELETED: "&aNexus block with name %nexusName% has been deleted."
-    TELEPORTED: "&7Teleported to nexus block &a%nexusName% &7location."
-    SETLOCATION: "&7Updated nexus block &e\"&a%nexusName%&e\" location."
-    LOCATION_NOT_SET: "&cNexus block &e%nexusName% &cdoesn't have a location set."
+    DOES_NOT_EXIST: "<red>No nexus block with that name exists!"
+    ALREADY_EXISTS: "<red>Nexus block with that name already exists!"
+    CREATED: "<green>Nexus block with name %nexusName% has been created."
+    DELETED: "<green>Nexus block with name %nexusName% has been deleted."
+    TELEPORTED: "<gray>Teleported to nexus block <green>%nexusName% <gray>location."
+    SETLOCATION: "<gray>Updated nexus block <yellow>\"<green>%nexusName%<yellow>\" location."
+    LOCATION_NOT_SET: "<red>Nexus block <yellow>%nexusName% <red>doesn't have a location set."
     # How nexus are displayed when using /nexusblock list
-    EMPTY_LIST: "&7There are no nexus blocks to display."
+    EMPTY_LIST: "<gray>There are no nexus blocks to display."
     LIST-FORMAT:
-        ENABLED: "&a"
-        DISABLED: "&c"
-        PREFIX: "&7Available nexus blocks: "
+        ENABLED: "<green>"
+        DISABLED: "<red>"
+        PREFIX: "<gray>Available nexus blocks: "
         DELIMITER: ", "
-        SUFFIX: "&7."
+        SUFFIX: "<gray>."
     INFO:
-        HEADER: "&7Nexus information."
+        HEADER: "<gray>Nexus information."
         DISPLAY:
             - "%header%"
             - "Nexus ID: %id%"
@@ -53,26 +53,26 @@ NEXUS:
             - "%destroyers_header%"
             - "%destroyers_rewards%"
             - "%hologram%"
-        ID: "&7ID: &f%id%"
-        MATERIAL: "&7Material: &f%material%"
-        DAMAGE: "&7Damage: &f%damage%"
-        MAX_HEALTH: "&7Max Health: &f%max_health%"
-        RESPAWN_INTERVAL: "&7Respawn Interval: &f%respawn_interval%"
+        ID: "<gray>ID: <white>%id%"
+        MATERIAL: "<gray>Material: <white>%material%"
+        DAMAGE: "<gray>Damage: <white>%damage%"
+        MAX_HEALTH: "<gray>Max Health: <white>%max_health%"
+        RESPAWN_INTERVAL: "<gray>Respawn Interval: <white>%respawn_interval%"
         REWARDS:
             DESTROYER:
-                HEADER: "&7Destroyer Rewards:"
+                HEADER: "<gray>Destroyer Rewards:"
                 VALUE: "%destroyer_rewards%"
             LEADERBOARD:
-                HEADER: "&7Destroyers Rewards:"
+                HEADER: "<gray>Destroyers Rewards:"
                 VALUE: "%top% - %reward%"
         HOLOGRAM:
-            HEADER: "&7Hologram:"
+            HEADER: "<gray>Hologram:"
             VALUE: "%hologram_lines%"
 
 # Command manager messages.
 COMMAND_MANAGER:
-    USAGE_HEADER: "&8x &c&lNexusBlock &7‣ &f<required> [optional] (description)"
-    USAGE_PREFIX: "&8x &c/"
+    USAGE_HEADER: "<dark_gray>x <red><b>NexusBlock<reset> <gray>‣ <white><required> [optional] (description)"
+    USAGE_PREFIX: "<dark_gray>x <red>/"
     USAGE:
         SETLOCATION: "%command% setlocation <nexusName>"
         CREATE: "%command% create <nexusName> <blockMaterial>"
@@ -81,7 +81,7 @@ COMMAND_MANAGER:
         EDIT: "%command% edit <nexusName>"
         TELEPORT: "%command% teleport <nexusName>"
     TRANSLATIONS:
-        NO_PERMISSION: "%prefix% &cYou have no permissions to use that command."
-        ONLY_PLAYERS: "%prefix% &cYou can only run this command in-game!"
-        ONLY_CONSOLE: "%prefix% &cYou can only run this command at the console!"
-        INVALID_SUB_COMMAND: "%prefix% &cSub-command &e\"%sub-command%\" &cdoesn't exists!"
+        NO_PERMISSION: "%prefix% <red>You have no permissions to use that command."
+        ONLY_PLAYERS: "%prefix% <red>You can only run this command in-game!"
+        ONLY_CONSOLE: "%prefix% <red>You can only run this command at the console!"
+        INVALID_SUB_COMMAND: "%prefix% <red>Sub-command <yellow>\"%sub-command%\" <red>doesn't exists!"
