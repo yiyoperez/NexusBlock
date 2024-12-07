@@ -26,7 +26,14 @@ public class BlockDestroy implements Listener {
 
         Block block = event.getBlock();
         Location blockLocation = block.getLocation();
-        Nexus nexusBlock = manager.getNexusBlocks().stream()
+
+        if (manager.getNexusBlocks().isEmpty()) return;
+
+        Nexus nexusBlock = manager.getNexusBlocks()
+                .stream()
+                // Filter out nexus blocks with no location set.
+                .filter(nexus -> nexus.getLocationConfig().getLocation() != null)
+                // Check if broken block location is the same as nexus block.
                 .filter(nexus -> nexus.getLocationConfig().getLocation().equals(blockLocation))
                 .findAny()
                 .orElse(null);
