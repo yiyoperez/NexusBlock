@@ -2,9 +2,10 @@ package xhyrom.nexusblock.utils;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import me.clip.placeholderapi.PlaceholderAPI;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginManager;
 import xhyrom.nexusblock.NexusBlock;
 
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ public class MessageHandler {
 
     private final NexusBlock plugin;
     private final YamlDocument messages;
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+    private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.legacySection();
 
     public MessageHandler(NexusBlock plugin, YamlDocument messages) {
         this.plugin = plugin;
@@ -23,23 +26,18 @@ public class MessageHandler {
     }
 
     public String intercept(CommandSender sender, String message, List<Placeholder> placeholders) {
-        message = intercept(sender, message);
-
-        // Replace placeholders.
+        // Replace preset/local placeholders.
         if (!placeholders.isEmpty()) {
             message = StringUtils.replace(message, placeholders);
         }
 
-        return MessageUtils.translateColor(message);
+        return intercept(sender, message);
     }
 
     public String intercept(CommandSender sender, String message) {
-        PluginManager pluginManager = plugin.getServer().getPluginManager();
-
         // Replace PlaceholderAPI's placeholders if found.
         if (plugin.isEnabled("PlaceholderAPI")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
+            if (sender instanceof Player player) {
                 message = PlaceholderAPI.setPlaceholders(player, message);
             }
         }
@@ -54,7 +52,7 @@ public class MessageHandler {
             }
         }
 
-        return MessageUtils.translateColor(message);
+        return LEGACY_COMPONENT_SERIALIZER.serialize(MINI_MESSAGE.deserialize(message));
     }
 
     public String getRawMessage(String path) {
