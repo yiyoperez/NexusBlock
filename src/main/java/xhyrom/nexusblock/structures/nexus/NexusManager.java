@@ -124,10 +124,10 @@ public class NexusManager {
 
     public void setWorldBlock(Nexus nexus) {
         Location location = nexus.getLocationConfig().getLocation();
-        if (location == null) {
-            Bukkit.getLogger().warning("Could not set nexus block " + nexus.getId() + " since it doesn't have a location.");
-            Bukkit.getLogger().warning("Please use /nexusblock setlocation <nexus>");
-            Bukkit.getLogger().warning("to set your current eye location as nexus block location.");
+        if (nexus.isEnabled() && location == null) {
+            plugin.getLogger().warning("Could not set nexus block " + nexus.getId() + " since it doesn't have a location.");
+            plugin.getLogger().warning("Please use /nexusblock setlocation <nexus>");
+            plugin.getLogger().warning("to set your current eye location as nexus block location.");
             return;
         }
 
