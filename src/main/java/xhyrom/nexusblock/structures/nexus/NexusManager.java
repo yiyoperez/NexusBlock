@@ -126,7 +126,7 @@ public class NexusManager {
         Location location = nexus.getLocationConfig().getLocation();
         if (location == null) {
             Bukkit.getLogger().warning("Could not set nexus block " + nexus.getId() + " since it doesn't have a location.");
-            Bukkit.getLogger().warning("Please use /nexusblock setlocation ");
+            Bukkit.getLogger().warning("Please use /nexusblock setlocation <nexus>");
             Bukkit.getLogger().warning("to set your current eye location as nexus block location.");
             return;
         }
@@ -268,6 +268,12 @@ public class NexusManager {
                 .stream()
                 .sorted(new ModuleComparator(nexus.getDestroyers()))
                 .collect(Collectors.toList());
+    }
+
+    public boolean isNexusLocation(Location location) {
+        return nexusBlocks.stream()
+                .filter(nexus -> nexus.getLocationConfig().getLocation() != null)
+                .anyMatch(nexus -> nexus.getLocationConfig().getLocation().equals(location));
     }
 
     private static class ModuleComparator implements Comparator<String> {
