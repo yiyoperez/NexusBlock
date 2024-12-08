@@ -52,7 +52,7 @@ public class SetLocationCommand extends NexusBlockCommand {
         Location lookingLocation = lastBlock.getLocation();
 
         NexusLocationConfig locationConfig = nexus.getLocationConfig();
-        if (locationConfig.getLocation().equals(lookingLocation)) {
+        if (locationConfig.getLocation() != null && locationConfig.getLocation().equals(lookingLocation)) {
             getMessageHandler().sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexusName));
             return;
         }
