@@ -12,6 +12,8 @@ import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
 
+import java.util.Optional;
+
 public class BlockDestroy implements Listener {
 
     private final NexusManager manager;
@@ -29,20 +31,19 @@ public class BlockDestroy implements Listener {
 
         if (manager.getNexusBlocks().isEmpty()) return;
 
-        Nexus nexusBlock = manager.getNexusBlocks()
+        Optional<Nexus> nexusBlock = manager.getNexusBlocks()
                 .stream()
                 // Filter out nexus blocks with no location set.
                 .filter(nexus -> nexus.getLocationConfig().getLocation() != null)
                 // Check if broken block location is the same as nexus block.
                 .filter(nexus -> nexus.getLocationConfig().getLocation().equals(blockLocation))
-                .findAny()
-                .orElse(null);
+                .findAny();
 
-        if (nexusBlock != null) {
+        if (nexusBlock.isPresent()) {
             event.setCancelled(true);
 
             if (block.getType() != Material.BEDROCK)
-                manager.handleBreakActions(player, nexusBlock);
+                manager.handleBreakActions(player, nexusBlock.get());
         }
     }
 }
