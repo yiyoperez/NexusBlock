@@ -51,8 +51,18 @@ public class SetLocationCommand extends NexusBlockCommand {
         // Self-explanatory.
         Location lookingLocation = lastBlock.getLocation();
 
-        //Remove old block
         NexusLocationConfig locationConfig = nexus.getLocationConfig();
+        if (locationConfig.getLocation().equals(lookingLocation)) {
+            getMessageHandler().sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexusName));
+            return;
+        }
+
+        if (nexusManager.isNexusLocation(lookingLocation)) {
+            getMessageHandler().sendMessage(player, "NEXUS.LOCATION_OCCUPIED");
+            return;
+        }
+
+        //Remove old block
         if (locationConfig.getLocation() != null) {
             Block block = locationConfig.getLocation().getBlock();
             if (!block.isEmpty()) {
