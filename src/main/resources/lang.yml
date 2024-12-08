@@ -30,6 +30,7 @@ NEXUS:
     DELETED: "<green>Nexus block with name %nexusName% has been deleted."
     TELEPORTED: "<gray>Teleported to nexus block <green>%nexusName% <gray>location."
     SETLOCATION: "<gray>Updated nexus block <yellow>\"<green>%nexusName%<yellow>\" location."
+    LOCATION_OCCUPIED: "<red>Another nexus block already is using that location!"
     LOCATION_NOT_SET: "<red>Nexus block <yellow>%nexusName% <red>doesn't have a location set."
     # How nexus are displayed when using /nexusblock list
     EMPTY_LIST: "<gray>There are no nexus blocks to display."
