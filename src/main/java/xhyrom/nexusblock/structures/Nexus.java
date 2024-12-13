@@ -1,6 +1,7 @@
 package xhyrom.nexusblock.structures;
 
 import org.bukkit.Material;
+import xhyrom.nexusblock.structures.nexus.NexusState;
 import xhyrom.nexusblock.structures.nexusConfig.NexusConfig;
 import xhyrom.nexusblock.structures.nexusConfig.NexusHealthConfig;
 import xhyrom.nexusblock.structures.nexusConfig.NexusHologramConfig;
@@ -16,6 +17,7 @@ public class Nexus {
     private Material material;
     private boolean enabled;
     private Long respawnDelay;
+    private NexusState state;
     private final NexusRewardsConfig rewardsConfig;
     private final NexusHologramConfig hologramConfig;
     private final NexusLocationConfig locationConfig;
@@ -30,29 +32,22 @@ public class Nexus {
         this.enabled = nexusConfig.isEnabled();
         this.respawnDelay = nexusConfig.getRespawnInterval();
         this.rewardsConfig = new NexusRewardsConfig();
+        this.state = nexusConfig.getState();
         this.hologramConfig = new NexusHologramConfig(id);
         this.locationConfig = new NexusLocationConfig();
         this.healthStatus = new NexusHealthConfig();
     }
 
-    public Nexus(
-            String id,
-            Material material,
-            boolean isEnabled,
-            long respawnDelay,
-            NexusHologramConfig hologramConfig,
-            NexusLocationConfig locationConfig,
-            NexusHealthConfig healthStatus,
-            NexusRewardsConfig rewardsConfig
-    ) {
+    public Nexus(String id, Material material, NexusConfig nexusConfig) {
         this.id = id;
-        this.enabled = isEnabled;
+        this.enabled = nexusConfig.isEnabled();
         this.material = material;
-        this.respawnDelay = respawnDelay;
-        this.rewardsConfig = rewardsConfig;
-        this.hologramConfig = hologramConfig;
-        this.locationConfig = locationConfig;
-        this.healthStatus = healthStatus;
+        this.respawnDelay = nexusConfig.getRespawnInterval();
+        this.state = nexusConfig.getState();
+        this.rewardsConfig = nexusConfig.getRewards();
+        this.hologramConfig = nexusConfig.getHologram();
+        this.locationConfig = nexusConfig.getLocation();
+        this.healthStatus = nexusConfig.getHealths();
     }
 
     public String getId() {
@@ -81,6 +76,14 @@ public class Nexus {
 
     public void setRespawnDelay(Long respawnDelay) {
         this.respawnDelay = respawnDelay;
+    }
+
+    public NexusState getState() {
+        return state;
+    }
+
+    public void setState(NexusState state) {
+        this.state = state;
     }
 
     public NexusRewardsConfig getRewardsConfig() {

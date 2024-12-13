@@ -79,6 +79,7 @@ public class NexusService {
                 file.set("ENABLED", nexus.isEnabled());
                 file.set("MATERIAL", nexus.getMaterial().name());
                 file.set("HEALTH", nexus.getHealthStatus().getMaximumHealth());
+                file.set("STATE", nexus.getState().name());
                 file.set("HOLOGRAM-HEIGHT", nexus.getHologramConfig().getHologramOffset());
                 file.set("RESPAWN_INTERVAL", nexus.getRespawnDelay());
 

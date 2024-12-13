@@ -60,12 +60,7 @@ public class NexusManager {
         Nexus nexus = new Nexus(
                 nexusConfig.getId(),
                 Material.matchMaterial(nexusConfig.getBlockMaterial()),
-                nexusConfig.isEnabled(),
-                nexusConfig.getRespawnInterval(),
-                nexusConfig.getHologram(),
-                nexusConfig.getLocation(),
-                nexusConfig.getHealths(),
-                nexusConfig.getRewards()
+                nexusConfig
         );
 
         // Update values from temporal data if any.
@@ -114,7 +109,7 @@ public class NexusManager {
             if (section.contains("DESTROYERS")) {
                 section.getSection("DESTROYERS")
                         .getStringRouteMappedValues(false)
-                        .replaceAll((d, v) -> nexus.getDestroyers().put(d, (Integer) v));
+                        .forEach((d, v) -> nexus.getDestroyers().put(d, (Integer) v));
             }
 
             // Clear the section
