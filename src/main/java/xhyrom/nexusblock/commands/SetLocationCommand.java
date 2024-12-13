@@ -19,8 +19,11 @@ import xhyrom.nexusblock.utils.Placeholder;
 
 public class SetLocationCommand extends NexusBlockCommand {
 
+    private final NexusBlock plugin;
+
     public SetLocationCommand(NexusBlock plugin) {
         super(plugin);
+        this.plugin = plugin;
     }
 
     @SubCommand(value = "setlocation")
@@ -76,19 +79,22 @@ public class SetLocationCommand extends NexusBlockCommand {
         // Setup create block at new location.
         nexusManager.setWorldBlock(nexus);
 
-        // Get hologram offset.
-        NexusHologramConfig hologramConfig = nexus.getHologramConfig();
-        double offset = hologramConfig.getHologramOffset();
+        // Handle holograms if enabled.
+        if (plugin.getHologram() != null) {
+            if (nexus.getHologramConfig().getHologram() == null) {
+                // Create hologram if didn't have one.
+                hologramManager.setupHologram(nexus);
+            } else {
+                // Get hologram offset.
+                NexusHologramConfig hologramConfig = nexus.getHologramConfig();
+                double offset = hologramConfig.getHologramOffset();
 
-        // Update current hologram location if any.
-        hologramManager.updateHologramLocation(nexus, lookingLocation.clone().add(0.5D, offset, 0.5D));
+                // Update current hologram location if any.
+                hologramManager.updateHologramLocation(nexus, lookingLocation.clone().add(0.5D, offset, 0.5D));
+            }
+        }
 
         // Send message to player notifying location update.
         getMessageHandler().sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexusName));
-
-        // Create hologram if didn't have one.
-        if (nexus.getHologramConfig().getHologram() == null) {
-            hologramManager.setupHologram(nexus);
-        }
     }
 }

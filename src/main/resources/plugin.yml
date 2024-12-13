@@ -10,3 +10,8 @@ softdepend:
     - Multiverse-Core
     - MultiWorld
     - My_Worlds
+
+permissions:
+    nexusblock.admin.break:
+        default: op
+        description: Allow the player to break placed nexus blocks when sneaking.

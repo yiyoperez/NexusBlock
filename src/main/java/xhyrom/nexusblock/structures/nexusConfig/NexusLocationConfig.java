@@ -32,7 +32,7 @@ public class NexusLocationConfig {
         return world;
     }
 
-    private void setWorld(World world) {
+    public void setWorld(World world) {
         this.world = world;
     }
 
@@ -43,5 +43,10 @@ public class NexusLocationConfig {
     public void setLocation(Location location) {
         this.location = location;
         setWorld(location.getWorld());
+    }
+
+    public void resetLocationConfig() {
+        this.location = null;
+        this.world = null;
     }
 }
