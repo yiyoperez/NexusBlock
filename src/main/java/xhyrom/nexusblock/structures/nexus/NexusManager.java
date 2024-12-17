@@ -119,10 +119,13 @@ public class NexusManager {
 
     public void setWorldBlock(Nexus nexus) {
         Location location = nexus.getLocationConfig().getLocation();
-        if (nexus.isEnabled() && location == null) {
-            plugin.getLogger().warning("Could not set nexus block " + nexus.getId() + " since it doesn't have a location.");
-            plugin.getLogger().warning("Please use /nexusblock setlocation <nexus>");
-            plugin.getLogger().warning("to set your current eye location as nexus block location.");
+
+        if (location == null) {
+            if (nexus.isEnabled()) {
+                plugin.getLogger().warning("Could not set nexus block " + nexus.getId() + " since it doesn't have a location.");
+                plugin.getLogger().warning("Please use /nexusblock setlocation <nexus>");
+                plugin.getLogger().warning("to set your current eye location as nexus block location.");
+            }
             return;
         }
 
@@ -193,6 +196,7 @@ public class NexusManager {
     private void resetNexus(Nexus nexus, Location location) {
         HologramManager hologramManager = plugin.getHologramManager();
 
+        //TODO: get rid of task later schedulers.
         // So... this resets the nexus block.
         Bukkit.getScheduler().runTaskLater(plugin, () -> {
             Block block = location.getBlock();
