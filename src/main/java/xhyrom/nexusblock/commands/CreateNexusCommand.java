@@ -6,6 +6,7 @@ import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.optional.OptionalArg;
 import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -26,7 +27,7 @@ public class CreateNexusCommand {
     @Execute
     @Permission("nexusblock.command.create")
     @Description("Create a new nexus block.")
-    public void createCommand(@Context CommandSender sender, @Arg("nexusName") String nexusName) {
+    public void createCommand(@Context CommandSender sender, @Arg("nexusName") String nexusName, @OptionalArg("material") @Key("block-materials") String materialName) {
         NexusManager nexusManager = plugin.getNexusManager();
         MessageHandler messageHandler = plugin.getMessageHandler();
 
@@ -35,30 +36,19 @@ public class CreateNexusCommand {
             return;
         }
 
+        Material material = Material.STONE;
 
-        nexusManager.createNexusBlock(nexusName, Material.STONE);
-        messageHandler.sendMessage(sender, "NEXUS.CREATED", new Placeholder("%nexusName%", nexusName));
-    }
+        if (materialName != null) {
+            if (Material.matchMaterial(materialName) == null) {
+                //TODO: Create message.
+                messageHandler.sendManualMessage(sender, "Invalid material in nexus " + nexusName);
+                return;
+            }
 
-    @Execute
-    @Permission("nexusblock.command.create")
-    @Description("Create a new nexus block.")
-    public void createCommand(@Context CommandSender sender, @Arg("nexusName") String nexusName, @Arg("material") @Key("block-materials") String materialName) {
-        NexusManager nexusManager = plugin.getNexusManager();
-        MessageHandler messageHandler = plugin.getMessageHandler();
-
-        if (nexusManager.existsNexusBlock(nexusName)) {
-            messageHandler.sendMessage(sender, "NEXUS.ALREADY_EXISTS", new Placeholder("%nexusName%", nexusName));
-            return;
+            material = Material.matchMaterial(materialName);
         }
 
-        if (Material.matchMaterial(materialName) == null) {
-            //TODO: Create message.
-            messageHandler.sendManualMessage(sender, "Invalid material in nexus " + nexusName);
-            return;
-        }
-
-        nexusManager.createNexusBlock(nexusName, Material.matchMaterial(materialName));
+        nexusManager.createNexusBlock(nexusName, material);
         messageHandler.sendMessage(sender, "NEXUS.CREATED", new Placeholder("%nexusName%", nexusName));
     }
 }
