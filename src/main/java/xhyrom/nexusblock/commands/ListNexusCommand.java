@@ -1,30 +1,39 @@
 package xhyrom.nexusblock.commands;
 
 import dev.dejvokep.boostedyaml.block.implementation.Section;
-import dev.triumphteam.cmd.bukkit.annotation.Permission;
-import dev.triumphteam.cmd.core.annotation.SubCommand;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.command.CommandSender;
 import xhyrom.nexusblock.NexusBlock;
+import xhyrom.nexusblock.structures.nexus.NexusManager;
+import xhyrom.nexusblock.utils.MessageHandler;
 
 import java.util.StringJoiner;
 
 
-public class ListNexusCommand extends NexusBlockCommand {
+@Command(name = "nexusblock list")
+public class ListNexusCommand {
+
+    private final NexusBlock plugin;
 
     public ListNexusCommand(NexusBlock plugin) {
-        super(plugin);
+        this.plugin = plugin;
     }
 
-    @SubCommand(value = "list")
+    @Execute
     @Permission("nexusblock.command.list")
-    public void listCommand(CommandSender sender) {
+    public void listCommand(@Context CommandSender sender) {
+        NexusManager nexusManager = plugin.getNexusManager();
+        MessageHandler messageHandler = plugin.getMessageHandler();
 
-        if (getNexusManager().getNexusBlocks().isEmpty()) {
-            getMessageHandler().sendMessage(sender, "NEXUS.EMPTY_LIST");
+        if (nexusManager.getNexusBlocks().isEmpty()) {
+            messageHandler.sendMessage(sender, "NEXUS.EMPTY_LIST");
             return;
         }
 
-        Section listFormatSection = getLang().getSection("NEXUS.LIST-FORMAT");
+        Section listFormatSection = plugin.getLang().getSection("NEXUS.LIST-FORMAT");
 
         String enabled = listFormatSection.getString("ENABLED");
         String disabled = listFormatSection.getString("DISABLED");
@@ -33,9 +42,9 @@ public class ListNexusCommand extends NexusBlockCommand {
         String suffix = listFormatSection.getString("SUFFIX");
 
         StringJoiner joiner = new StringJoiner(delimiter, prefix, suffix);
-        getNexusManager().getNexusBlocks().forEach(nexus -> joiner.add((nexus.isEnabled() ? enabled : disabled) + nexus.getId()));
+        nexusManager.getNexusBlocks().forEach(nexus -> joiner.add((nexus.isEnabled() ? enabled : disabled) + nexus.getId()));
 
-        getMessageHandler().sendManualMessage(sender, joiner.toString());
+        messageHandler.sendManualMessage(sender, joiner.toString());
     }
 
 }

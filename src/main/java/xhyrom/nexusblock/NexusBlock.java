@@ -13,7 +13,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import xhyrom.nexusblock.events.BlockDestroy;
-import xhyrom.nexusblock.services.CommandService;
+import xhyrom.nexusblock.loaders.CommandLoader;
 import xhyrom.nexusblock.structures.holograms.HologramManager;
 import xhyrom.nexusblock.structures.holograms.implementation.DecentHolograms;
 import xhyrom.nexusblock.structures.holograms.implementation.HologramInterface;
@@ -37,7 +37,7 @@ public final class NexusBlock extends JavaPlugin {
     private HologramManager hologramManager;
     private NexusManager nexusManager;
     private NexusService nexusService;
-    private CommandService commandService;
+    private CommandLoader commandLoader;
 
     private Lotus lotus;
     private BukkitAudiences adventure;
@@ -63,8 +63,8 @@ public final class NexusBlock extends JavaPlugin {
         nexusService = new NexusService(this);
         nexusService.loadBlocks();
 
-        commandService = new CommandService(this);
-        commandService.start();
+        commandLoader = new CommandLoader(this);
+        commandLoader.load();
 
         getServer().getPluginManager().registerEvents(new BlockDestroy(this), this);
     }
@@ -78,9 +78,6 @@ public final class NexusBlock extends JavaPlugin {
     public void onDisable() {
         if (nexusService != null) {
             nexusService.saveNexusBlocks();
-        }
-        if (commandService != null) {
-            commandService.finish();
         }
         if (this.adventure != null) {
             this.adventure.close();

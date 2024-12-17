@@ -73,14 +73,7 @@ NEXUS:
 # Command manager messages.
 COMMAND_MANAGER:
     USAGE_HEADER: "<dark_gray>x <red><b>NexusBlock<reset> <gray>‣ <white><required> [optional] (description)"
-    USAGE_PREFIX: "<dark_gray>x <red>/"
-    USAGE:
-        SETLOCATION: "%command% setlocation <nexusName>"
-        CREATE: "%command% create <nexusName> <blockMaterial>"
-        DELETE: "%command% delete <nexusName>"
-        INFO: "%command% info <nexusName>"
-        EDIT: "%command% edit <nexusName>"
-        TELEPORT: "%command% teleport <nexusName>"
+    USAGE_PREFIX: "<dark_gray>x <red>"
     TRANSLATIONS:
         NO_PERMISSION: "%prefix% <red>You have no permissions to use that command."
         ONLY_PLAYERS: "%prefix% <red>You can only run this command in-game!"

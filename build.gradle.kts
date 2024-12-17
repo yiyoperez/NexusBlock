@@ -11,8 +11,8 @@ plugins {
 repositories {
     mavenCentral()
     maven("https://jitpack.io")
+    maven("https://repo.panda-lang.org/releases")
     maven("https://repo.codemc.io/repository/nms/")
-    maven("https://repo.triumphteam.dev/snapshots/")
     maven("https://oss.sonatype.org/content/groups/public")
     maven("https://repo.codemc.io/repository/maven-public/")
     maven("https://repo.codemc.io/repository/maven-snapshots/")
@@ -26,12 +26,13 @@ dependencies {
     compileOnly("com.github.decentsoftware-eu:decentholograms:2.8.6")
     compileOnly("me.filoghost.holographicdisplays:holographicdisplays-api:3.0.0")
 
+
     implementation("com.github.mqzn:Lotus:1.3")
     implementation("dev.dejvokep:boosted-yaml:1.3.7")
     implementation("net.wesjd:anvilgui:1.10.3-SNAPSHOT")
+    implementation("dev.rollczi:litecommands-bukkit:3.9.2")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
     implementation("net.kyori:adventure-text-serializer-legacy:4.17.0")
-    implementation("dev.triumphteam:triumph-cmd-bukkit:2.0.0-SNAPSHOT")
 }
 
 tasks {

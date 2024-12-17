@@ -1,9 +1,12 @@
 package xhyrom.nexusblock.commands;
 
-import dev.triumphteam.cmd.bukkit.annotation.Permission;
-import dev.triumphteam.cmd.core.annotation.Description;
-import dev.triumphteam.cmd.core.annotation.SubCommand;
-import dev.triumphteam.cmd.core.annotation.Suggestion;
+import dev.rollczi.litecommands.annotations.argument.Arg;
+import dev.rollczi.litecommands.annotations.argument.Key;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.description.Description;
+import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,26 +18,29 @@ import xhyrom.nexusblock.structures.holograms.HologramManager;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
 import xhyrom.nexusblock.structures.nexusConfig.NexusHologramConfig;
 import xhyrom.nexusblock.structures.nexusConfig.NexusLocationConfig;
+import xhyrom.nexusblock.utils.MessageHandler;
 import xhyrom.nexusblock.utils.Placeholder;
 
-public class SetLocationCommand extends NexusBlockCommand {
+@Command(name = "nexusblock setlocation")
+public class SetLocationCommand {
 
     private final NexusBlock plugin;
 
     public SetLocationCommand(NexusBlock plugin) {
-        super(plugin);
         this.plugin = plugin;
     }
 
-    @SubCommand(value = "setlocation")
+    @Execute
     @Permission("nexusblock.command.setlocation")
     @Description("Set nexusblock location where you currently are watching.")
-    public void setLocationCommand(Player player, @Suggestion("available-blocks") String nexusName) {
-        NexusManager nexusManager = getNexusManager();
-        HologramManager hologramManager = getHologramManager();
+    public void setLocationCommand(@Context Player player, @Arg @Key("available-blocks") String nexusName) {
+        NexusManager nexusManager = plugin.getNexusManager();
+        HologramManager hologramManager = plugin.getHologramManager();
+        MessageHandler messageHandler = plugin.getMessageHandler();
+        
         Nexus nexus = nexusManager.getNexus(nexusName);
         if (nexus == null) {
-            getMessageHandler().sendMessage(player, "NEXUS.DOES_NOT_EXIST", new Placeholder("%nexusName%", nexusName));
+            messageHandler.sendMessage(player, "NEXUS.DOES_NOT_EXIST", new Placeholder("%nexusName%", nexusName));
             return;
         }
 
@@ -56,12 +62,12 @@ public class SetLocationCommand extends NexusBlockCommand {
 
         NexusLocationConfig locationConfig = nexus.getLocationConfig();
         if (locationConfig.getLocation() != null && locationConfig.getLocation().equals(lookingLocation)) {
-            getMessageHandler().sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexusName));
+            messageHandler.sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexusName));
             return;
         }
 
         if (nexusManager.isNexusLocation(lookingLocation)) {
-            getMessageHandler().sendMessage(player, "NEXUS.LOCATION_OCCUPIED");
+            messageHandler.sendMessage(player, "NEXUS.LOCATION_OCCUPIED");
             return;
         }
 
@@ -95,6 +101,6 @@ public class SetLocationCommand extends NexusBlockCommand {
         }
 
         // Send message to player notifying location update.
-        getMessageHandler().sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexusName));
+        messageHandler.sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexusName));
     }
 }

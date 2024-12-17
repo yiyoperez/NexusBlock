@@ -1,9 +1,12 @@
 package xhyrom.nexusblock.commands;
 
-import dev.triumphteam.cmd.bukkit.annotation.Permission;
-import dev.triumphteam.cmd.core.annotation.Description;
-import dev.triumphteam.cmd.core.annotation.SubCommand;
-import dev.triumphteam.cmd.core.annotation.Suggestion;
+import dev.rollczi.litecommands.annotations.argument.Arg;
+import dev.rollczi.litecommands.annotations.argument.Key;
+import dev.rollczi.litecommands.annotations.command.Command;
+import dev.rollczi.litecommands.annotations.context.Context;
+import dev.rollczi.litecommands.annotations.description.Description;
+import dev.rollczi.litecommands.annotations.execute.Execute;
+import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.command.CommandSender;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
@@ -14,21 +17,25 @@ import xhyrom.nexusblock.utils.Placeholder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InfoNexusCommand extends NexusBlockCommand {
+@Command(name = "nexusblock info")
+public class InfoNexusCommand {
+
+    private final NexusBlock plugin;
 
     public InfoNexusCommand(NexusBlock plugin) {
-        super(plugin);
+        this.plugin = plugin;
     }
 
-    @SubCommand(value = "info")
+    @Execute
     @Permission("nexusblock.command.info")
     @Description("Check information about nexus settings.")
-    public void infoCommand(CommandSender sender, @Suggestion("available-blocks") String nexusName) {
-        MessageHandler messageHandler = getMessageHandler();
-        NexusManager nexusManager = getNexusManager();
+    public void infoCommand(@Context CommandSender sender, @Arg @Key("available-blocks") String nexusName) {
+        NexusManager nexusManager = plugin.getNexusManager();
+        MessageHandler messageHandler = plugin.getMessageHandler();
+
         Nexus nexus = nexusManager.getNexus(nexusName);
         if (nexus == null) {
-            getMessageHandler().sendMessage(sender, "NEXUS.DOES_NOT_EXIST", new Placeholder("%nexusName%", nexusName));
+            messageHandler.sendMessage(sender, "NEXUS.DOES_NOT_EXIST", new Placeholder("%nexusName%", nexusName));
             return;
         }
 
