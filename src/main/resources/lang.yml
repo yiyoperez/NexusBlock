@@ -72,7 +72,7 @@ NEXUS:
 
 # Command manager messages.
 COMMAND_MANAGER:
-    USAGE_HEADER: "<dark_gray>x <red><b>NexusBlock<reset> <gray>‣ <white><required> [optional] (description)"
+    USAGE_HEADER: "<dark_gray>x <red><b>NexusBlock<reset> <gray>‣ <white><required> [optional]"
     USAGE_PREFIX: "<dark_gray>x <red>"
     TRANSLATIONS:
         NO_PERMISSION: "%prefix% <red>You have no permissions to use that command."
