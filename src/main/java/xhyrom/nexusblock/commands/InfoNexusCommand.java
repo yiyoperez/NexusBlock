@@ -44,6 +44,7 @@ public class InfoNexusCommand {
 
         placeholders.add(new Placeholder("%header%", header));
         placeholders.add(new Placeholder("%id%", nexus.getId()));
+        placeholders.add(new Placeholder("%state%", nexus.getState().name()));
         placeholders.add(new Placeholder("%status%", String.valueOf(nexus.isEnabled())));
         placeholders.add(new Placeholder("%material%", nexus.getMaterial().name()));
         placeholders.add(new Placeholder("%damage%", nexus.getHealthStatus().getDamage()));

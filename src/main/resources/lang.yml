@@ -44,7 +44,7 @@ NEXUS:
         HEADER: "<gray>Nexus information."
         DISPLAY:
             - "%header%"
-            - "Nexus ID: %id%"
+            - "Nexus ID: %id% (%state%)"
             - "Status: %status%"
             - "Material: %material%"
             - "Health: %damage%/%max_health%"
