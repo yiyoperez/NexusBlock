@@ -2,8 +2,6 @@ package xhyrom.nexusblock.utils;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import me.clip.placeholderapi.PlaceholderAPI;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xhyrom.nexusblock.NexusBlock;
@@ -17,8 +15,6 @@ public class MessageHandler {
 
     private final NexusBlock plugin;
     private final YamlDocument messages;
-    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
-    private static final LegacyComponentSerializer LEGACY_COMPONENT_SERIALIZER = LegacyComponentSerializer.legacySection();
 
     public MessageHandler(NexusBlock plugin, YamlDocument messages) {
         this.plugin = plugin;
@@ -52,7 +48,7 @@ public class MessageHandler {
             }
         }
 
-        return LEGACY_COMPONENT_SERIALIZER.serialize(MINI_MESSAGE.deserialize(message));
+        return MessageUtils.translateMiniMessage(message);
     }
 
     public String getRawMessage(String path) {
