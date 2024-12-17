@@ -28,7 +28,7 @@ public class EditNexusCommand {
     @Execute()
     @Permission("nexusblock.command.edit")
     @Description("Edit nexus settings in-game from a GUI.")
-    public void editCommand(@Context CommandSender sender, @Arg @Key("available-blocks") String nexusName) {
+    public void editCommand(@Context CommandSender sender, @Arg("nexusName") @Key("available-blocks") String nexusName) {
         NexusManager nexusManager = plugin.getNexusManager();
         MessageHandler messageHandler = plugin.getMessageHandler();
 

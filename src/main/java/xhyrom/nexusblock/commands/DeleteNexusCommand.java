@@ -30,7 +30,7 @@ public class DeleteNexusCommand {
     @Execute
     @Permission("nexusblock.command.delete")
     @Description("Delete a nexus block.")
-    public void deleteNexusCommand(@Context CommandSender sender, @Arg @Key("available-blocks") String nexusName) {
+    public void deleteNexusCommand(@Context CommandSender sender, @Arg("nexusName") @Key("available-blocks") String nexusName) {
         NexusManager nexusManager = plugin.getNexusManager();
         HologramManager hologramManager = plugin.getHologramManager();
         MessageHandler messageHandler = plugin.getMessageHandler();

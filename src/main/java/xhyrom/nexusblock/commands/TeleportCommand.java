@@ -27,7 +27,7 @@ public class TeleportCommand {
     @Execute
     @Permission("nexusblock.command.teleport")
     @Description("Teleport to nexus block.")
-    public void teleportCommand(@Context Player player, @Arg @Key("available-blocks") String nexusName) {
+    public void teleportCommand(@Context Player player, @Arg("nexusName") @Key("available-blocks") String nexusName) {
         NexusManager nexusManager = plugin.getNexusManager();
         MessageHandler messageHandler = plugin.getMessageHandler();
 

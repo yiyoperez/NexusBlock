@@ -29,7 +29,7 @@ public class InfoNexusCommand {
     @Execute
     @Permission("nexusblock.command.info")
     @Description("Check information about nexus settings.")
-    public void infoCommand(@Context CommandSender sender, @Arg @Key("available-blocks") String nexusName) {
+    public void infoCommand(@Context CommandSender sender, @Arg("nexusName") @Key("available-blocks") String nexusName) {
         NexusManager nexusManager = plugin.getNexusManager();
         MessageHandler messageHandler = plugin.getMessageHandler();
 

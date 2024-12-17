@@ -33,11 +33,11 @@ public class SetLocationCommand {
     @Execute
     @Permission("nexusblock.command.setlocation")
     @Description("Set nexusblock location where you currently are watching.")
-    public void setLocationCommand(@Context Player player, @Arg @Key("available-blocks") String nexusName) {
+    public void setLocationCommand(@Context Player player, @Arg("nexusName") @Key("available-blocks") String nexusName) {
         NexusManager nexusManager = plugin.getNexusManager();
         HologramManager hologramManager = plugin.getHologramManager();
         MessageHandler messageHandler = plugin.getMessageHandler();
-        
+
         Nexus nexus = nexusManager.getNexus(nexusName);
         if (nexus == null) {
             messageHandler.sendMessage(player, "NEXUS.DOES_NOT_EXIST", new Placeholder("%nexusName%", nexusName));
