@@ -57,6 +57,7 @@ public class HologramManager {
 
         updateHologramHealthPositions(nexus);
         updateHologramPositions(nexus, reset);
+        updateHologramLocation(nexus, nexus.getLocationConfig().getLocation());
     }
 
     public void updateHologramLocation(Nexus nexus, Location location) {
