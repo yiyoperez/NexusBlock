@@ -54,11 +54,13 @@ public final class EditMenu implements Menu {
                         long currentDelay = button.getNamedData("delay");
 
                         if (event.isLeftClick()) {
-                            button.setNamedData("delay", currentDelay + 1);
+                            currentDelay = currentDelay + 1;
+                            button.setNamedData("delay", currentDelay);
                         }
                         if (event.isRightClick()) {
                             if (currentDelay > 0) {
-                                button.setNamedData("delay", currentDelay - 1);
+                                currentDelay = currentDelay - 1;
+                                button.setNamedData("delay", currentDelay);
                             }
                         }
 
@@ -76,8 +78,25 @@ public final class EditMenu implements Menu {
         return Content.builder(capacity)
                 .setButton(10, getStatusButton(player))
                 .setButton(11, respawnButton)
+                .setButton(12, getHologramButton(player))
                 .setButton(25, deleteButton(player))
                 .build();
+    }
+
+    private Button getHologramButton(Player player) {
+        return Button.clickable(
+                ItemBuilder.modern(Material.BOOK)
+                        .setDisplay(Component.text("Holograma"))
+                        .build(),
+                ButtonClickAction.plain((menuView, event) -> {
+                    event.setCancelled(true);
+
+                    plugin.getLotus().openMenu(player,
+                            new HologramMenu(nexus, plugin, this));
+
+                })
+        );
+
     }
 
     private Button getStatusButton(Player player) {
