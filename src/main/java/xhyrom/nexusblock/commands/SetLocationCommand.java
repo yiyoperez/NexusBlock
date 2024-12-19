@@ -16,7 +16,6 @@ import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.structures.holograms.HologramManager;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
-import xhyrom.nexusblock.structures.nexusConfig.NexusHologramConfig;
 import xhyrom.nexusblock.structures.nexusConfig.NexusLocationConfig;
 import xhyrom.nexusblock.utils.MessageHandler;
 import xhyrom.nexusblock.utils.Placeholder;
@@ -91,12 +90,8 @@ public class SetLocationCommand {
                 // Create hologram if didn't have one.
                 hologramManager.setupHologram(nexus);
             } else {
-                // Get hologram offset.
-                NexusHologramConfig hologramConfig = nexus.getHologramConfig();
-                double offset = hologramConfig.getHologramOffset();
-
                 // Update current hologram location if any.
-                hologramManager.updateHologramLocation(nexus, lookingLocation.clone().add(0.5D, offset, 0.5D));
+                hologramManager.updateHologramLocation(nexus, lookingLocation);
             }
         }
 

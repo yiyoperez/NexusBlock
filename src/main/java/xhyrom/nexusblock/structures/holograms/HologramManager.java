@@ -66,7 +66,10 @@ public class HologramManager {
         Object hologram = nexus.getHologramConfig().getHologram();
         if (hologram == null) return;
 
-        hologramInterface.updateLocation(hologram, location);
+        NexusHologramConfig hologramConfig = nexus.getHologramConfig();
+        double offset = hologramConfig.getHologramOffset();
+
+        hologramInterface.updateLocation(hologram, location.clone().add(0.5, offset, 0.5));
     }
 
     public void deleteHologram(Nexus nexus) {
