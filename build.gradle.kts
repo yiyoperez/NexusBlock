@@ -26,7 +26,6 @@ dependencies {
     compileOnly("com.github.decentsoftware-eu:decentholograms:2.8.6")
     compileOnly("me.filoghost.holographicdisplays:holographicdisplays-api:3.0.0")
 
-
     implementation("com.github.mqzn:Lotus:1.3")
     implementation("dev.dejvokep:boosted-yaml:1.3.7")
     implementation("net.wesjd:anvilgui:1.10.3-SNAPSHOT")
@@ -45,7 +44,6 @@ tasks {
         }
     }
     shadowJar {
-        archiveClassifier.set("")
         archiveFileName.set("NexusBlock-${projectVersion}.jar")
 
         // Used to locally test the plugin.
@@ -53,8 +51,10 @@ tasks {
         destinationDirectory.set(file("$rootDir/bin/"))
 
         // Relocate libs if any.
-        relocate("dev.triumphteam.cmd", "${libsPackage}.commandmanager")
+        relocate("net.wesjd.anvilgui", "${libsPackage}.anvilgui")
+        relocate("net.kyori", "${libsPackage}.kyori")
         relocate("dev.dejvokep.boostedyaml", "${libsPackage}.boostedyaml")
+        relocate("dev.rollczi.litecommands", "${libsPackage}.litecommands")
         relocate("org.jetbrains.annotations", "${libsPackage}.annotations")
         relocate("org.intellij.lang.annotations", "${libsPackage}.lang-annotations")
     }
