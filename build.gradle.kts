@@ -30,6 +30,7 @@ dependencies {
     implementation("dev.dejvokep:boosted-yaml:1.3.7")
     implementation("net.wesjd:anvilgui:1.10.3-SNAPSHOT")
     implementation("dev.rollczi:litecommands-bukkit:3.9.3")
+    implementation("net.kyori:adventure-platform-bukkit:4.3.4")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
     implementation("net.kyori:adventure-text-serializer-legacy:4.17.0")
 }

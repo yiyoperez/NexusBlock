@@ -7,7 +7,7 @@ import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
 import io.github.mqzen.menus.Lotus;
-import me.clip.placeholderapi.libs.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -98,9 +98,11 @@ public final class NexusBlock extends JavaPlugin {
         }
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private void createFiles() {
         try {
-            this.lang = YamlDocument.create(new File(getDataFolder(), "lang.yml"), getResource("lang.yml"),
+            this.lang = YamlDocument.create(new File(getDataFolder(), "lang.yml"),
+                    getResource("lang.yml"),
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
@@ -110,7 +112,8 @@ public final class NexusBlock extends JavaPlugin {
         }
 
         try {
-            this.config = YamlDocument.create(new File(getDataFolder(), "config.yml"), getResource("config.yml"),
+            this.config = YamlDocument.create(new File(getDataFolder(), "config.yml"),
+                    getResource("config.yml"),
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
