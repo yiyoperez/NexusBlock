@@ -26,10 +26,10 @@ dependencies {
     compileOnly("com.github.decentsoftware-eu:decentholograms:2.8.12")
     compileOnly("me.filoghost.holographicdisplays:holographicdisplays-api:3.0.5")
 
-    implementation("com.github.mqzn:Lotus:1.3")
+    implementation("com.github.mqzn:Lotus:1.4")
     implementation("dev.dejvokep:boosted-yaml:1.3.7")
     implementation("net.wesjd:anvilgui:1.10.3-SNAPSHOT")
-    implementation("dev.rollczi:litecommands-bukkit:3.9.2")
+    implementation("dev.rollczi:litecommands-bukkit:3.9.3")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
     implementation("net.kyori:adventure-text-serializer-legacy:4.17.0")
 }
