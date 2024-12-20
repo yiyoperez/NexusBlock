@@ -6,6 +6,7 @@ val projectVersion = property("version") as String
 plugins {
     `java-library`
     id("com.gradleup.shadow") version "8.3.5"
+    id("xyz.jpenilla.run-paper") version "2.3.1"
 }
 
 repositories {
@@ -44,6 +45,18 @@ tasks {
             languageVersion.set(JavaLanguageVersion.of(21))
         }
     }
+
+    runServer {
+        minecraftVersion("1.20.4")
+
+        downloadPlugins {
+            modrinth("decentholograms", "2.8.12")
+            hangar("placeholderapi", "2.11.6")
+            url("https://ci.viaversion.com/job/ViaVersion/lastSuccessfulBuild/artifact/build/libs/ViaVersion-5.2.1-SNAPSHOT.jar")
+            url("https://download.luckperms.net/1567/bukkit/loader/LuckPerms-Bukkit-5.4.150.jar")
+        }
+    }
+
     shadowJar {
         archiveFileName.set("NexusBlock-${projectVersion}.jar")
 
