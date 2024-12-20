@@ -73,8 +73,10 @@ tasks {
         destinationDirectory.set(file("$rootDir/bin/"))
 
         // Relocate libs if any.
-        relocate("net.wesjd.anvilgui", "${libsPackage}.anvilgui")
+        // Relocation needs to be commented out when debugging with runServer!!
         relocate("net.kyori", "${libsPackage}.kyori")
+        relocate("net.wesjd.anvilgui", "${libsPackage}.anvilgui")
+        relocate("io.github.mqzen.menus", "${libsPackage}.lotus")
         relocate("dev.dejvokep.boostedyaml", "${libsPackage}.boostedyaml")
         relocate("dev.rollczi.litecommands", "${libsPackage}.litecommands")
         relocate("org.jetbrains.annotations", "${libsPackage}.annotations")
