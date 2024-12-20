@@ -79,13 +79,15 @@ public final class HologramMenu implements Menu {
 
     private Button getOffsetButton(Player player) {
         if (plugin.getHologram() == null) {
-            return Button.empty(ItemBuilder.modern(Material.BARRIER).setDisplay(Component.text("Holograms are disabled.")).build());
+            return Button.empty(ItemBuilder.modern(Material.BARRIER)
+                    .setDisplay(Component.text("Holograms are disabled."))
+                    .build());
         }
 
         NexusHologramConfig hologramConfig = nexus.getHologramConfig();
         return Button.clickable(
                 ItemBuilder.modern(Material.INK_SAC, 1)
-                        .setDisplay(Component.text("Hologram Offset " + hologramConfig.getHologramOffset()))
+                        .setDisplay(Component.text("Hologram Offset " + String.format("%.1f", hologramConfig.getHologramOffset())))
                         .build(),
                 ButtonClickAction.plain((menuView, event) -> {
                     event.setCancelled(true);
@@ -94,28 +96,36 @@ public final class HologramMenu implements Menu {
                         double currentOffset = button.getNamedData("offset");
 
                         if (event.isLeftClick()) {
-                            currentOffset = currentOffset + 0.1;
+                            if (event.isShiftClick()) {
+                                currentOffset += 1.0;
+                            } else {
+                                currentOffset += 0.1;
+                            }
                             button.setNamedData("offset", currentOffset);
                         }
                         if (event.isRightClick()) {
                             if (currentOffset > 0) {
-                                currentOffset = currentOffset - 0.1;
+                                if (event.isShiftClick()) {
+                                    currentOffset -= 1.0;
+                                } else {
+                                    currentOffset -= 0.1;
+                                }
                                 button.setNamedData("offset", currentOffset);
                             }
                         }
 
-                        button.setItem(ItemBuilder.modern(Material.BLAZE_POWDER)
-                                .setDisplay(Component.text("Hologram Offset " + currentOffset))
+                        button.setItem(ItemBuilder.modern(Material.INK_SAC)
+                                .setDisplay(Component.text("Hologram Offset " + String.format("%.1f", currentOffset)))
                                 .build());
 
-                        //TODO: Create message.
-                        messageHandler.sendManualMessage(player, "Nexus " + nexus.getId() + " hologram offset has been set to " + currentOffset);
+                        messageHandler.sendManualMessage(player, "Nexus " + nexus.getId() + " hologram offset has been set to " + String.format("%.2f", currentOffset));
                         hologramConfig.setHologramOffset(currentOffset);
                         plugin.getHologramManager().updateHologram(nexus);
                     });
                 })
         ).setNamedData("offset", hologramConfig.getHologramOffset());
     }
+
 
     private Button returnButton(Player player) {
         return Button.clickable(
