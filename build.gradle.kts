@@ -69,7 +69,7 @@ tasks {
         archiveFileName.set("NexusBlock-${projectVersion}.jar")
 
         // Used to locally test the plugin.
-        //destinationDirectory.set(file("D:\\MarleyMC Network\\ComboFly\\plugins"))
+        //destinationDirectory.set(file("$rootDir/run/plugins"))
         destinationDirectory.set(file("$rootDir/bin/"))
 
         // Relocate libs if any.
