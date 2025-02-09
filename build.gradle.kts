@@ -2,11 +2,14 @@ import org.apache.tools.ant.filters.ReplaceTokens
 
 val libsPackage = property("libsPackage") as String
 val projectVersion = property("version") as String
+val projectGroup = property("group") as String
 
 plugins {
     `java-library`
     id("com.gradleup.shadow") version "8.3.5"
+    id("io.github.revxrsal.zapper") version "1.0.3"
     id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("net.minecrell.plugin-yml.bukkit") version "0.6.0"
 }
 
 repositories {
@@ -28,12 +31,17 @@ dependencies {
     compileOnly("me.filoghost.holographicdisplays:holographicdisplays-api:3.0.5")
 
     implementation("com.github.mqzn:Lotus:1.4")
-    implementation("dev.dejvokep:boosted-yaml:1.3.7")
     implementation("net.wesjd:anvilgui:1.10.3-SNAPSHOT")
     implementation("dev.rollczi:litecommands-bukkit:3.9.3")
     implementation("net.kyori:adventure-platform-bukkit:4.3.4")
     implementation("net.kyori:adventure-text-minimessage:4.17.0")
     implementation("net.kyori:adventure-text-serializer-legacy:4.17.0")
+
+    zap("dev.dejvokep:boosted-yaml:1.3.7")
+    zap("dev.rollczi:litecommands-bukkit:3.9.6")
+    zap("net.kyori:adventure-platform-bukkit:4.3.4")
+    zap("net.kyori:adventure-text-minimessage:4.17.0")
+    zap("net.kyori:adventure-text-serializer-legacy:4.17.0")
 }
 
 tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
@@ -47,7 +55,9 @@ tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
 tasks {
     compileJava {
         options.encoding = "UTF-8"
+        options.compilerArgs.add("-parameters")
     }
+
     java {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(21))
@@ -68,25 +78,47 @@ tasks {
     shadowJar {
         archiveFileName.set("NexusBlock-${projectVersion}.jar")
 
-        // Used to locally test the plugin.
-        //destinationDirectory.set(file("$rootDir/run/plugins"))
         destinationDirectory.set(file("$rootDir/bin/"))
-
-        // Relocate libs if any.
-        // Relocation needs to be commented out when debugging with runServer!!
-        relocate("net.kyori", "${libsPackage}.kyori")
-        relocate("net.wesjd.anvilgui", "${libsPackage}.anvilgui")
-        relocate("io.github.mqzen.menus", "${libsPackage}.lotus")
-        relocate("dev.dejvokep.boostedyaml", "${libsPackage}.boostedyaml")
-        relocate("dev.rollczi.litecommands", "${libsPackage}.litecommands")
-        relocate("org.jetbrains.annotations", "${libsPackage}.annotations")
-        relocate("org.intellij.lang.annotations", "${libsPackage}.lang-annotations")
     }
-    processResources {
-        filesMatching("**/*.yml") {
-            filter<ReplaceTokens>(
-                "tokens" to mapOf("version" to projectVersion)
-            )
+
+    zapper {
+        libsFolder = "libraries"
+        relocationPrefix = libsPackage
+
+        repositories { includeProjectRepositories() }
+
+        // Relocation needs to be commented out when debugging with runServer!!
+//        relocate("net.kyori", "kyori")
+//        relocate("net.wesjd.anvilgui", "anvilgui")
+//        relocate("io.github.mqzen.menus", "lotus")
+//        relocate("dev.dejvokep.boostedyaml", "boostedyaml")
+//        relocate("dev.rollczi.litecommands", "litecommands")
+        //relocate("org.jetbrains.annotations", "annotations")
+        //relocate("org.intellij.lang.annotations", "lang-annotations")
+    }
+
+    bukkit {
+        name = "NexusBlock"
+        prefix = name
+        version = projectVersion
+        main = "$projectGroup.$name"
+        apiVersion = "1.20"
+        authors = listOf("Sliide_")
+        contributors = listOf("xHyroM")
+        description = "Plugin that allows create nexus blocks."
+        softDepend = listOf(
+            "HolographicDisplays",
+            "DecentHolograms",
+            "Multiverse-Core",
+            "MultiWorld",
+            "My_Worlds"
+        )
+
+        permissions {
+            register("nexusblock.admin.break") {
+                default = BukkitPluginDescription.Permission.Default.OP
+                description = "Allow the player to break placed nexus blocks when sneaking."
+            }
         }
     }
 }

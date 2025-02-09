@@ -1,7 +1,8 @@
 package xhyrom.nexusblock;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
-import dev.dejvokep.boostedyaml.dvs.versioning.BasicVersioning;
+import dev.dejvokep.boostedyaml.dvs.Pattern;
+import dev.dejvokep.boostedyaml.dvs.segment.Segment;
 import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
@@ -10,8 +11,8 @@ import io.github.mqzen.menus.Lotus;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import revxrsal.zapper.ZapperJavaPlugin;
 import xhyrom.nexusblock.events.BlockDestroy;
 import xhyrom.nexusblock.loaders.CommandLoader;
 import xhyrom.nexusblock.structures.holograms.HologramManager;
@@ -25,7 +26,7 @@ import xhyrom.nexusblock.utils.MessageHandler;
 import java.io.File;
 import java.io.IOException;
 
-public final class NexusBlock extends JavaPlugin {
+public final class NexusBlock extends ZapperJavaPlugin {
 
     private YamlDocument lang;
     private YamlDocument config;
@@ -106,7 +107,7 @@ public final class NexusBlock extends JavaPlugin {
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
-                    UpdaterSettings.builder().setVersioning(new BasicVersioning("lang-version")).build());
+                    UpdaterSettings.builder().setVersioning(new Pattern(Segment.range(1, Integer.MAX_VALUE)), "lang-version").build());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -117,7 +118,7 @@ public final class NexusBlock extends JavaPlugin {
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
-                    UpdaterSettings.builder().setVersioning(new BasicVersioning("config-version")).build());
+                    UpdaterSettings.builder().setVersioning(new Pattern(Segment.range(1, Integer.MAX_VALUE)), "config-version").build());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
