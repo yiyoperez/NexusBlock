@@ -11,7 +11,7 @@ import xhyrom.nexusblock.structures.nexusConfig.NexusRewardsConfig;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Nexus {
+public final class Nexus {
 
     private final String id;
     private Material material;

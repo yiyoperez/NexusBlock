@@ -244,9 +244,7 @@ public class NexusManager {
         if (!existsNexusBlock(nexusName)) return null;
 
         for (Nexus nexusBlock : nexusBlocks) {
-            if (nexusBlock
-                    .getId()
-                    .equalsIgnoreCase(nexusName)) {
+            if (nexusBlock.getId().equalsIgnoreCase(nexusName)) {
                 return nexusBlock;
             }
         }

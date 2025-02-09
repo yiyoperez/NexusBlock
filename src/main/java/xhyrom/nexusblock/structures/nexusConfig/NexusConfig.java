@@ -5,6 +5,7 @@ import xhyrom.nexusblock.structures.nexus.NexusState;
 import java.util.Map;
 
 public class NexusConfig {
+
     private final String id;
     private boolean enabled;
     private long respawnInterval;

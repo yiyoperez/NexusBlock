@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class MessageHandler {
+public final class MessageHandler {
 
     private final NexusBlock plugin;
     private final YamlDocument messages;
@@ -32,7 +32,7 @@ public class MessageHandler {
 
     public String intercept(CommandSender sender, String message) {
         // Replace PlaceholderAPI's placeholders if found.
-        if (plugin.isEnabled("PlaceholderAPI")) {
+        if (plugin.isPluginEnabled("PlaceholderAPI")) {
             if (sender instanceof Player player) {
                 message = PlaceholderAPI.setPlaceholders(player, message);
             }
