@@ -7,7 +7,6 @@ import dev.dejvokep.boostedyaml.settings.dumper.DumperSettings;
 import dev.dejvokep.boostedyaml.settings.general.GeneralSettings;
 import dev.dejvokep.boostedyaml.settings.loader.LoaderSettings;
 import dev.dejvokep.boostedyaml.settings.updater.UpdaterSettings;
-import io.github.mqzen.menus.Lotus;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -16,9 +15,6 @@ import revxrsal.zapper.ZapperJavaPlugin;
 import xhyrom.nexusblock.events.BlockDestroy;
 import xhyrom.nexusblock.loaders.CommandLoader;
 import xhyrom.nexusblock.structures.holograms.HologramManager;
-import xhyrom.nexusblock.structures.holograms.implementation.DecentHolograms;
-import xhyrom.nexusblock.structures.holograms.implementation.HologramInterface;
-import xhyrom.nexusblock.structures.holograms.implementation.HolographicDisplays;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
 import xhyrom.nexusblock.structures.nexus.NexusService;
 import xhyrom.nexusblock.utils.MessageHandler;
@@ -34,13 +30,11 @@ public final class NexusBlock extends ZapperJavaPlugin {
 
     private MessageHandler messageHandler;
 
-    private HologramInterface hologram;
     private HologramManager hologramManager;
     private NexusManager nexusManager;
     private NexusService nexusService;
     private CommandLoader commandLoader;
 
-    private Lotus lotus;
     private BukkitAudiences adventure;
 
     public @NotNull BukkitAudiences adventure() {
@@ -53,13 +47,13 @@ public final class NexusBlock extends ZapperJavaPlugin {
     @Override
     public void onEnable() {
         this.adventure = BukkitAudiences.create(this);
-        lotus = Lotus.load(this);
 
         createFiles();
         messageHandler = new MessageHandler(this, lang);
 
-        setupHolograms();
         hologramManager = new HologramManager(this);
+        hologramManager.initHologramsHook();
+
         nexusManager = new NexusManager(this);
         nexusService = new NexusService(this);
         nexusService.loadBlocks();
@@ -83,19 +77,6 @@ public final class NexusBlock extends ZapperJavaPlugin {
         if (this.adventure != null) {
             this.adventure.close();
             this.adventure = null;
-        }
-    }
-
-    private void setupHolograms() {
-        if (isEnabled("DecentHolograms")) {
-            this.hologram = new DecentHolograms();
-            getLogger().info("NexusBlock is now using DecentHolograms");
-        } else if (isEnabled("HolographicDisplays")) {
-            this.hologram = new HolographicDisplays(this);
-            getLogger().info("NexusBlock is now using HolographicDisplays");
-        } else {
-            getLogger().severe("No holograms plugins has been detected!");
-            getLogger().severe("They wont work if you are not using an hologram plugin.");
         }
     }
 
@@ -145,7 +126,7 @@ public final class NexusBlock extends ZapperJavaPlugin {
         }
     }
 
-    public boolean isEnabled(String pluginName) {
+    public boolean isPluginEnabled(String pluginName) {
         Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
         return plugin != null && plugin.isEnabled();
     }
@@ -162,10 +143,6 @@ public final class NexusBlock extends ZapperJavaPlugin {
         return tempData;
     }
 
-    public HologramInterface getHologram() {
-        return hologram;
-    }
-
     public HologramManager getHologramManager() {
         return hologramManager;
     }
@@ -178,7 +155,4 @@ public final class NexusBlock extends ZapperJavaPlugin {
         return messageHandler;
     }
 
-    public Lotus getLotus() {
-        return lotus;
-    }
 }

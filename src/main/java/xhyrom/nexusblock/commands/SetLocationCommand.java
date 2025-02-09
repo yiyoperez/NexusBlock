@@ -85,14 +85,12 @@ public class SetLocationCommand {
         nexusManager.setWorldBlock(nexus);
 
         // Handle holograms if enabled.
-        if (plugin.getHologram() != null) {
-            if (nexus.getHologramConfig().getHologram() == null) {
-                // Create hologram if didn't have one.
-                hologramManager.setupHologram(nexus);
-            } else {
-                // Update current hologram location if any.
-                hologramManager.updateHologramLocation(nexus, lookingLocation);
-            }
+        if (nexus.getHologramConfig().getHologram() == null) {
+            // Create hologram if didn't have one.
+            hologramManager.setupHologram(nexus);
+        } else {
+            // Update current hologram location if any.
+            hologramManager.updateHologramLocation(nexus, lookingLocation);
         }
 
         // Send message to player notifying location update.

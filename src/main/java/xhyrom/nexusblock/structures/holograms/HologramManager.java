@@ -5,7 +5,9 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
+import xhyrom.nexusblock.structures.holograms.implementation.DecentHolograms;
 import xhyrom.nexusblock.structures.holograms.implementation.HologramInterface;
+import xhyrom.nexusblock.structures.holograms.implementation.HolographicDisplays;
 import xhyrom.nexusblock.structures.nexusConfig.NexusHealthConfig;
 import xhyrom.nexusblock.structures.nexusConfig.NexusHologramConfig;
 import xhyrom.nexusblock.utils.Placeholder;
@@ -13,9 +15,10 @@ import xhyrom.nexusblock.utils.StringUtils;
 
 import java.util.List;
 
-public class HologramManager {
+public final class HologramManager {
 
     private final NexusBlock plugin;
+    private HologramInterface hologramInterface;
 
     //TODO: Class will need changes to accept per-state hologram.
 
@@ -23,8 +26,20 @@ public class HologramManager {
         this.plugin = plugin;
     }
 
+    public void initHologramsHook() {
+        if (plugin.isPluginEnabled("DecentHolograms")) {
+            this.hologramInterface = new DecentHolograms();
+            plugin.getLogger().info("NexusBlock is now using DecentHolograms");
+        } else if (plugin.isPluginEnabled("HolographicDisplays")) {
+            this.hologramInterface = new HolographicDisplays(plugin);
+            plugin.getLogger().info("NexusBlock is now using HolographicDisplays");
+        } else {
+            plugin.getLogger().severe("No holograms plugins has been detected!");
+            plugin.getLogger().severe("They wont work if you are not using an hologram plugin.");
+        }
+    }
+
     public void setupHologram(Nexus nexus) {
-        HologramInterface hologramInterface = plugin.getHologram();
         Location location = nexus.getLocationConfig().getLocation();
         if (hologramInterface == null || location == null) return;
 
@@ -52,7 +67,6 @@ public class HologramManager {
     }
 
     public void updateHologram(Nexus nexus, boolean reset) {
-        HologramInterface hologramInterface = plugin.getHologram();
         if (hologramInterface == null) return;
 
         updateHologramHealthPositions(nexus);
@@ -61,7 +75,6 @@ public class HologramManager {
     }
 
     public void updateHologramLocation(Nexus nexus, Location location) {
-        HologramInterface hologramInterface = plugin.getHologram();
         if (hologramInterface == null) return;
 
         Object hologram = nexus.getHologramConfig().getHologram();
@@ -74,21 +87,22 @@ public class HologramManager {
     }
 
     public void deleteHologram(Nexus nexus) {
-        HologramInterface hologramInterface = plugin.getHologram();
-        if (hologramInterface == null) return;
-
-        Object hologram = nexus.getHologramConfig().getHologram();
-        if (hologram == null) return;
-
-        hologramInterface.deleteHologram(hologram);
-    }
-
-    private void updateHologramHealthPositions(Nexus nexus) {
-        HologramInterface hologramInterface = plugin.getHologram();
         if (hologramInterface == null) return;
 
         NexusHologramConfig hologramConfig = nexus.getHologramConfig();
         Object hologram = hologramConfig.getHologram();
+        if (hologram == null) return;
+
+        hologramConfig.setHologram(null);
+        hologramInterface.deleteHologram(hologram);
+    }
+
+    private void updateHologramHealthPositions(Nexus nexus) {
+        if (hologramInterface == null) return;
+
+        NexusHologramConfig hologramConfig = nexus.getHologramConfig();
+        Object hologram = hologramConfig.getHologram();
+        if (hologram == null) return;
 
         NexusHealthConfig healthStatus = nexus.getHealthStatus();
         List<String> hologramStrings = hologramConfig.getHologramStrings();
@@ -110,11 +124,12 @@ public class HologramManager {
     }
 
     private void updateHologramPositions(Nexus nexus, boolean reset) {
-        HologramInterface hologramInterface = plugin.getHologram();
         if (hologramInterface == null) return;
 
         NexusHologramConfig hologramConfig = nexus.getHologramConfig();
         Object hologram = hologramConfig.getHologram();
+        if (hologram == null) return;
+
         YamlDocument config = plugin.getConfiguration();
 
         // Limit leaderboard players.
@@ -147,5 +162,9 @@ public class HologramManager {
                 }
             }
         }
+    }
+
+    public HologramInterface getHologramInterface() {
+        return hologramInterface;
     }
 }

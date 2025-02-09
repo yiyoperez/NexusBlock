@@ -23,21 +23,23 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class NexusManager {
+public final class NexusManager {
 
     private final NexusBlock plugin;
+    private final HologramManager hologramManager;
     private final Set<Nexus> nexusBlocks = new HashSet<>();
 
     public NexusManager(NexusBlock plugin) {
         this.plugin = plugin;
+        this.hologramManager = plugin.getHologramManager();
     }
 
     public void createNexusBlock(String nexusName, Material material) {
@@ -65,6 +67,10 @@ public class NexusManager {
 
         // Update values from temporal data if any.
         updateFromTemporalData(nexusConfig, nexus);
+
+        // Spawn block and hologram.
+        setWorldBlock(nexus);
+        hologramManager.setupHologram(nexus);
 
         // Add to list.
         nexusBlocks.add(nexus);
@@ -252,25 +258,45 @@ public class NexusManager {
     }
 
     public boolean existsNexusBlock(String nexusName) {
-        return nexusBlocks.stream().anyMatch(block -> block.getId().equalsIgnoreCase(nexusName));
+        for (Nexus block : nexusBlocks) {
+            if (block.getId().equalsIgnoreCase(nexusName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Set<Nexus> getNexusBlocks() {
         return nexusBlocks;
     }
 
+    public Set<Nexus> getAvailableBlocks() {
+        Set<Nexus> set = new HashSet<>();
+        for (Nexus nexus : nexusBlocks) {
+            if (nexus.isEnabled()) {
+                if (nexus.getLocationConfig().getLocation() != null) {
+                    set.add(nexus);
+                }
+            }
+        }
+        return set;
+    }
+
     public List<String> getSortedDestroyers(Nexus nexus) {
-        return nexus.getDestroyers()
-                .keySet()
-                .stream()
-                .sorted(new ModuleComparator(nexus.getDestroyers()))
-                .collect(Collectors.toList());
+        List<String> list = new ArrayList<>(nexus.getDestroyers().keySet());
+        list.sort(new ModuleComparator(nexus.getDestroyers()));
+        return list;
     }
 
     public boolean isNexusLocation(Location location) {
-        return nexusBlocks.stream()
-                .filter(nexus -> nexus.getLocationConfig().getLocation() != null)
-                .anyMatch(nexus -> nexus.getLocationConfig().getLocation().equals(location));
+        for (Nexus nexus : nexusBlocks) {
+            if (nexus.getLocationConfig().getLocation() != null) {
+                if (nexus.getLocationConfig().getLocation() == location) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private static class ModuleComparator implements Comparator<String> {

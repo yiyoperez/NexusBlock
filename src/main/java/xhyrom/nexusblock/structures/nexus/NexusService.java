@@ -5,7 +5,6 @@ import dev.dejvokep.boostedyaml.block.implementation.Section;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.structures.holograms.HologramManager;
-import xhyrom.nexusblock.structures.holograms.implementation.HologramInterface;
 import xhyrom.nexusblock.structures.nexusConfig.NexusLocationConfig;
 
 import java.io.File;
@@ -14,13 +13,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
-public class NexusService {
+public final class NexusService {
 
     private final File folder;
     private final NexusBlock plugin;
     private final NexusManager nexusManager;
     private final HologramManager hologramManager;
-    private final HologramInterface hologramInterface;
     private final YamlDocument tempData;
 
     public NexusService(NexusBlock plugin) {
@@ -28,7 +26,6 @@ public class NexusService {
         this.folder = new File(plugin.getDataFolder(), "blocks");
         this.tempData = plugin.getTempData();
         this.nexusManager = plugin.getNexusManager();
-        this.hologramInterface = plugin.getHologram();
         this.hologramManager = plugin.getHologramManager();
     }
 
@@ -40,7 +37,6 @@ public class NexusService {
 
         for (File file : files) {
             String id = file.getName().split("\\.")[0];
-            plugin.getLogger().info("Loaded nexus " + id);
 
             YamlDocument nexusBlock;
             try {
@@ -50,10 +46,7 @@ public class NexusService {
             }
 
             nexusManager.createNexusBlock(nexusBlock.getStringRouteMappedValues(false));
-
-            // Spawn block and hologram.
-            nexusManager.setWorldBlock(nexusManager.getNexus(id));
-            hologramManager.setupHologram(nexusManager.getNexus(id));
+            plugin.getLogger().info("Loaded nexus " + id);
         }
     }
 
@@ -64,9 +57,7 @@ public class NexusService {
             plugin.getLogger().info("Saving nexus " + nexus.getId());
 
             // Delete holograms.
-            if (hologramInterface != null) {
-                hologramManager.deleteHologram(nexus);
-            }
+            hologramManager.deleteHologram(nexus);
 
             // Save current damage and destroyers values.
             saveTemporalData(nexus);
