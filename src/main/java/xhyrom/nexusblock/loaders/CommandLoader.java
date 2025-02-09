@@ -19,12 +19,13 @@ import xhyrom.nexusblock.commands.handlers.NexusInvalidUsageHandler;
 import xhyrom.nexusblock.commands.handlers.NexusMissingPermissionHandler;
 import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.utils.MessageHandler;
+import xhyrom.nexusblock.utils.MessageUtils;
 import xhyrom.nexusblock.utils.Placeholder;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
-public class CommandLoader {
+public final class CommandLoader {
 
     private final NexusBlock plugin;
     private final MessageHandler messageHandler;
@@ -35,6 +36,21 @@ public class CommandLoader {
     }
 
     public void load() {
+        List<String> nexusList = new ArrayList<>();
+        for (Nexus nexus : plugin.getNexusManager()
+                .getNexusBlocks()) {
+            String id = nexus.getId();
+            nexusList.add(id);
+        }
+
+        List<String> materialList = new ArrayList<>();
+        for (Material material : Material.values()) {
+            if (material.isBlock() && material.isSolid()) {
+                String name = material.name();
+                materialList.add(name);
+            }
+        }
+
         LiteBukkitFactory.builder()
                 .settings(settings -> settings
                         .fallbackPrefix("nexusblock")
@@ -52,8 +68,8 @@ public class CommandLoader {
                         new SetLocationCommand(plugin)
                 )
 
-                .message(LiteBukkitMessages.PLAYER_NOT_FOUND, input -> messageHandler.getRawMessage("PLAYER_NOT_FOUND", new Placeholder("%player%", input)))
-                .message(LiteBukkitMessages.PLAYER_ONLY, messageHandler.getRawMessage("COMMAND_MANAGER.TRANSLATIONS.ONLY_PLAYER"))
+                .message(LiteBukkitMessages.PLAYER_ONLY, MessageUtils.translateMiniMessage(messageHandler.getRawMessage("COMMAND_MANAGER.TRANSLATIONS.ONLY_PLAYERS")))
+                .message(LiteBukkitMessages.PLAYER_NOT_FOUND, input -> MessageUtils.translateMiniMessage(messageHandler.getRawMessage("PLAYER_NOT_FOUND", new Placeholder("%player%", input))))
 
                 .schematicGenerator(SchematicFormat.angleBrackets())
 
@@ -61,17 +77,8 @@ public class CommandLoader {
                 .missingPermission(new NexusMissingPermissionHandler(messageHandler))
 
                 // Argument suggestions.
-                .argumentSuggestion(String.class, ArgumentKey.of("available-blocks"),
-                        SuggestionResult.of(plugin.getNexusManager()
-                                .getNexusBlocks()
-                                .stream()
-                                .map(Nexus::getId)
-                                .collect(Collectors.toList())))
-                .argumentSuggestion(String.class, ArgumentKey.of("block-materials"),
-                        SuggestionResult.of(Arrays.stream(Material.values())
-                                .filter(material -> material.isBlock() && material.isSolid())
-                                .map(Enum::name)
-                                .collect(Collectors.toList())))
+                .argumentSuggestion(String.class, ArgumentKey.of("available-blocks"), SuggestionResult.of(nexusList))
+                .argumentSuggestion(String.class, ArgumentKey.of("block-materials"), SuggestionResult.of(materialList))
 
                 .build();
     }
