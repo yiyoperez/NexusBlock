@@ -7,7 +7,6 @@ import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
 import dev.rollczi.litecommands.annotations.execute.Execute;
 import dev.rollczi.litecommands.annotations.permission.Permission;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.menus.EditMenu;
@@ -28,7 +27,7 @@ public class EditNexusCommand {
     @Execute()
     @Permission("nexusblock.command.edit")
     @Description("Edit nexus settings in-game from a GUI.")
-    public void editCommand(@Context CommandSender sender, @Arg("nexusName") @Key("available-blocks") String nexusName) {
+    public void editCommand(@Context Player sender, @Arg("nexusName") @Key("available-blocks") String nexusName) {
         NexusManager nexusManager = plugin.getNexusManager();
         MessageHandler messageHandler = plugin.getMessageHandler();
 
@@ -40,6 +39,6 @@ public class EditNexusCommand {
 
         //TODO: create message.
         messageHandler.sendManualMessage(sender, "Opening nexus " + nexus.getId() + " edit menu.");
-        plugin.getLotus().openMenu((Player) sender, new EditMenu(nexus, plugin));
+        new EditMenu(nexus, plugin).open(sender);
     }
 }

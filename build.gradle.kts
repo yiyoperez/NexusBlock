@@ -1,4 +1,4 @@
-import org.apache.tools.ant.filters.ReplaceTokens
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
 
 val libsPackage = property("libsPackage") as String
 val projectVersion = property("version") as String
@@ -30,14 +30,10 @@ dependencies {
     compileOnly("com.github.decentsoftware-eu:decentholograms:2.8.12")
     compileOnly("me.filoghost.holographicdisplays:holographicdisplays-api:3.0.5")
 
-    implementation("com.github.mqzn:Lotus:1.4")
     implementation("net.wesjd:anvilgui:1.10.3-SNAPSHOT")
-    implementation("dev.rollczi:litecommands-bukkit:3.9.3")
-    implementation("net.kyori:adventure-platform-bukkit:4.3.4")
-    implementation("net.kyori:adventure-text-minimessage:4.17.0")
-    implementation("net.kyori:adventure-text-serializer-legacy:4.17.0")
 
     zap("dev.dejvokep:boosted-yaml:1.3.7")
+    zap("dev.triumphteam:triumph-gui:3.1.11")
     zap("dev.rollczi:litecommands-bukkit:3.9.6")
     zap("net.kyori:adventure-platform-bukkit:4.3.4")
     zap("net.kyori:adventure-text-minimessage:4.17.0")
@@ -70,8 +66,9 @@ tasks {
         downloadPlugins {
             modrinth("decentholograms", "2.8.12")
             hangar("placeholderapi", "2.11.6")
-            url("https://ci.viaversion.com/job/ViaVersion/lastSuccessfulBuild/artifact/build/libs/ViaVersion-5.2.1-SNAPSHOT.jar")
+            url("https://ci.viaversion.com/job/ViaVersion/1077/artifact/build/libs/ViaVersion-5.2.2-SNAPSHOT.jar")
             url("https://download.luckperms.net/1567/bukkit/loader/LuckPerms-Bukkit-5.4.150.jar")
+            url("https://github.com/EternalCodeTeam/EternalCore/releases/download/v1.5.2/EternalCore.v1.5.2.MC.1.17.x-1.21.x.jar")
         }
     }
 
