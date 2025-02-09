@@ -13,8 +13,6 @@ import xhyrom.nexusblock.structures.Nexus;
 import xhyrom.nexusblock.structures.holograms.HologramManager;
 import xhyrom.nexusblock.structures.nexus.NexusManager;
 
-import java.util.Optional;
-
 public class BlockDestroy implements Listener {
 
     private final NexusManager manager;
@@ -27,25 +25,19 @@ public class BlockDestroy implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onNexusDestroy(BlockBreakEvent event) {
-        Player player = event.getPlayer();
+        if (manager.getNexusBlocks().isEmpty()) return;
 
         Block block = event.getBlock();
         Location blockLocation = block.getLocation();
 
-        if (manager.getNexusBlocks().isEmpty()) return;
-
-        Optional<Nexus> nexusBlock = manager.getNexusBlocks()
-                .stream()
-                // Filter out nexus blocks with no location set.
-                .filter(nexus -> nexus.getLocationConfig().getLocation() != null)
-                // Check if broken block location is the same as nexus block.
-                .filter(nexus -> nexus.getLocationConfig().getLocation().equals(blockLocation))
-                .findAny();
-
-        if (nexusBlock.isPresent()) {
-            Nexus nexus = nexusBlock.get();
+        // Check if broken block location is the same as nexus block.
+        for (Nexus nexus : manager.getNexusBlocks()) {
+            if (!nexus.getLocationConfig().getLocation().equals(blockLocation)) continue;
             event.setCancelled(true);
 
+            if (!nexus.isEnabled()) continue;
+
+            Player player = event.getPlayer();
             if (player.hasPermission("nexusblock.admin.break") && player.isSneaking()) {
                 hologramManager.deleteHologram(nexus);
                 nexus.getHologramConfig().setHologram(null);
@@ -54,8 +46,10 @@ public class BlockDestroy implements Listener {
                 return;
             }
 
-            if (block.getType() != Material.BEDROCK)
+            if (block.getType() != Material.BEDROCK) {
                 manager.handleBreakActions(player, nexus);
+                break;
+            }
         }
     }
 }
