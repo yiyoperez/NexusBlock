@@ -34,7 +34,7 @@ dependencies {
 
     zap("dev.dejvokep:boosted-yaml:1.3.7")
     zap("dev.triumphteam:triumph-gui:3.1.11")
-    zap("dev.rollczi:litecommands-bukkit:3.9.6")
+    zap("dev.rollczi:litecommands-bukkit:3.9.7")
     zap("net.kyori:adventure-platform-bukkit:4.3.4")
     zap("net.kyori:adventure-text-minimessage:4.17.0")
     zap("net.kyori:adventure-text-serializer-legacy:4.17.0")
