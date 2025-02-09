@@ -45,19 +45,19 @@ REWARDS:
     DROP:
         RADIUS: 5 # Value is in blocks.
         ACTIONS:
-            - "[COMMAND] give %player% golden_apple 1"
+            - "[COMMAND] minecraft:give %player% golden_apple 1"
     # Player that destroy block
     DESTROYER:
-        - "give %player% golden_apple 1"
-        - "say %player% destroyed block!"
-        - "say %player% broke the nexus %destroys% times."
+        - "minecraft:give %player% golden_apple 1"
+        - "minecraft:say %player% destroyed block!"
+        - "minecraft:say %player% broke the nexus %destroys% times."
     # Set this section empty ( DESTROYERS: {} ) if you don't want give rewards to other destroyers.
     DESTROYERS:
         # First player (top 1)
         1:
-            - "give %player% apple 1"
-            - "say %player% broke the nexus %destroys% times."
+            - "minecraft:give %player% apple 1"
+            - "minecraft:say %player% broke the nexus %destroys% times."
         # Second player (top 2)
         2:
-            - "give %player% book 1"
-            - "say %player% broke the nexus %destroys% times."
+            - "minecraft:give %player% book 1"
+            - "minecraft:say %player% broke the nexus %destroys% times."
