@@ -37,7 +37,7 @@ dependencies {
     zap("dev.rollczi:litecommands-bukkit:3.9.6")
     zap("net.kyori:adventure-platform-bukkit:4.3.4")
     zap("net.kyori:adventure-text-minimessage:4.17.0")
-    zap("net.kyori:adventure-text-serializer-legacy:4.17.0")
+    zap("net.kyori:adventure-text-serializer-legacy:4.21.0")
 }
 
 tasks.withType(xyz.jpenilla.runtask.task.AbstractRun::class) {
