@@ -1,7 +1,6 @@
 package xhyrom.nexusblock.commands;
 
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -10,7 +9,6 @@ import dev.rollczi.litecommands.annotations.permission.Permission;
 import org.bukkit.command.CommandSender;
 import xhyrom.nexusblock.NexusBlock;
 import xhyrom.nexusblock.structures.Nexus;
-import xhyrom.nexusblock.structures.nexus.NexusManager;
 import xhyrom.nexusblock.utils.MessageHandler;
 import xhyrom.nexusblock.utils.Placeholder;
 
@@ -29,15 +27,8 @@ public class InfoNexusCommand {
     @Execute
     @Permission("nexusblock.command.info")
     @Description("Check information about nexus settings.")
-    public void infoCommand(@Context CommandSender sender, @Arg("nexusName") @Key("available-blocks") String nexusName) {
-        NexusManager nexusManager = plugin.getNexusManager();
+    public void infoCommand(@Context CommandSender sender, @Arg("nexusName") Nexus nexus) {
         MessageHandler messageHandler = plugin.getMessageHandler();
-
-        Nexus nexus = nexusManager.getNexus(nexusName);
-        if (nexus == null) {
-            messageHandler.sendMessage(sender, "NEXUS.DOES_NOT_EXIST", new Placeholder("%nexusName%", nexusName));
-            return;
-        }
 
         List<Placeholder> placeholders = new ArrayList<>();
         String header = messageHandler.getRawMessage("NEXUS.INFO.HEADER");

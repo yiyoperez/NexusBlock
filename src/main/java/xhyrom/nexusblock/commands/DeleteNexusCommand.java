@@ -1,7 +1,6 @@
 package xhyrom.nexusblock.commands;
 
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -30,25 +29,19 @@ public class DeleteNexusCommand {
     @Execute
     @Permission("nexusblock.command.delete")
     @Description("Delete a nexus block.")
-    public void deleteNexusCommand(@Context CommandSender sender, @Arg("nexusName") @Key("available-blocks") String nexusName) {
+    public void deleteNexusCommand(@Context CommandSender sender, @Arg("nexusName") Nexus nexus) {
         NexusManager nexusManager = plugin.getNexusManager();
         HologramManager hologramManager = plugin.getHologramManager();
         MessageHandler messageHandler = plugin.getMessageHandler();
 
-        Nexus nexus = nexusManager.getNexus(nexusName);
-        if (nexus == null) {
-            messageHandler.sendMessage(sender, "NEXUS.DOES_NOT_EXIST", new Placeholder("%nexusName%", nexusName));
-            return;
-        }
-
-        hologramManager.deleteHologram(nexus);
         NexusLocationConfig locationConfig = nexus.getLocationConfig();
         if (locationConfig.getLocation() != null) {
             Block block = locationConfig.getLocation().getBlock();
             block.setType(Material.AIR);
         }
-        nexusManager.deleteNexus(nexus);
 
-        messageHandler.sendMessage(sender, "NEXUS.DELETED", new Placeholder("%nexusName%", nexusName));
+        messageHandler.sendMessage(sender, "NEXUS.DELETED", new Placeholder("%nexusName%", nexus.getId()));
+        nexusManager.deleteNexus(nexus);
+        hologramManager.deleteHologram(nexus);
     }
 }

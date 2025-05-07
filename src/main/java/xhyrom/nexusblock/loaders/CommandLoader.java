@@ -3,7 +3,6 @@ package xhyrom.nexusblock.loaders;
 import dev.rollczi.litecommands.argument.ArgumentKey;
 import dev.rollczi.litecommands.bukkit.LiteBukkitFactory;
 import dev.rollczi.litecommands.bukkit.LiteBukkitMessages;
-import dev.rollczi.litecommands.schematic.SchematicFormat;
 import dev.rollczi.litecommands.suggestion.SuggestionResult;
 import org.bukkit.Material;
 import xhyrom.nexusblock.NexusBlock;
@@ -15,6 +14,7 @@ import xhyrom.nexusblock.commands.ListNexusCommand;
 import xhyrom.nexusblock.commands.NexusBlockCommand;
 import xhyrom.nexusblock.commands.SetLocationCommand;
 import xhyrom.nexusblock.commands.TeleportCommand;
+import xhyrom.nexusblock.commands.handlers.NexusArgument;
 import xhyrom.nexusblock.commands.handlers.NexusInvalidUsageHandler;
 import xhyrom.nexusblock.commands.handlers.NexusMissingPermissionHandler;
 import xhyrom.nexusblock.structures.Nexus;
@@ -71,13 +71,11 @@ public final class CommandLoader {
                 .message(LiteBukkitMessages.PLAYER_ONLY, MessageUtils.translateMiniMessage(messageHandler.getRawMessage("COMMAND_MANAGER.TRANSLATIONS.ONLY_PLAYERS")))
                 .message(LiteBukkitMessages.PLAYER_NOT_FOUND, input -> MessageUtils.translateMiniMessage(messageHandler.getRawMessage("PLAYER_NOT_FOUND", new Placeholder("%player%", input))))
 
-                .schematicGenerator(SchematicFormat.angleBrackets())
-
                 .invalidUsage(new NexusInvalidUsageHandler(messageHandler))
                 .missingPermission(new NexusMissingPermissionHandler(messageHandler))
 
                 // Argument suggestions.
-                .argumentSuggestion(String.class, ArgumentKey.of("available-blocks"), SuggestionResult.of(nexusList))
+                .argument(Nexus.class, new NexusArgument(plugin))
                 .argumentSuggestion(String.class, ArgumentKey.of("block-materials"), SuggestionResult.of(materialList))
 
                 .build();

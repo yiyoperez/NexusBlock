@@ -1,7 +1,6 @@
 package xhyrom.nexusblock.commands;
 
 import dev.rollczi.litecommands.annotations.argument.Arg;
-import dev.rollczi.litecommands.annotations.argument.Key;
 import dev.rollczi.litecommands.annotations.command.Command;
 import dev.rollczi.litecommands.annotations.context.Context;
 import dev.rollczi.litecommands.annotations.description.Description;
@@ -32,16 +31,10 @@ public class SetLocationCommand {
     @Execute
     @Permission("nexusblock.command.setlocation")
     @Description("Set nexusblock location where you currently are watching.")
-    public void setLocationCommand(@Context Player player, @Arg("nexusName") @Key("available-blocks") String nexusName) {
+    public void setLocationCommand(@Context Player player, @Arg("nexusName") Nexus nexus) {
         NexusManager nexusManager = plugin.getNexusManager();
         HologramManager hologramManager = plugin.getHologramManager();
         MessageHandler messageHandler = plugin.getMessageHandler();
-
-        Nexus nexus = nexusManager.getNexus(nexusName);
-        if (nexus == null) {
-            messageHandler.sendMessage(player, "NEXUS.DOES_NOT_EXIST", new Placeholder("%nexusName%", nexusName));
-            return;
-        }
 
         // Iteration to find block/location player is looking at.
         BlockIterator blockIterator = new BlockIterator(player, 10);
@@ -61,7 +54,7 @@ public class SetLocationCommand {
 
         NexusLocationConfig locationConfig = nexus.getLocationConfig();
         if (locationConfig.getLocation() != null && locationConfig.getLocation().equals(lookingLocation)) {
-            messageHandler.sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexusName));
+            messageHandler.sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexus.getId()));
             return;
         }
 
@@ -94,6 +87,6 @@ public class SetLocationCommand {
         }
 
         // Send message to player notifying location update.
-        messageHandler.sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexusName));
+        messageHandler.sendMessage(player, "NEXUS.SETLOCATION", new Placeholder("%nexusName%", nexus.getId()));
     }
 }
