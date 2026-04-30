@@ -17,9 +17,11 @@ import java.util.StringJoiner;
 public class ListNexusCommand {
 
     private final NexusBlock plugin;
+    private final MessageHandler messageHandler;
 
     public ListNexusCommand(NexusBlock plugin) {
         this.plugin = plugin;
+        this.messageHandler = plugin.getMessageHandler();
     }
 
     @Execute
@@ -33,7 +35,7 @@ public class ListNexusCommand {
             return;
         }
 
-        Section listFormatSection = plugin.getLang().getSection("NEXUS.LIST-FORMAT");
+        Section listFormatSection = messageHandler.getSection("NEXUS.LIST-FORMAT");
 
         String enabled = listFormatSection.getString("ENABLED");
         String disabled = listFormatSection.getString("DISABLED");

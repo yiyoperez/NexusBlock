@@ -1,6 +1,7 @@
 package xhyrom.nexusblock.utils;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
+import dev.dejvokep.boostedyaml.block.implementation.Section;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -137,5 +138,9 @@ public final class MessageHandler {
 
     public void sendListMessage(CommandSender sender, String path, List<Placeholder> placeholders) {
         getMessages(sender, path, placeholders).forEach(sender::sendMessage);
+    }
+
+    public Section getSection(String section) {
+        return messages.getSection(section);
     }
 }

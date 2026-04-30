@@ -24,10 +24,6 @@ import java.io.IOException;
 
 public final class NexusBlock extends ZapperJavaPlugin {
 
-    private YamlDocument lang;
-    private YamlDocument config;
-    private YamlDocument tempData;
-
     private MessageHandler messageHandler;
 
     private HologramManager hologramManager;
@@ -80,7 +76,6 @@ public final class NexusBlock extends ZapperJavaPlugin {
         }
     }
 
-    @SuppressWarnings("DataFlowIssue")
     private void createFiles() {
         try {
             this.lang = YamlDocument.create(new File(getDataFolder(), "lang.yml"),
@@ -110,13 +105,17 @@ public final class NexusBlock extends ZapperJavaPlugin {
             throw new RuntimeException(e);
         }
 
-        boolean isPluginLoadingForFirstTime = !new File(getDataFolder() + File.separator + "blocks").exists();
-        if (isPluginLoadingForFirstTime) {
+        File blocksDir = new File(getDataFolder(), "blocks");
+        if (!blocksDir.exists()) {
             getLogger().info("Creating default nexus block.");
 
             try {
-                YamlDocument defaultConfig = YamlDocument.create(new File(getDataFolder(), "blocks/default.yml"),
-                        getResource("default.yml"));
+                if (!blocksDir.mkdirs()) {
+                    throw new IOException("Failed to create blocks directory, please try again.");
+                }
+
+                File defaultConfigFile = new File(blocksDir, "default.yml");
+                YamlDocument defaultConfig = YamlDocument.create(defaultConfigFile, getResource("default.yml"));
 
                 defaultConfig.update();
                 defaultConfig.save();
@@ -129,10 +128,6 @@ public final class NexusBlock extends ZapperJavaPlugin {
     public boolean isPluginEnabled(String pluginName) {
         Plugin plugin = Bukkit.getPluginManager().getPlugin(pluginName);
         return plugin != null && plugin.isEnabled();
-    }
-
-    public YamlDocument getLang() {
-        return lang;
     }
 
     public YamlDocument getConfiguration() {
